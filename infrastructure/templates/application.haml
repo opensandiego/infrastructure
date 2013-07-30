@@ -1,0 +1,16 @@
+
+- load bootstrap_toolkit
+%html
+  %head
+    %title
+      - block title
+    - bootstrap_stylesheet_tag
+    - bootstrap_stylesheet_tag "responsive"
+  %body
+    .container
+      .navbar
+        .navbar-inner
+        
+      %h1 Infrastructure San Diego
+    
+      - block content
