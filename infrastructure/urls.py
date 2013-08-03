@@ -10,7 +10,9 @@ urlpatterns = patterns('infrastructure.cip.views',
     url(r'^$', 'index'),
     url(r'^projects$', 'projects'),
     url(r'^projects/(?P<filter>\w+)/(?P<value>\w+(\s+\w+)*)$', 'projects'),
+    url(r'^projects/(?P<filter>\w+)/(?P<value>\w+(\s+\w+)*)/(?P<show>(all|current))$', 'projects'),
+    url(r'^projects/filter$', 'filter_projects'),
 
-    url(r'^project/(\d+)/$','show_project'),
+    url(r'^project/(\d+)/$','show_project', name='show_project'),
     url(r'^admin/', include(admin.site.urls)),
 )
