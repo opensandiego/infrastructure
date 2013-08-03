@@ -1,6 +1,32 @@
 from django.db import models
-
+from django.db.models.query import QuerySet
+import datetime
 # Create your models here.
+
+class ProjectManagerMixin(object):
+    def current(self):
+        """docstring for current"""
+        return self.filter(SP_CONSTR_FINISH_DT__gt=datetime.date.today(), SP_AWARD_START_DT__lt=datetime.date.today())
+    def future(self):
+        """docstring for future"""
+        return self.filter(SP_AWARD_START_DT__gt=datetime.date.today())
+    def by_phase(self,phase):
+        """docstring for by_phase"""
+        return self.filter(SP_PROJECT_PHASE__icontains=phase)
+    def by_asset_group(self,asset_group):
+        """docstring for by_asset_group"""
+        return self.filter(SP_ASSET_GROUP__icontains=asset_group)
+
+class ProjectQuerySet(QuerySet,ProjectManagerMixin):
+    pass
+
+class ProjectManager(models.Manager,ProjectManagerMixin):
+    def phase_count(self, phase):
+        """docstring for phase_count"""
+        return self.filter(SP_PROJECT_PHASE__icontains=phase).count()
+    def get_query_set(self):
+        """docstring for get_query_set"""
+        return ProjectQuerySet(self.model)
 
 ASSET_TYPE_GROUPS = (
     "A", "Airports",
@@ -78,12 +104,12 @@ DELIVERY_METHODS = (
     "ST","Study")
 
 PROJECT_PHASES = (
-    "D", "Design",
-    "N", "Construction",
-    "O", "Post Construction",
-    "P", "Planning",
-    "B", "Bid and Award",
-    "C", "Complete")
+    ("D", "Design"),
+    ("N", "Construction"),
+    ("O", "Post Construction"),
+    ("P", "Planning"),
+    ("B", "Bid and Award"),
+    ("C", "Complete"))
 
 CLIENT_DEPARTMENTS = (
     "Airports","Airports Department",
@@ -256,6 +282,8 @@ class Project(models.Model):
     SP_BID_NUM = models.CharField(max_length=20, null=True, blank=True)
     SP_SPEC_NUM = models.CharField(max_length=20, null=True, blank=True)
 
+    objects = ProjectManager()
+
     def __unicode__(self):
         return self.SP_PROJECT_NM
 
@@ -294,3 +322,7 @@ class DepartmentNeed(models.Model):
     map_length = models.FloatField(null=True, blank=True)
     fci_percent = models.FloatField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
+
+    
+
+
