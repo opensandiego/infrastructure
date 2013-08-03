@@ -15,7 +15,16 @@ class ProjectManagerMixin(object):
         return self.filter(SP_PROJECT_PHASE__icontains=phase)
     def by_asset_group(self,asset_group):
         """docstring for by_asset_group"""
-        return self.filter(SP_ASSET_GROUP__icontains=asset_group)
+        return self.filter(SP_ASSET_TYPE_GROUP__icontains=asset_group)
+    def by_asset_choice(self,asset_choice):
+        """docstring for by_asset_group"""
+        return self.filter(SP_ASSET_TYPE_CD__icontains=asset_choice)
+    def by_delivery_method(self,delivery_method):
+        """docstring for by_asset_group"""
+        return self.filter(SP_DELIVERY_METHOD_CD__icontains=delivery_method)
+    def by_client_departement(self,client_departements):
+        """docstring for by_asset_group"""
+        return self.filter(SP_CLIENT2__icontains=client_departements)
 
 class ProjectQuerySet(QuerySet,ProjectManagerMixin):
     pass
@@ -29,79 +38,79 @@ class ProjectManager(models.Manager,ProjectManagerMixin):
         return ProjectQuerySet(self.model)
 
 ASSET_TYPE_GROUPS = (
-    "A", "Airports",
-    "B", "Buildings",
-    "C", "Storm Water Drainage",
-    "G", "Parks",
-    "I", "Transportation",
-    "J", "Sewer",
-    "K", "Water")
+   ( "A", "Airports"),
+   ( "B", "Buildings"),
+   ( "C", "Storm Water Drainage"),
+   ( "G", "Parks"),
+   ( "I", "Transportation"),
+   ( "J", "Sewer"),
+   ( "K", "Water"))
 
 ASSET_TYPE_CHOICES = (
-    "BA","Bldg - Pub Safety - Police Facility/Structure",
-    "BB","Bldg - Pub Safety - Lifeguard Station",
-    "BC","Bldg - Pub Safety - Fire Facility/Structure",
-    "BD","Bldg - Library",
-    "BE","Bldg - Parks - Recreation/Pool Center",
-    "BF","Bldg - Parks - Recreational Sports Facility",
-    "BG","Bldg - Stadium Facility",
-    "BH","Bldg - Community Center",
-    "BI","Bldg - Water - Treatment Plant"
-    "BJ","Bldg - Water - Pump Station",
-    "BK","Bldg - Water - Reservoir/Dam",
-    "BL","Bldg - Water - Standpipe",
-    "BO","Bldg - Sewer - Treatment Plant",
-    "BP","Bldg - Sewer - Pump Station",
-    "BS","Bldg - Operations Facility/Structure",
-    "BT","Bldg - Other City Facility/Structure",
-    "CA","Drainage - Storm Drain Pipe",
-    "CB","Drainage - Channel",
-    "CC","Drainage - Best Mgt Practices BMPs",
-    "CD","Drainage - Pump Station",
-    "DA","Flood Control System",
-    "EA","Golf Course",
-    "GA","Parks - Community",
-    "GB","Parks - Neighborhood",
-    "GC","Parks - Mini Park",
-    "GE","Parks - Resource Based",
-    "GF","Parks - Miscellaneous Park",
-    "GG","Parks - Open Space",
-    "HC","Reclaimed Water System - Pipeline",
-    "IA","Trans - Bicycle Facility All Class.",
-    "IB","Trans - Bridge - Vehicular",
-    "IC","Trans - Bridge - Pedestrian",
-    "ID","Trans - Roadway",
-    "IE","Trans - Roadway - GRails/BRails/Safety",
-    "IF","Trans - Roadway - Erosion/Slope/Ret Wall",
-    "IG","Trans - Roadway - Enhance/Scape/Median",
-    "IH","Trans - Roadway - Street Lighting",
-    "II","Trans - Ped Fac - Accessibility Improvement",
-    "IJ","Trans - Ped Fac - Curb Ramp",
-    "IK","Trans - Ped Fac - Sidewalk",
-    "IL","Trans - Signals - Traffic Signal",
-    "IM","Trans - Signals - Calming/Speed Abatement",
-    "IO","Trans - Roads/Widening/Reconfiguration",
-    "JA","Wastewater - Collection System - Main",
-    "JB","Wastewater - Collection System - Trunk Sewer",
-    "JD","Wastewater - Collection System - Laterals",
-    "KA","Water - Distribution System - Transmission",
-    "KB","Water - Distribution System - Distribution",
-    "KC","Water - Reservoir")
+    ("BA","Bldg - Pub Safety - Police Facility/Structure"),
+    ("BB","Bldg - Pub Safety - Lifeguard Station"),
+    ("BC","Bldg - Pub Safety - Fire Facility/Structure"),
+    ("BD","Bldg - Library"),
+    ("BE","Bldg - Parks - Recreation/Pool Center"),
+    ("BF","Bldg - Parks - Recreational Sports Facility"),
+    ("BG","Bldg - Stadium Facility"),
+    ("BH","Bldg - Community Center"),
+    ("BI","Bldg - Water - Treatment Plant"),
+    ("BJ","Bldg - Water - Pump Station"),
+    ("BK","Bldg - Water - Reservoir/Dam"),
+    ("BL","Bldg - Water - Standpipe"),
+    ("BO","Bldg - Sewer - Treatment Plant"),
+    ("BP","Bldg - Sewer - Pump Station"),
+    ("BS","Bldg - Operations Facility/Structure"),
+    ("BT","Bldg - Other City Facility/Structure"),
+    ("CA","Drainage - Storm Drain Pipe"),
+    ("CB","Drainage - Channel"),
+    ("CC","Drainage - Best Mgt Practices BMPs"),
+    ("CD","Drainage - Pump Station"),
+    ("DA","Flood Control System"),
+    ("EA","Golf Course"),
+    ("GA","Parks - Community"),
+    ("GB","Parks - Neighborhood"),
+    ("GC","Parks - Mini Park"),
+    ("GE","Parks - Resource Based"),
+    ("GF","Parks - Miscellaneous Park"),
+    ("GG","Parks - Open Space"),
+    ("HC","Reclaimed Water System - Pipeline"),
+    ("IA","Trans - Bicycle Facility All Class."),
+    ("IB","Trans - Bridge - Vehicular"),
+    ("IC","Trans - Bridge - Pedestrian"),
+    ("ID","Trans - Roadway"),
+    ("IE","Trans - Roadway - GRails/BRails/Safety"),
+    ("IF","Trans - Roadway - Erosion/Slope/Ret Wall"),
+    ("IG","Trans - Roadway - Enhance/Scape/Median"),
+    ("IH","Trans - Roadway - Street Lighting"),
+    ("II","Trans - Ped Fac - Accessibility Improvement"),
+    ("IJ","Trans - Ped Fac - Curb Ramp"),
+    ("IK","Trans - Ped Fac - Sidewalk"),
+    ("IL","Trans - Signals - Traffic Signal"),
+    ("IM","Trans - Signals - Calming/Speed Abatement"),
+    ("IO","Trans - Roads/Widening/Reconfiguration"),
+    ("JA","Wastewater - Collection System - Main"),
+    ("JB","Wastewater - Collection System - Trunk Sewer"),
+    ("JD","Wastewater - Collection System - Laterals"),
+    ("KA","Water - Distribution System - Transmission"),
+    ("KB","Water - Distribution System - Distribution"),
+    ("KC","Water - Reservoir"))
 
 DELIVERY_METHODS = (
-    "AB","Agency Build (CDBG/Caltrans)",
-    "CF","City Forces",
-    "CMAR","Construction Manager at Risk",
-    "DB","Design Build",
-    "DBB","Design Bid Build",
-    "DVB","Developer Build",
-    "EP","Emergency Project (Std, as-needed)",
-    "JOC","Job Order Contract",
-    "JU","Joint Use",
-    "MACC","Multiple Award Construction Contract",
-    "MC","Minor Contract",
-    "SS","Sole Source",
-    "ST","Study")
+    ("AB","Agency Build (CDBG/Caltrans)"),
+    ("CF","City Forces"),
+    ("CMAR","Construction Manager at Risk"),
+    ("DB","Design Build"),
+    ("DBB","Design Bid Build"),
+    ("DVB","Developer Build"),
+    ("EP","Emergency Project (Std, as-needed)"),
+    ("JOC","Job Order Contract"),
+    ("JU","Joint Use"),
+    ("MACC","Multiple Award Construction Contract"),
+    ("MC","Minor Contract"),
+    ("SS","Sole Source"),
+    ("ST","Study"))
 
 PROJECT_PHASES = (
     ("D", "Design"),
@@ -112,22 +121,22 @@ PROJECT_PHASES = (
     ("C", "Complete"))
 
 CLIENT_DEPARTMENTS = (
-    "Airports","Airports Department",
-    "DS","Disability Services",
-    "DSD","Development Services Department",
-    "EDD","Economic Development Division",
-    "Fire","Fire-Rescue Department (Lifeguard)",
-    "GSF","General Services Facilities",
-    "Library","Library Department",
-    "P&R","Park & Recreation Department",
-    "PPD","Pollution Prevention Division",
-    "READ","Real Estate Assets Department",
-    "SWD","Storm Water Department",
-    "Sewer","Public Utilities Department - Wastewater",
-    "Street","Street Division",
-    "TEO","Transportation Engineering & Operations Division",
-    "TSWD","Transportation and Storm Water Department",
-    "Water","Public Utilities Department - Water")
+    ("Airports","Airports Department"),
+    ("DS","Disability Services"),
+    ("DSD","Development Services Department"),
+    ("EDD","Economic Development Division"),
+    ("Fire","Fire-Rescue Department (Lifeguard)"),
+    ("GSF","General Services Facilities"),
+    ("Library","Library Department"),
+    ("P&R","Park & Recreation Department"),
+    ("PPD","Pollution Prevention Division"),
+    ("READ","Real Estate Assets Department"),
+    ("SWD","Storm Water Department"),
+    ("Sewer","Public Utilities Department - Wastewater"),
+    ("Street","Street Division"),
+    ("TEO","Transportation Engineering & Operations Division"),
+    ("TSWD","Transportation and Storm Water Department"),
+    ("Water","Public Utilities Department - Water"))
 
 RESPONSIBLE_DIVISIONS = (
     "AEP/PB","Architectural Engineering & Parks Division - Public Buildings",
