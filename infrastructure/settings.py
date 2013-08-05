@@ -128,6 +128,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'infrastructure.cip',
     'bootstrap_toolkit',
+    'django_select2',
+    'jquery',
 )
 
 # A sample logging configuration. The only tangible logging

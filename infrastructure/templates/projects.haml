@@ -1,20 +1,19 @@
 - extends "application.haml"
 - block title
   Infrastrucutre
+- load tags 
 - block content
-  - url "infrastructure.cip.views.projects" "phase" "construction" as construction_link
-  - url "infrastructure.cip.views.projects" "phase" "design" as design_link 
-  - url "infrastructure.cip.views.projects" "phase" "planning" as planning_link
-  - url "infrastructure.cip.views.projects" "phase" "post construction" as post_construction_link
-  - url "infrastructure.cip.views.projects" "phase" "bid and award" as bid_and_award_link
-
-  %a{href: '{{bid_and_award_link}}' } Bid and Award
-  %a{href: '{{planning_link}}' } Planning
-  %a{href: '{{design_link}}' } Design
-  %a{href: '{{construction_link}}' } Construction
-  %a{href: '{{post_construction_link}}' } Post Construction
+  - show_shortcuts
   %h2 Current Projects
+  %form{ method: "post", action: "/projects/filter"}
+	  %table
+	    - csrf_token
+		  = form
+	  %input{ type:"submit", value:"Submit Form" }
+
   #projects
     - for project in projects
-      %h4= project.SP_PROJECT_NM
-      %p Finish: {{project.SP_CONSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}
+      - url "show_project" project.id as project_path
+      %h4
+        %a{href: '{{project_path}}' }= project.SP_PROJECT_NM
+      %p Finish: {{project.SP_CtNSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: {{project.SP_TOTAL_PROJECT_COST}} $
