@@ -5,29 +5,19 @@ from django.db.models import Q
 from infrastructure.cip.models import *
 from django import forms
 from django_select2 import *
+from django.core.urlresolvers import *
 import inspect
+from django.views.generic import ListView
+
 def index(request):
     """docstring for projects"""
     projects = Project.objects.all()
     department_needs = DepartmentNeed.objects.all()
     return render_to_response('index.haml', {'projects': projects, 'department_needs': department_needs})
 
-def projects(request,filter ='', value= '',show= 'current'):
+def projects():
     """docstring for projects"""
-    if show == "all":
-        projects = Project.objects.all()
-    else:
-        projects = Project.objects.current()
-    if filter != "":
-        if filter == "phase":
-            if value == "planning":
-                projects = Project.objects.future()
-            projects = projects.by_phase(value)
-        elif filter == "asset_group":
-            projects = projects.by_asset_group(value)
-    form = ProjectFilterForm()
-    return render(request, 'projects.haml', {'projects': projects, 'form': form })
-
+    
 def filter_projects(request):
     """docstring for filter_projects"""
     if request.POST:
@@ -43,6 +33,29 @@ def show_project(request, p_id):
     project = Project.objects.get(id= p_id)
     
     return render_to_response('project.haml', {'project': project})
+
+
+class ProjectList(ListView):
+    model = Project
+    context_object_name = 'projects'
+    template_name = 'projects.haml'
+
+    def get_queryset(self):
+        """docstring for get_queryset"""
+        if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
+            self.filter = self.kwargs['filter']
+            self.filter_value = self.kwargs['value']
+            projects = Project.objects.all()
+            return getattr(projects, 'by_{format}'.format(format=self.filter))(self.filter_value)
+        else:
+            return Project.objects.all()
+
+        
+    def get_context_data(self, **kwargs):
+        """docstring for get_contxt_data"""
+        context = super(ProjectList, self).get_context_data(**kwargs)
+        context['form'] = ProjectFilterForm()
+        return context
 
 class ProjectFilter:
     def __init__(self, form):

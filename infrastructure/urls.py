@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-
+from infrastructure.cip.views import ProjectList
 from django.contrib import admin
 admin.autodiscover()
 
@@ -8,8 +8,8 @@ urlpatterns = patterns('infrastructure.cip.views',
     # url(r'^$', 'infrastructure.views.home', name='home'),
     # url(r'^infrastructure/', include('infrastructure.foo.urls')),
     url(r'^$', 'index'),
-    url(r'^projects$', 'projects'),
-    url(r'^projects/(?P<filter>\w+)/(?P<value>\w+(\s+\w+)*)$', 'projects'),
+    url(r'^projects$',ProjectList.as_view()),
+    url(r'^projects/(?P<filter>\w+)/(?P<value>\w+(\s+\w+)*)$', ProjectList.as_view(), name='projects_list'),
     url(r'^projects/(?P<filter>\w+)/(?P<value>\w+(\s+\w+)*)/(?P<show>(all|current))$', 'projects'),
     url(r'^projects/filter$', 'filter_projects'),
 
