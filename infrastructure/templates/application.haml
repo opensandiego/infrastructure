@@ -15,7 +15,10 @@
     .container
       .navbar
         .navbar-inner
-        
+          - url 'projects_list' as projects_link
+          %ul.nav
+            %li
+              %a{href: '{{projects_link}}' } Projects
       %h1 Infrastructure San Diego
     
       - block content

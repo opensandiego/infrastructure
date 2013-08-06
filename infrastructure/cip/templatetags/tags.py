@@ -12,7 +12,7 @@ def show_shortcuts():
     phase_links = { 'links' : [], 'title': 'Current Projects by phase' }
     for (key, value) in PROJECT_PHASES:
         link = {}
-        link['url'] = reverse("projects_list",kwargs={'filter':"phase", 'value':urllib.unquote(value)})
+        link['url'] = reverse("projects_filter_list",kwargs={'filter':"phase", 'value':urllib.unquote(value)})
         link['name'] = value
         link['key'] = key
         phase_links['links'].append(link)
