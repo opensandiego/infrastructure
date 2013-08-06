@@ -2,7 +2,6 @@
 from infrastructure.cip.models import *
 from django import template
 from django.core.urlresolvers import *
-from django.template.defaultfilters import slugify
 import urllib
 
 register = template.Library()
@@ -28,7 +27,7 @@ def show_shortcuts():
 def generate_link(type,key,value):
     """docstring for generate_link"""
     link = {}
-    link['url'] = reverse("projects_filter_list",kwargs={'filter':type, 'value':slugify(value)})
+    link['url'] = reverse("projects_filter_list",kwargs={'filter':type, 'value':iri_to_uri(re.sub(r"[\(\)-]"," ",value))})
     link['name'] = value
     link['key'] = key
     return link
