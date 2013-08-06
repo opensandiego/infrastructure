@@ -9,7 +9,7 @@ def parse_date(date_str, format):
     except:
         return None
 
-projects_file = open('data/cip_snapshot/csv/20130531_cip_dump.csv')
+projects_file = open('/home/ubuntu/infrastructure/data/cip_snapshot/csv/20130531_cip_dump.csv')
 projects_reader = csv.reader(projects_file, delimiter=',', quotechar='"')
 headerline = projects_reader.next()
 for project in projects_reader:

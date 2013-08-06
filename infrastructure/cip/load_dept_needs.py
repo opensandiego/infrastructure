@@ -16,7 +16,7 @@ def parse_int(int_str):
         return None
 
 def load_buildings():
-    building_projects_file = open('data/dept-needs/csv/building_facilities.csv')
+    building_projects_file = open('/home/ubuntu/infrastructure/data/dept-needs/csv/building_facilities.csv')
     building_reader = csv.reader(building_projects_file, delimiter=',', quotechar='"')
     headerline = building_reader.next()
     for project in building_reader:
@@ -42,7 +42,7 @@ def load_buildings():
         p.save()
 
 def load_parks():
-    parks_projects_file = open('data/dept-needs/csv/parks_rec.csv')
+    parks_projects_file = open('/home/ubuntu/infrastructure/data/dept-needs/csv/parks_rec.csv')
     parks_reader = csv.reader(parks_projects_file, delimiter=',', quotechar='"')
     headerline = parks_reader.next()
     for project in parks_reader:
@@ -70,7 +70,7 @@ def load_parks():
         p.save()
 
 def load_water():
-    water_projects_file = open('data/dept-needs/csv/water.csv')
+    water_projects_file = open('/home/ubuntu/infrastructure/data/dept-needs/csv/water.csv')
     water_reader = csv.reader(water_projects_file, delimiter=',', quotechar='"')
     headerline = water_reader.next()
     for project in water_reader:
@@ -83,7 +83,7 @@ def load_water():
         p.save()
 
 def load_sewer():
-    sewer_projects_file = open('data/dept-needs/csv/sewer.csv')
+    sewer_projects_file = open('/home/ubuntu/infrastructure/data/dept-needs/csv/sewer.csv')
     sewer_reader = csv.reader(sewer_projects_file, delimiter=',', quotechar='"')
     headerline = sewer_reader.next()
     for project in sewer_reader:
@@ -97,7 +97,7 @@ def load_sewer():
         p.save()
 
 def load_storm_drains():
-    storm_drain_projects_file = open('data/dept-needs/csv/storm_drains.csv')
+    storm_drain_projects_file = open('/home/ubuntu/infrastructure/data/dept-needs/csv/storm_drains.csv')
     storm_drain_reader = csv.reader(storm_drain_projects_file, delimiter=',', quotechar='"')
     headerline = storm_drain_reader.next()
     for project in storm_drain_reader:
@@ -116,7 +116,7 @@ def load_storm_drains():
         p.save()
 
 def load_transportation():
-    transportation_projects_file = open('data/dept-needs/csv/transportation.csv')
+    transportation_projects_file = open('/home/ubuntu/infrastructure/data/dept-needs/csv/transportation.csv')
     transportation_reader = csv.reader(transportation_projects_file, delimiter=',', quotechar='"')
     headerline = transportation_reader.next()
     for project in transportation_reader:
