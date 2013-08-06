@@ -12,19 +12,19 @@ class ProjectManagerMixin(object):
         return self.filter(SP_AWARD_START_DT__gt=datetime.date.today())
     def by_phase(self,phase):
         """docstring for by_phase"""
-        return self.filter(SP_PROJECT_PHASE__icontains=phase)
+        return self.filter(SP_PROJECT_PHASE__istartswith=phase)
     def by_asset_group(self,asset_group):
         """docstring for by_asset_group"""
-        return self.filter(SP_ASSET_TYPE_GROUP__icontains=asset_group)
+        return self.filter(SP_ASSET_TYPE_GROUP__istartswith=asset_group)
     def by_asset_choice(self,asset_choice):
         """docstring for by_asset_group"""
-        return self.filter(SP_ASSET_TYPE_CD__icontains=asset_choice)
+        return self.filter(SP_ASSET_TYPE_CD__istartswith=asset_choice)
     def by_delivery_method(self,delivery_method):
         """docstring for by_asset_group"""
-        return self.filter(SP_DELIVERY_METHOD_CD__icontains=delivery_method)
+        return self.filter(SP_DELIVERY_METHOD_CD__istartswith=delivery_method)
     def by_client_departement(self,client_departements):
         """docstring for by_asset_group"""
-        return self.filter(SP_CLIENT2__icontains=client_departements)
+        return self.filter(SP_CLIENT2__istartswith=client_departements)
 
 class ProjectQuerySet(QuerySet,ProjectManagerMixin):
     pass
@@ -32,7 +32,7 @@ class ProjectQuerySet(QuerySet,ProjectManagerMixin):
 class ProjectManager(models.Manager,ProjectManagerMixin):
     def phase_count(self, phase):
         """docstring for phase_count"""
-        return self.filter(SP_PROJECT_PHASE__icontains=phase).count()
+        return self.filter(SP_PROJECT_PHASE__istartswith=phase).count()
     def get_query_set(self):
         """docstring for get_query_set"""
         return ProjectQuerySet(self.model)

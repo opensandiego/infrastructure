@@ -7,7 +7,7 @@ from django import forms
 from django_select2 import *
 from django.core.urlresolvers import *
 import inspect
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 def index(request):
     """docstring for projects"""
@@ -34,21 +34,37 @@ def show_project(request, p_id):
     
     return render_to_response('project.haml', {'project': project})
 
-
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'project.haml'
+    context_object_name = 'project'
+    
 class ProjectList(ListView):
     model = Project
     context_object_name = 'projects'
     template_name = 'projects.haml'
 
+    def timephase(self):
+        """docstring for timephase"""
+        if self.kwargs.has_key('show'):
+            if self.kwargs['show'] == "all":
+                return Project.objects.all()
+            elif self.kwargs['show'] == "current":
+                return Project.objects.current()
+            else:
+                return Project.objects.all()
+        else:
+            return Project.objects.current()
+        
     def get_queryset(self):
         """docstring for get_queryset"""
         if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
             self.filter = self.kwargs['filter']
             self.filter_value = self.kwargs['value']
-            projects = Project.objects.all()
+            projects = self.timephase() 
             return getattr(projects, 'by_{format}'.format(format=self.filter))(self.filter_value)
         else:
-            return Project.objects.all()
+            return self.timephase() 
 
         
     def get_context_data(self, **kwargs):

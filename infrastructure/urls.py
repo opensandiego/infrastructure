@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from infrastructure.cip.views import ProjectList
+from infrastructure.cip.views import ProjectList, ProjectDetailView
 from django.contrib import admin
 admin.autodiscover()
 
@@ -10,9 +10,9 @@ urlpatterns = patterns('infrastructure.cip.views',
     url(r'^$', 'index'),
     url(r'^projects$',ProjectList.as_view()),
     url(r'^projects/(?P<filter>\w+)/(?P<value>\w+(\s+\w+)*)$', ProjectList.as_view(), name='projects_list'),
-    url(r'^projects/(?P<filter>\w+)/(?P<value>\w+(\s+\w+)*)/(?P<show>(all|current))$', 'projects'),
+    url(r'^projects/(?P<filter>\w+)/(?P<value>\w+(\s+\w+)*)/(?P<show>(all|current))$', ProjectList.as_view(), name='projects_list'),
     url(r'^projects/filter$', 'filter_projects'),
 
-    url(r'^project/(\d+)/$','show_project', name='show_project'),
+    url(r'^project/(?P<pk>\d+)/$', ProjectDetailView.as_view(),name='project_detail'),
     url(r'^admin/', include(admin.site.urls)),
 )
