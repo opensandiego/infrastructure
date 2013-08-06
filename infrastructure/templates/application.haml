@@ -20,5 +20,8 @@
             %li
               %a{href: '{{projects_link}}' } Projects
       %h1 Infrastructure San Diego
-    
-      - block content
+      .row
+        .span2
+          - block sidebar
+        .span10
+          - block content
