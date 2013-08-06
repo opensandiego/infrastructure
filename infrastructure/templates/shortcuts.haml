@@ -1,0 +1,7 @@
+
+- for shortcut in shortcuts
+  %h6= shortcut.title
+  %ul
+    - for link in shortcut.links
+      %li
+        %a{href: '{{ link.url }}' }= link.name

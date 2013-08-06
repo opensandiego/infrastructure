@@ -1,0 +1,19 @@
+- extends "application.haml"
+- block title
+  Infrastrucutre
+- load tags 
+- block content
+  - show_shortcuts
+  %h2 Current Projects
+  %form{ method: "post", action: "/projects/filter"}
+	  %table
+	    - csrf_token
+		  = form
+	  %input{ type:"submit", value:"Submit Form" }
+
+  #projects
+    - for project in projects
+      - url "project_detail" project.pk as project_path
+      %h4
+        %a{href: '{{project_path}}' }= project.SP_PROJECT_NM
+      %p Finish: {{project.SP_CtNSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: {{project.SP_TOTAL_PROJECT_COST}} $
