@@ -15,7 +15,7 @@
 
   #projects
     - for project in projects
-      - url "project_detail" project.id as project_path
+      - url 'project_detail' project.pk as project_url
       %h4
-        %a{href: '{{project_path}}' }= project.SP_PROJECT_NM
+        %a{'href': "{% url 'project_detail' project.pk %}"}= project.SP_PROJECT_NM
       %p Finish: {{project.SP_CtNSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: {{project.SP_TOTAL_PROJECT_COST}} $
