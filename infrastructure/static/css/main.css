@@ -1,0 +1,20 @@
+a {
+  color: #62ACC2;
+}
+
+#filter {
+  clear: left;
+  overflow: hidden;
+  border: 1px solid #30546A;
+  background: #476B7B;
+  padding: 5px 10px 15px;
+  color: #fff;
+  margin: 0 0 30px 0;
+}
+#filter li {
+  float:left;
+  padding: 5px 10px;
+}
+#projects {
+  clear: left;
+}

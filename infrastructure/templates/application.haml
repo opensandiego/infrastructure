@@ -2,6 +2,7 @@
 - load bootstrap_toolkit
 - load staticfiles
 - load django_select2_tags
+- load static from staticfiles
 %html
   %head
     %title
@@ -11,14 +12,17 @@
 	  - import_django_select2_css
     - bootstrap_stylesheet_tag
     - bootstrap_stylesheet_tag "responsive"
+    %link{href: "{% static 'css/main.css' %}", rel:'stylesheet', type:'text/css'}
   %body
     .container
       .navbar
         .navbar-inner
-          - url 'projects_list' as projects_link
           %ul.nav
             %li
-              %a{href: '{{projects_link}}' } Projects
+              %a{href: "{% url 'projects_list' as projects_link %}" } Projects
       %h1 Infrastructure San Diego
-    
-      - block content
+      .row
+        .span2
+          - block sidebar
+        .span10
+          - block content

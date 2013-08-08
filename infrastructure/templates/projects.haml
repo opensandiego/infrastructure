@@ -2,18 +2,23 @@
 - block title
   Infrastrucutre
 - load tags 
-- block content
+- block sidebar
   - show_shortcuts
+  
+- block content
+  - load humanize
   %h2 Current Projects
-  %form{ method: "post", action: "/projects/filter"}
-	  %table
-	    - csrf_token
-		  = form
-	  %input{ type:"submit", value:"Submit Form" }
+  #filter
+    %h5 Filter
+    %form{ method: "post", action: "/projects/filter"}
+        - csrf_token
+        = form.as_ul
+      %li
+        %input{ type:"submit", value:"Submit Form" }
 
   #projects
     - for project in projects
-      - url "project_detail" project.pk as project_path
+      - url 'project_detail' project.pk as project_url
       %h4
-        %a{href: '{{project_path}}' }= project.SP_PROJECT_NM
-      %p Finish: {{project.SP_CtNSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: {{project.SP_TOTAL_PROJECT_COST}} $
+        %a{'href': "{% url 'project_detail' project.pk %}"}= project.SP_PROJECT_NM
+      %p Finish: {{project.SP_CONSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: {{project.SP_TOTAL_PROJECT_COST|intcomma}} $

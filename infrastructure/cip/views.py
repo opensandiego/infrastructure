@@ -43,6 +43,7 @@ class ProjectList(ListView):
     model = Project
     context_object_name = 'projects'
     template_name = 'projects.haml'
+    #paginate_by = 10
 
     def timephase(self):
         """docstring for timephase"""
@@ -55,6 +56,14 @@ class ProjectList(ListView):
                 return Project.objects.all()
         else:
             return Project.objects.current()
+    def post(self, request, *args, **kwargs):
+        form = ProjectFilterForm(self.request.POST)
+        form.is_valid()
+        projects =  ProjectFilter(form).filter()
+        kwargs['object_list'] = projects
+        context = super(ProjectList, self).get_context_data(**kwargs)
+        context["form"] = form
+        return render(request, self.template_name, context)
         
     def get_queryset(self):
         """docstring for get_queryset"""
@@ -122,14 +131,15 @@ class ProjectFilter:
         self.projects = self.projects.by_client_departement(client_departements[client_departement]).order_by(self.order)
 
 class ProjectFilterForm(forms.Form):
-    choice_phases = tuple([(u'', 'None')] + list(PROJECT_PHASES))
-    choice_assets = tuple([(u'', 'None')] + list(ASSET_TYPE_GROUPS))
-    choice_type_choices = tuple([(u'', 'None')] + list(ASSET_TYPE_CHOICES))
-    choice_delivery_methods = tuple([(u'', 'None')] + list(DELIVERY_METHODS))
-    choice_client_departements = tuple([(u'', 'None')] + list(CLIENT_DEPARTMENTS))
+    default = [(u'', 'All')]
+    choice_phases = tuple(default + list(PROJECT_PHASES))
+    choice_assets = tuple(default + list(ASSET_TYPE_GROUPS))
+    choice_type_choices = tuple(default + list(ASSET_TYPE_CHOICES))
+    choice_delivery_methods = tuple(default + list(DELIVERY_METHODS))
+    choice_client_departements = tuple(default + list(CLIENT_DEPARTMENTS))
 
     dataset = Select2ChoiceField(initial=2,
-        choices=(('all','All'),('current','Current')),required=False)
+        choices=(('all','All'),('current','Active')),required=False)
     order = Select2ChoiceField(initial=2,
         choices=(('SP_AWARD_START_DT', 'Award Start'),('SP_CONSTR_FINISH_DT','construction finish'),('SP_TOTAL_PROJECT_COST','construction cost')),required=False)
     phases = Select2ChoiceField(initial=2,
