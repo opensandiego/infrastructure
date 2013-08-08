@@ -2,6 +2,7 @@
 - load bootstrap_toolkit
 - load staticfiles
 - load django_select2_tags
+- load static from staticfiles
 %html
   %head
     %title
@@ -11,6 +12,7 @@
 	  - import_django_select2_css
     - bootstrap_stylesheet_tag
     - bootstrap_stylesheet_tag "responsive"
+    %link{href: "{% static 'css/main.css' %}", rel:'stylesheet', type:'text/css'}
   %body
     .container
       .navbar
