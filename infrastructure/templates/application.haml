@@ -8,6 +8,7 @@
     %title
       - block title
     %script{src: '{{ STATIC_URL }}js/jquery.js' }
+    %script{src: '{{ STATIC_URL }}js/main.js' }
 	  - import_django_select2_js
 	  - import_django_select2_css
     - bootstrap_stylesheet_tag
@@ -22,7 +23,7 @@
               %a{href: "{% url 'projects_list' as projects_link %}" } Projects
       %h1 Infrastructure San Diego
       .row
-        .span2
+        .span2.hidden-phone
           - block sidebar
         .span10
           - block content
