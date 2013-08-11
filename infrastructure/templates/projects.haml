@@ -21,4 +21,4 @@
       - url 'project_detail' project.pk as project_url
       %h4
         %a{'href': "{% url 'project_detail' project.pk %}"}= project.SP_PROJECT_NM
-      %p Finish: {{project.SP_CONSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: {{project.SP_TOTAL_PROJECT_COST|intcomma}} $
+      %p Finish: {{project.SP_CONSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: ${{project.SP_TOTAL_PROJECT_COST|intcomma}}
