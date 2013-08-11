@@ -102,6 +102,8 @@ class ProjectFilter:
             self.delivery_methods()
         if self.form.cleaned_data.has_key('client_departements') and self.form.cleaned_data['client_departements']:
             self.client_departements()
+        if self.form.cleaned_data.has_key('project_cost') and self.form.cleaned_data['project_cost']:
+            self.project_cost()
         return self.projects
 
     def phases(self):
@@ -129,6 +131,10 @@ class ProjectFilter:
         client_departement = self.form.cleaned_data['client_departements']
         client_departements = dict(CLIENT_DEPARTMENTS)
         self.projects = self.projects.by_client_departement(client_departements[client_departement]).order_by(self.order)
+    def project_cost(self):
+        """docstring for project_cost"""
+        project_cost = self.form.cleaned_data['project_cost']
+        self.projects = self.projects.by_project_cost(ProjectCosts().get_value(int(project_cost))).order_by(self.order)
 
 class ProjectFilterForm(forms.Form):
     default = [(u'', 'All')]
@@ -137,11 +143,14 @@ class ProjectFilterForm(forms.Form):
     choice_type_choices = tuple(default + list(ASSET_TYPE_CHOICES))
     choice_delivery_methods = tuple(default + list(DELIVERY_METHODS))
     choice_client_departements = tuple(default + list(CLIENT_DEPARTMENTS))
+    project_costs = ProjectCosts().get_touples()
 
     dataset = Select2ChoiceField(initial=2,
         choices=(('all','All'),('current','Active')),required=False)
     order = Select2ChoiceField(initial=2,
-        choices=(('SP_AWARD_START_DT', 'Award Start'),('SP_CONSTR_FINISH_DT','construction finish'),('SP_TOTAL_PROJECT_COST','construction cost')),required=False)
+        choices=(('SP_AWARD_START_DT', 'Award Start ASC'),('-SP_AWARD_START_DT', 'Award Start DESC'),('SP_CONSTR_FINISH_DT','construction finish ASC'),('-SP_CONSTR_FINISH_DT','construction finish DESC'),('SP_TOTAL_PROJECT_COST','construction cost ASC'),('-SP_TOTAL_PROJECT_COST','construction cost DESC')),required=False)
+    project_cost = Select2ChoiceField(
+        choices=project_costs)
     phases = Select2ChoiceField(initial=2,
         choices=choice_phases,required=False)
     asset_types = Select2ChoiceField(initial=2,

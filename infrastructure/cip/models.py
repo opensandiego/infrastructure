@@ -1,7 +1,52 @@
 from django.db import models
 from django.db.models.query import QuerySet
 import datetime
+from django.contrib.humanize.templatetags.humanize import intcomma
 # Create your models here.
+
+class ProjectCosts(object):
+    def __init__(self):
+        """docstring for __init__"""
+        self.cost = [
+                [0,300000],
+                [300000,500000],
+                [500000,1000000],
+                [1000000,3000000],
+                [3000000,5000000],
+                [5000000,8000000],
+                [8000000,11000000],
+                [11000000,15000000],
+                [15000000,0]
+                ]
+    def get_string(self,value):
+        """docstring for get_string"""
+        if isinstance(value, list):
+            if value[0] == 0:
+                return '< {0}'.format(intcomma(value[1]))
+            elif value[1] == 0:
+                return '> {0}'.format(intcomma(value[0]))
+            else:
+                return '{0} - {1}'.format(intcomma(value[0]), intcomma(value[1]))
+        else:
+            return ''
+    def get_query(self,value):
+        """docstring for get_query"""
+        if isinstance(value, list):
+            if value[0] == 0:
+                return self.filter(SP_TOTAL_PROJECT_COST__lt=value[1])
+            elif value[1] == 0:
+                return self.filter(SP_TOTAL_PROJECT_COST__gt=value[0])
+            else:
+                return self.filter(SP_TOTAL_PROJECT_COST__gt=value[0], SP_TOTAL_PROJECT_COST__lt=value[1])
+
+    def get_value(self,value):
+        """docstring for get_value"""
+        print value
+        return self.cost[value]
+    def get_touples(self):
+        """docstring for get_touples"""
+        return [(i,self.get_string(self.cost[i])) for i in range(len(self.cost))]
+
 
 class ProjectManagerMixin(object):
     def current(self):
@@ -25,8 +70,11 @@ class ProjectManagerMixin(object):
     def by_client_departement(self,client_departements):
         """docstring for by_asset_group"""
         return self.filter(SP_CLIENT2__istartswith=client_departements)
+    def by_project_cost(self,project_cost):
+        """docstring for by_project_cost"""
+        return self.get_query(project_cost)
 
-class ProjectQuerySet(QuerySet,ProjectManagerMixin):
+class ProjectQuerySet(QuerySet,ProjectManagerMixin,ProjectCosts):
     pass
 
 class ProjectManager(models.Manager,ProjectManagerMixin):
