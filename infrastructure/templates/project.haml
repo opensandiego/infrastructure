@@ -9,11 +9,11 @@
   #project
     %h2= project.SP_PROJECT_NM
     %p= project.SP_PROJECT_DESC
-    %h3 Total Cost: {{project.SP_TOTAL_PROJECT_COST|intcomma}} $
+    %h3 Total Cost: ${{project.SP_TOTAL_PROJECT_COST|intcomma}}
     %h4 Construction Plan
     %p Construction start: {{project.SP_CONSTRUCTION_START_DT}}
     %p Construction finish: {{project.SP_CONSTR_FINISH_DT}}
-    %p Construction cost: {{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}} $
+    %p Construction cost: ${{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}}
     %h4 Current Phase: {{project.SP_PROJECT_PHASE}}
     %h5 Division: {{project.SP_RESP_DIV_SECT_DESC}}
     %h5 Asset Type: {{project.SP_ASSET_TYPE_GROUP}}
