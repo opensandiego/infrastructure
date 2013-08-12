@@ -104,37 +104,37 @@ class ProjectFilter:
             self.client_departements()
         if self.form.cleaned_data.has_key('project_cost') and self.form.cleaned_data['project_cost']:
             self.project_cost()
-        return self.projects
+        return self.projects.order_by(self.order)
 
     def phases(self):
         """docstring for phases"""
         phase = self.form.cleaned_data['phases']
         phases = dict(PROJECT_PHASES)
-        self.projects = self.projects.by_phase(phases[phase]).order_by(self.order)
+        self.projects = self.projects.by_phase(phases[phase])
     def asset_types(self):
         """docstring for asset_types"""
         asset_type = self.form.cleaned_data['asset_types']
         asset_types = dict(ASSET_TYPE_GROUPS)
-        self.projects = self.projects.by_asset_group(asset_types[asset_type]).order_by(self.order)
+        self.projects = self.projects.by_asset_group(asset_types[asset_type])
     def asset_groups(self):
         """docstring for asset_types"""
         asset_group = self.form.cleaned_data['type_choices']
         asset_groups = dict(ASSET_TYPE_CHOICES)
-        self.projects = self.projects.by_asset_group(asset_groups[asset_group]).order_by(self.order)
+        self.projects = self.projects.by_asset_group(asset_groups[asset_group])
     def delivery_methods(self):
         """docstring for asset_types"""
         delivery_method = self.form.cleaned_data['delivery_methods']
         delivery_methods = dict(DELIVERY_METHODS)
-        self.projects = self.projects.by_delivery_method(delivery_methods[delivery_method]).order_by(self.order)
+        self.projects = self.projects.by_delivery_method(delivery_methods[delivery_method])
     def client_departements(self):
         """docstring for asset_types"""
         client_departement = self.form.cleaned_data['client_departements']
         client_departements = dict(CLIENT_DEPARTMENTS)
-        self.projects = self.projects.by_client_departement(client_departements[client_departement]).order_by(self.order)
+        self.projects = self.projects.by_client_departement(client_departements[client_departement])
     def project_cost(self):
         """docstring for project_cost"""
         project_cost = self.form.cleaned_data['project_cost']
-        self.projects = self.projects.by_project_cost(ProjectCosts().get_value(int(project_cost))).order_by(self.order)
+        self.projects = self.projects.by_project_cost(ProjectCosts().get_value(int(project_cost)))
 
 class ProjectFilterForm(forms.Form):
     default = [(u'', 'All')]
