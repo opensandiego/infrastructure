@@ -1,0 +1,18 @@
+#projects
+  - for project in projects
+    - url "show_project" project.id as project_path
+    %h4
+      %a{href: '{{project_path}}' }= project.SP_PROJECT_NM
+    %p Finish: {{project.SP_CONSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: {{project.SP_TOTAL_PROJECT_COST}} $
+#pagination
+  - if page_obj.has_previous
+    %span
+      %a{href:'#prev', "data-page": '{{page_obj.previous_page_number}}', class: 'btn' } prev
+  %span
+    Page
+    %a{href:'#{{page_obj.number}}', "data-page": '{{page_obj.number}}'}= page_obj.number
+    of
+    %a{href:'#last', "data-page": '{{paginator.num_pages}}'}= paginator.num_pages
+  - if page_obj.has_next
+    %span
+      %a{href:'#next', "data-page": '{{page_obj.next_page_number}}', class: 'btn' } next

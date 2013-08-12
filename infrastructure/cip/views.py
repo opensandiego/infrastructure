@@ -8,7 +8,6 @@ from django_select2 import *
 from django.core.urlresolvers import *
 import inspect
 from django.views.generic import ListView, DetailView
-
 def index(request):
     """docstring for projects"""
     projects = Project.objects.all()
@@ -38,12 +37,11 @@ class ProjectDetailView(DetailView):
     model = Project
     template_name = 'project.haml'
     context_object_name = 'project'
-    
+
 class ProjectList(ListView):
     model = Project
     context_object_name = 'projects'
     template_name = 'projects.haml'
-    #paginate_by = 10
 
     def timephase(self):
         """docstring for timephase"""
@@ -56,15 +54,6 @@ class ProjectList(ListView):
                 return Project.objects.all()
         else:
             return Project.objects.current()
-    def post(self, request, *args, **kwargs):
-        form = ProjectFilterForm(self.request.POST)
-        form.is_valid()
-        projects =  ProjectFilter(form).filter()
-        kwargs['object_list'] = projects
-        context = super(ProjectList, self).get_context_data(**kwargs)
-        context["form"] = form
-        return render(request, self.template_name, context)
-        
     def get_queryset(self):
         """docstring for get_queryset"""
         if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
@@ -75,13 +64,24 @@ class ProjectList(ListView):
         else:
             return self.timephase() 
 
-        
     def get_context_data(self, **kwargs):
         """docstring for get_contxt_data"""
         context = super(ProjectList, self).get_context_data(**kwargs)
         context['form'] = ProjectFilterForm()
         return context
 
+class ProjectsListListView(ProjectList):
+    template_name = 'project_list.haml'
+    paginate_by = 10
+    def get(self, request, *args, **kwargs):  
+        form = ProjectFilterForm(self.request.GET)
+        if form.is_valid():
+            projects =  ProjectFilter(form).filter()
+        kwargs['object_list'] = projects
+        context = super(ProjectList, self).get_context_data(**kwargs)
+        print context["paginator"]
+        return render(request, self.template_name, context)
+ 
 class ProjectFilter:
     def __init__(self, form):
         self.form = form

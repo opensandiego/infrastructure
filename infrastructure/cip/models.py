@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models.query import QuerySet
 import datetime
 from django.contrib.humanize.templatetags.humanize import intcomma
-# Create your models here.
 
 class ProjectCosts(object):
     def __init__(self):

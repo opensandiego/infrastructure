@@ -10,15 +10,16 @@
   %h2 Current Projects
   #filter
     %h5 Filter
-    %form{ method: "post", action: "/projects/filter"}
+    %form#projects_filter{ method: "post", action: "/projects/filter"}
         - csrf_token
         = form.as_ul
+        %input#page{ type:"hidden", name: "page", value: 1}
       %li
-        %input{ type:"submit", value:"Submit Form" }
+        %input#submit{ type:"submit", value:"Submit Form" }
 
   #projects
     - for project in projects
       - url 'project_detail' project.pk as project_url
       %h4
         %a{'href': "{% url 'project_detail' project.pk %}"}= project.SP_PROJECT_NM
-      %p Finish: {{project.SP_CONSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: ${{project.SP_TOTAL_PROJECT_COST|intcomma}}
+      %p Finish: {{project.SP_CONSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: ${{project.SP_TOTAL_PROJECT_COST|intcomma}} 
