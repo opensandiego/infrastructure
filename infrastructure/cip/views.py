@@ -143,14 +143,14 @@ class ProjectFilterForm(forms.Form):
     choice_type_choices = tuple(default + list(ASSET_TYPE_CHOICES))
     choice_delivery_methods = tuple(default + list(DELIVERY_METHODS))
     choice_client_departements = tuple(default + list(CLIENT_DEPARTMENTS))
-    project_costs = ProjectCosts().get_touples()
+    project_costs = tuple(default + ProjectCosts().get_touples())
 
     dataset = Select2ChoiceField(initial=2,
         choices=(('all','All'),('current','Active')),required=False)
     order = Select2ChoiceField(initial=2,
         choices=(('SP_AWARD_START_DT', 'Award Start ASC'),('-SP_AWARD_START_DT', 'Award Start DESC'),('SP_CONSTR_FINISH_DT','construction finish ASC'),('-SP_CONSTR_FINISH_DT','construction finish DESC'),('SP_TOTAL_PROJECT_COST','construction cost ASC'),('-SP_TOTAL_PROJECT_COST','construction cost DESC')),required=False)
     project_cost = Select2ChoiceField(
-        choices=project_costs)
+        choices=project_costs, required=False)
     phases = Select2ChoiceField(initial=2,
         choices=choice_phases,required=False)
     asset_types = Select2ChoiceField(initial=2,
