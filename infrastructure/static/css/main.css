@@ -18,3 +18,46 @@ a {
 #projects {
   clear: left;
 }
+#projects dl {
+  margin: 0;
+  clear:both;
+  overflow:auto;
+}
+#projects li {
+  padding: 5px 10px 5px 40px;
+  display:block;
+  margin: 0 0 5px 0;
+  border-bottom: 1px solid #ccc;
+  clear:both;
+}
+#projects dt {
+  font-size: 18px;
+  line-height: 24px;
+}
+#projects dd {
+  padding: 5px 20px 5px 0;
+  margin: 0;
+  float:left;
+  color: #777;
+}
+.icon {
+  padding: 5px 0 5px 40px;
+}
+.design {
+  background: url('../images/icons/glyphicons_234_brush.png') center left no-repeat;
+}
+.construction {
+  background: url('../images/icons/glyphicons_430_construction_cone.png') center left no-repeat;
+}
+.planing {
+  background: url('../images/icons/glyphicons_335_pushpin.png') center left no-repeat;
+}
+.post-construction {
+  background: url('../images/icons/glyphicons_331_dashboard.png') center left no-repeat;
+}
+.bid {
+  background: url('../images/icons/glyphicons_458_money.png') center left no-repeat;
+}
+.completed {
+  background: url('../images/icons/glyphicons_206_ok_2.png') center left no-repeat;
+}

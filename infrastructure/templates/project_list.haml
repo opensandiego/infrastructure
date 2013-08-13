@@ -1,9 +1,7 @@
+- load tags 
 #projects
   - for project in projects
-    - url "show_project" project.id as project_path
-    %h4
-      %a{href: '{{project_path}}' }= project.SP_PROJECT_NM
-    %p Finish: {{project.SP_CONSTR_FINISH_DT}}, Phase: {{project.SP_PROJECT_PHASE}}, project cost: {{project.SP_TOTAL_PROJECT_COST}} $
+    - project_list_item project
 #pagination
   - if page_obj.has_previous
     %span
