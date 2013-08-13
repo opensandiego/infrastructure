@@ -1,0 +1,14 @@
+- load static from staticfiles
+- load humanize
+%li{  class: 'icon {{phase}}'  }
+  %dl
+    %dt
+      %a{href: '{{link}}'}
+        = project.SP_PROJECT_NM
+        %img{src: "{% static asset_type_image %}"}
+    %dd
+      %img{src: "{% static 'images/icons/glyphicons_045_calendar.png' %}", width: '15'}
+      {{project.SP_CONSTR_FINISH_DT}}
+    %dd
+      %img{src: "{% static 'images/icons/glyphicons_227_usd.png' %}", width: '15'}
+      {{project.SP_TOTAL_PROJECT_COST|intcomma}} 

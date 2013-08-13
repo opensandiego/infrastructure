@@ -5,6 +5,23 @@ from django.core.urlresolvers import *
 import urllib
 
 register = template.Library()
+phase = {
+        'Design' : 'design',
+        'Construction' : 'construction',
+        'Post Construction' : 'post-construction',
+        'Planning' : 'planning',
+        'Bid and Award' : 'bid',
+        'Complete' : 'complete'
+        }
+asset_type = {
+        'Buildings': 'commercial',
+        'Airports' : 'airport',
+        'Storm Water Drainage' : 'telephone',
+        'Parks' : 'park2',
+        'Transportation' : 'bus',
+        'Sewer' : 'wetland',
+        'Water' : 'water',
+        }
 @register.inclusion_tag('shortcuts.haml')
 def show_shortcuts():
     """docstring for generate_shortcuts"""
@@ -31,3 +48,10 @@ def generate_link(type,key,value):
     link['name'] = value
     link['key'] = key
     return link
+
+@register.inclusion_tag('project_list_item.haml')
+def project_list_item(project):
+    """docstring for project_list_item"""
+    project_link_path = reverse('project_detail', args=[project.id] )
+    asset_type_image = "images/icons/%s-18.png" % asset_type[project.SP_ASSET_TYPE_GROUP] 
+    return { 'project' : project, 'link': project_link_path, 'phase': phase[project.SP_PROJECT_PHASE], 'asset_type_image': asset_type_image }
