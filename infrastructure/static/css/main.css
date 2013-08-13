@@ -1,7 +1,9 @@
 a {
   color: #62ACC2;
 }
-
+#footer {
+  margin: 20px 0;
+}
 #filter {
   clear: left;
   overflow: hidden;
