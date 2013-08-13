@@ -18,6 +18,8 @@
         %input#submit{ type:"submit", value:"Submit Form" }
 
   #project-list
+    - pagination_count
+    
     #projects
       - for project in projects
         - project_list_item project

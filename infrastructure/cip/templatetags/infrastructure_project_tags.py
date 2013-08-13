@@ -63,3 +63,10 @@ def pagination(context):
         'paginator': context['paginator'],
         'page_obj': context['page_obj']
         }
+@register.inclusion_tag('pagination_count', takes_context=True)
+def pagination_count(context):
+    """docstring for pagination_count"""
+    return {
+        'paginator': context['paginator'],
+        'page_obj': context['page_obj']
+        }
