@@ -6,10 +6,10 @@ $(document).ready(function() {
       url: '/projects_list',
       data: form_data,
     }).done(function(data) { 
-      $('#projects').html(data);
+      $('#project-list').html(data);
     });
   });
-  $(document).on("click", "#pagination a", function(event) {
+  $(document).on("click", ".remote #pagination a", function(event) {
     event.preventDefault();
     $('form #page').val($(this).data('page'));
     $('form').submit();

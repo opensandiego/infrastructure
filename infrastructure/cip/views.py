@@ -42,6 +42,7 @@ class ProjectList(ListView):
     model = Project
     context_object_name = 'projects'
     template_name = 'projects.haml'
+    paginate_by = 20
 
     def timephase(self):
         """docstring for timephase"""
@@ -79,7 +80,6 @@ class ProjectsListListView(ProjectList):
             projects =  ProjectFilter(form).filter()
         kwargs['object_list'] = projects
         context = super(ProjectList, self).get_context_data(**kwargs)
-        print context["paginator"]
         return render(request, self.template_name, context)
  
 class ProjectFilter:

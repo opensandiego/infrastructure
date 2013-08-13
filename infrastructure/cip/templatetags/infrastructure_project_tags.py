@@ -55,3 +55,18 @@ def project_list_item(project):
     project_link_path = reverse('project_detail', args=[project.id] )
     asset_type_image = "images/icons/%s-18.png" % asset_type[project.SP_ASSET_TYPE_GROUP] 
     return { 'project' : project, 'link': project_link_path, 'phase': phase[project.SP_PROJECT_PHASE], 'asset_type_image': asset_type_image }
+
+@register.inclusion_tag('pagination.haml',takes_context=True)
+def pagination(context):
+    """docstring for pagination"""
+    return {
+        'paginator': context['paginator'],
+        'page_obj': context['page_obj']
+        }
+@register.inclusion_tag('pagination_count', takes_context=True)
+def pagination_count(context):
+    """docstring for pagination_count"""
+    return {
+        'paginator': context['paginator'],
+        'page_obj': context['page_obj']
+        }

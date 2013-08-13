@@ -1,7 +1,7 @@
 - extends "application.haml"
 - block title
   Infrastructure
-- load tags 
+- load infrastructure_project_tags 
 - block sidebar
   - show_shortcuts
   
@@ -17,6 +17,10 @@
       %li
         %input#submit{ type:"submit", value:"Submit Form" }
 
-  #projects
-    - for project in projects
-      - project_list_item project
+  #project-list
+    - pagination_count
+    
+    #projects
+      - for project in projects
+        - project_list_item project
+    - pagination
