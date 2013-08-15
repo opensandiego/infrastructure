@@ -1,7 +1,7 @@
-
-- for shortcut in shortcuts
-  %h6= shortcut.title
-  %ul
-    - for link in shortcut.links
-      %li
-        %a{href: '{{ link.url }}' }= link.name
+#shortcuts
+  - for shortcut in shortcuts
+    %h5= shortcut.title
+    %ul
+      - for link in shortcut.links
+        %li{class: 'icon {{link.image_class}}' }
+          %a{href: '{{ link.url }}' }= link.name
