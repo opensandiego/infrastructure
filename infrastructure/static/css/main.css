@@ -51,7 +51,7 @@ a {
 .construction {
   background: url('../images/icons/glyphicons_430_construction_cone.png') center left no-repeat;
 }
-.planing {
+.planning {
   background: url('../images/icons/glyphicons_335_pushpin.png') center left no-repeat;
 }
 .post-construction {
@@ -62,4 +62,32 @@ a {
 }
 .completed {
   background: url('../images/icons/glyphicons_206_ok_2.png') center left no-repeat;
+}
+.buildings {
+  background: url('../images/icons/commercial-24.png') center left no-repeat;
+}
+.airport {
+  background: url('../images/icons/airport-24.png') center left no-repeat;
+}
+.storm-water-drainage {
+  background: url('../images/icons/telephone-24.png') center left no-repeat;
+}
+.parks {
+  background: url('../images/icons/park2-24.png') center left no-repeat;
+}
+.transportation {
+  background: url('../images/icons/bus-24.png') center left no-repeat;
+}
+.sewer {
+  background: url('../images/icons/wetland-24.png') center left no-repeat;
+}
+.water {
+  background: url('../images/icons/water-24.png') center left no-repeat;
+}
+#shortcuts ul {
+  margin: 0;
+}
+#shortcuts ul li {
+  list-style: none;
+  margin: 0 0 5px 0;
 }
