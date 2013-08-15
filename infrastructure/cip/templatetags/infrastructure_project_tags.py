@@ -63,10 +63,24 @@ def pagination(context):
         'paginator': context['paginator'],
         'page_obj': context['page_obj']
         }
-@register.inclusion_tag('pagination_count', takes_context=True)
+@register.inclusion_tag('pagination_count.haml', takes_context=True)
 def pagination_count(context):
     """docstring for pagination_count"""
     return {
         'paginator': context['paginator'],
         'page_obj': context['page_obj']
         }
+
+@register.inclusion_tag('filter_text.haml', takes_context=True)
+def filter_text(context):
+    """docstring for filter_text"""
+    filter =  context["filter"]
+    filter_text = ""
+    if filter.has_key("asset_type"):
+        filter_text = filter_text + " {0}".format(filter['asset_type'])
+    filter_text = filter_text + " Projects"
+    if filter.has_key("phase"):
+        filter_text = filter_text + " in {0} Phase".format(filter['phase'])
+    
+    filter_text = filter_text + " ordered by {0}".format(filter['order'])
+    return {'filter_text': filter_text}

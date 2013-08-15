@@ -77,9 +77,11 @@ class ProjectsListListView(ProjectList):
     def get(self, request, *args, **kwargs):  
         form = ProjectFilterForm(self.request.GET)
         if form.is_valid():
-            projects =  ProjectFilter(form).filter()
+            pf = ProjectFilter(form)
+            projects =  pf.filter()
         kwargs['object_list'] = projects
         context = super(ProjectList, self).get_context_data(**kwargs)
+        context['filter'] = pf.filter_set
         return render(request, self.template_name, context)
  
 class ProjectFilter:
@@ -90,6 +92,7 @@ class ProjectFilter:
         else:
             self.projects = Project.objects.all()
         self.order =  self.form.cleaned_data['order'] 
+        self.filter_set = { 'order': dict(ORDER)[self.order] }
     def filter(self):
         """docstring for  filter_data"""
         if self.form.cleaned_data.has_key('phases') and self.form.cleaned_data['phases']:
@@ -110,11 +113,13 @@ class ProjectFilter:
         """docstring for phases"""
         phase = self.form.cleaned_data['phases']
         phases = dict(PROJECT_PHASES)
+        self.filter_set['phase'] = phases[phase]
         self.projects = self.projects.by_phase(phases[phase])
     def asset_types(self):
         """docstring for asset_types"""
         asset_type = self.form.cleaned_data['asset_types']
         asset_types = dict(ASSET_TYPE_GROUPS)
+        self.filter_set['asset_type'] = asset_types[asset_type]
         self.projects = self.projects.by_asset_group(asset_types[asset_type])
     def asset_groups(self):
         """docstring for asset_types"""
@@ -148,7 +153,7 @@ class ProjectFilterForm(forms.Form):
     dataset = Select2ChoiceField(initial=2,
         choices=(('all','All'),('current','Active')),required=False)
     order = Select2ChoiceField(initial=2,
-        choices=(('SP_AWARD_START_DT', 'Award Start ASC'),('-SP_AWARD_START_DT', 'Award Start DESC'),('SP_CONSTR_FINISH_DT','construction finish ASC'),('-SP_CONSTR_FINISH_DT','construction finish DESC'),('SP_TOTAL_PROJECT_COST','construction cost ASC'),('-SP_TOTAL_PROJECT_COST','construction cost DESC')),required=False)
+        choices=(ORDER),required=False)
     project_cost = Select2ChoiceField(
         choices=project_costs, required=False)
     phases = Select2ChoiceField(initial=2,
