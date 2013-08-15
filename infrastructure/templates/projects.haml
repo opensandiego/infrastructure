@@ -7,7 +7,6 @@
   
 - block content
   - load humanize
-  %h2 Current Projects
   #filter
     %h5 Filter
     %form#projects_filter{ method: "post", action: "/projects/filter"}
@@ -18,6 +17,7 @@
         %input#submit{ type:"submit", value:"Submit Form" }
 
   #project-list
+    %h3 Currently running Projects ordered by Award start
     - pagination_count
     
     #projects

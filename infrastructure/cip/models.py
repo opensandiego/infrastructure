@@ -84,6 +84,14 @@ class ProjectManager(models.Manager,ProjectManagerMixin):
         """docstring for get_query_set"""
         return ProjectQuerySet(self.model)
 
+ORDER = (
+    ('SP_AWARD_START_DT', 'Award Start ASC'),
+    ('-SP_AWARD_START_DT', 'Award Start DESC'),
+    ('SP_CONSTR_FINISH_DT','construction finish ASC'),
+    ('-SP_CONSTR_FINISH_DT','construction finish DESC'),
+    ('SP_TOTAL_PROJECT_COST','construction cost ASC'),
+    ('-SP_TOTAL_PROJECT_COST','construction cost DESC'))
+
 ASSET_TYPE_GROUPS = (
    ( "A", "Airports"),
    ( "B", "Buildings"),
