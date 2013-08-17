@@ -50,7 +50,7 @@ class ProjectCosts(object):
 class ProjectManagerMixin(object):
     def current(self):
         """docstring for current"""
-        return self.filter(SP_CONSTR_FINISH_DT__gt=datetime.date.today(), SP_AWARD_START_DT__lt=datetime.date.today())
+        return self.filter(SP_CONSTR_FINISH_DT__gt=datetime.date.today(), SP_PRELIM_ENGR_START_DT__lt=datetime.date.today())
     def future(self):
         """docstring for future"""
         return self.filter(SP_AWARD_START_DT__gt=datetime.date.today())
@@ -85,8 +85,8 @@ class ProjectManager(models.Manager,ProjectManagerMixin):
         return ProjectQuerySet(self.model)
 
 ORDER = (
-    ('SP_AWARD_START_DT', 'Award Start ASC'),
-    ('-SP_AWARD_START_DT', 'Award Start DESC'),
+    ('SP_PRELIM_ENGR_START_DT', 'Planning Start ASC'),
+    ('-SP_PRELIM_ENGR_START_DT', 'Planning Start DESC'),
     ('SP_CONSTR_FINISH_DT','construction finish ASC'),
     ('-SP_CONSTR_FINISH_DT','construction finish DESC'),
     ('SP_TOTAL_PROJECT_COST','construction cost ASC'),
@@ -168,11 +168,11 @@ DELIVERY_METHODS = (
     ("ST","Study"))
 
 PROJECT_PHASES = (
+    ("P", "Planning"),
     ("D", "Design"),
+    ("B", "Bid and Award"),
     ("N", "Construction"),
     ("O", "Post Construction"),
-    ("P", "Planning"),
-    ("B", "Bid and Award"),
     ("C", "Complete"))
 
 CLIENT_DEPARTMENTS = (
