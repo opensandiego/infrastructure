@@ -92,6 +92,14 @@ PHASE_URLS = (
         ('post-construction' , 'Post Construction'),
         ('completed' , 'Complete')
        ) 
+PHASE_ORDERS = {
+        'planning' : 'SP_PRELIM_ENGR_START_DT',
+        'design' : 'SP_DESIGN_INITIATION_START_DT',
+        'bid' : 'SP_BID_START_DT',
+        'construction' : 'SP_CONSTRUCTION_START_DT',
+        'post-construction' : 'SP_CONSTR_FINISH_DT',
+        'completed' : 'SP_BO_BU_DT'
+        }
 ASSET_TYPE_URLS = (
    ( "airports", "Airports"),
    ( "buildings", "Buildings"),

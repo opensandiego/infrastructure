@@ -62,7 +62,7 @@ class ProjectList(ListView):
         """docstring for get_queryset"""
         if self.kwargs.has_key('phase'):
             self.show = {'current': '', 'all': 'active'}
-            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')#.exclude(SP_CONSTR_FINISH_DT=None)
+            projects = self.timephase().order_by(PHASE_ORDERS[self.kwargs['phase']])
             return projects.by_phase(dict(PHASE_URLS)[self.kwargs['phase']])
         if self.kwargs.has_key('asset_type'):
             self.show = {'current': '', 'all': 'active'}
