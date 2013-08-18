@@ -1,4 +1,3 @@
-# Create your views here.
 import datetime
 from django.shortcuts import render_to_response, render
 from django.db.models import Q
@@ -8,6 +7,8 @@ from django_select2 import *
 from django.core.urlresolvers import *
 import inspect
 from django.views.generic import ListView, DetailView
+import json
+import django.http
 def index(request):
     """docstring for projects"""
     projects = Project.objects.all()
@@ -66,13 +67,13 @@ class ProjectList(ListView):
             return projects.by_phase(dict(PHASE_URLS)[self.kwargs['phase']])
         if self.kwargs.has_key('asset_type'):
             self.show = {'current': '', 'all': 'active'}
-            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')#.exclude(SP_CONSTR_FINISH_DT=None)
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
             return projects.by_asset_group(dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']])
 
         if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
             self.filter = self.kwargs['filter']
             self.filter_value = self.kwargs['value']
-            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')#.exclude(SP_CONSTR_FINISH_DT=None)
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
             return getattr(projects, 'by_{format}'.format(format=self.filter))(self.filter_value)
         else:
             return self.timephase() 
@@ -180,3 +181,64 @@ class ProjectFilterForm(forms.Form):
     delivery_methods = Select2ChoiceField(initial=2,
         choices=choice_delivery_methods,required=False)
 
+class JSONTimetableMixin(object):
+    def render_to_response(self, context):
+        "Returns a JSON response containing 'context' as payload"
+        return self.get_json_response(self.convert_context_to_json(context))
+
+    def get_json_response(self, content, **httpresponse_kwargs):
+        "Construct an `HttpResponse` object."
+        return django.http.HttpResponse(content,
+                                 content_type='application/json',
+                                 **httpresponse_kwargs)
+
+    def convert_context_to_json(self, context):
+        "Convert the context dictionary into a JSON object"
+        project = context["project"]
+        json_response = {
+                "timeline": {
+                "headline":"Project Timeline",
+                "type":"default",
+                "text":"<p></p>",
+                "date": []
+                }
+            }
+        if project.SP_PRELIM_ENGR_START_DT and project.SP_PRELIM_ENGR_FINISH_DT:
+            json_response["timeline"]["date"].append({
+                        "startDate":project.SP_PRELIM_ENGR_START_DT.strftime("%Y,%m,%d"),
+                        "endDate":project.SP_PRELIM_ENGR_FINISH_DT.strftime("%Y,%m,%d"),
+                        "headline":"Planning Phase",
+                    })
+        if project.SP_DESIGN_INITIATION_START_DT and project.SP_DESIGN_FINISH_DT:
+            json_response["timeline"]["date"].append({
+                        "startDate":project.SP_DESIGN_INITIATION_START_DT.strftime("%Y,%m,%d"),
+                        "endDate":project.SP_DESIGN_FINISH_DT.strftime("%Y,%m,%d"),
+                        "headline":"Design Phase",
+                    })
+        if project.SP_BID_START_DT and project.SP_BID_FINISH_DT:
+            json_response["timeline"]["date"].append({
+                        "startDate":project.SP_BID_START_DT.strftime("%Y,%m,%d"),
+                        "endDate":project.SP_BID_FINISH_DT.strftime("%Y,%m,%d"),
+                        "headline":"Bid Phase",
+                    })
+        if project.SP_AWARD_START_DT and project.SP_AWARD_FINISH_DT:
+            json_response["timeline"]["date"].append({
+                        "startDate":project.SP_AWARD_START_DT.strftime("%Y,%m,%d"),
+                        "endDate":project.SP_AWARD_FINISH_DT.strftime("%Y,%m,%d"),
+                        "headline":"Award Phase",
+                    })
+        if project.SP_CONSTRUCTION_START_DT and project.SP_CONSTR_FINISH_DT:
+            json_response["timeline"]["date"].append({
+                        "startDate":project.SP_CONSTRUCTION_START_DT.strftime("%Y,%m,%d"),
+                        "endDate":project.SP_CONSTR_FINISH_DT.strftime("%Y,%m,%d"),
+                        "headline":"Construction Phase",
+                    })
+        if project.SP_CONSTR_FINISH_DT and project.SP_NOC_DT:
+            json_response["timeline"]["date"].append({
+                        "startDate":project.SP_CONSTR_FINISH_DT.strftime("%Y,%m,%d"),
+                        "endDate":project.SP_NOC_DT.strftime("%Y,%m,%d"),
+                        "headline":"Post-Construction Phase",
+                    })
+        return json.dumps(json_response)
+class ProjectDetailJSONView(JSONTimetableMixin, ProjectDetailView):
+    pass
