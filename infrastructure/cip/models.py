@@ -84,6 +84,23 @@ class ProjectManager(models.Manager,ProjectManagerMixin):
         """docstring for get_query_set"""
         return ProjectQuerySet(self.model)
 
+PHASE_URLS = (
+        ('planning' , 'Planning'),
+        ('design' , 'Design'),
+        ('bid' , 'Bid and Award'),
+        ('construction' , 'Construction'),
+        ('post-construction' , 'Post Construction'),
+        ('completed' , 'Complete')
+       ) 
+ASSET_TYPE_URLS = (
+   ( "airports", "Airports"),
+   ( "buildings", "Buildings"),
+   ( "storm-water-drainage", "Storm Water Drainage"),
+   ( "parks", "Parks"),
+   ( "transportation", "Transportation"),
+   ( "sewer", "Sewer"),
+   ( "water", "Water"))
+
 ORDER = (
     ('SP_PRELIM_ENGR_START_DT', 'Planning Start ASC'),
     ('-SP_PRELIM_ENGR_START_DT', 'Planning Start DESC'),

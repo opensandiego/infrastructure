@@ -47,7 +47,7 @@ class ProjectList(ListView):
     def timephase(self):
         """docstring for timephase"""
         self.show = {'current': 'active', 'all': ''}
-        projects = Project.objects.current()
+        projects = Project.objects.all()
         if self.kwargs.has_key('show'):
             if self.kwargs['show'] == "current":
                 self.show['current'] = 'active'
@@ -60,10 +60,19 @@ class ProjectList(ListView):
         return projects.order_by('SP_PRELIM_ENGR_START_DT').exclude(SP_PRELIM_ENGR_START_DT=None)
     def get_queryset(self):
         """docstring for get_queryset"""
+        if self.kwargs.has_key('phase'):
+            self.show = {'current': '', 'all': 'active'}
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')#.exclude(SP_CONSTR_FINISH_DT=None)
+            return projects.by_phase(dict(PHASE_URLS)[self.kwargs['phase']])
+        if self.kwargs.has_key('asset_type'):
+            self.show = {'current': '', 'all': 'active'}
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')#.exclude(SP_CONSTR_FINISH_DT=None)
+            return projects.by_asset_group(dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']])
+
         if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
             self.filter = self.kwargs['filter']
             self.filter_value = self.kwargs['value']
-            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT').exclude(SP_CONSTR_FINISH_DT=None)
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')#.exclude(SP_CONSTR_FINISH_DT=None)
             return getattr(projects, 'by_{format}'.format(format=self.filter))(self.filter_value)
         else:
             return self.timephase() 
