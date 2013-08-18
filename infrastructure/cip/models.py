@@ -50,7 +50,7 @@ class ProjectCosts(object):
 class ProjectManagerMixin(object):
     def current(self):
         """docstring for current"""
-        return self.filter(SP_CONSTR_FINISH_DT__gt=datetime.date.today(), SP_AWARD_START_DT__lt=datetime.date.today())
+        return self.filter(SP_CONSTR_FINISH_DT__gt=datetime.date.today(), SP_PRELIM_ENGR_START_DT__lt=datetime.date.today())
     def future(self):
         """docstring for future"""
         return self.filter(SP_AWARD_START_DT__gt=datetime.date.today())
@@ -84,9 +84,34 @@ class ProjectManager(models.Manager,ProjectManagerMixin):
         """docstring for get_query_set"""
         return ProjectQuerySet(self.model)
 
+PHASE_URLS = (
+        ('planning' , 'Planning'),
+        ('design' , 'Design'),
+        ('bid' , 'Bid and Award'),
+        ('construction' , 'Construction'),
+        ('post-construction' , 'Post Construction'),
+        ('completed' , 'Complete')
+       ) 
+PHASE_ORDERS = {
+        'planning' : 'SP_PRELIM_ENGR_START_DT',
+        'design' : 'SP_DESIGN_INITIATION_START_DT',
+        'bid' : 'SP_BID_START_DT',
+        'construction' : 'SP_CONSTRUCTION_START_DT',
+        'post-construction' : 'SP_CONSTR_FINISH_DT',
+        'completed' : 'SP_BO_BU_DT'
+        }
+ASSET_TYPE_URLS = (
+   ( "airports", "Airports"),
+   ( "buildings", "Buildings"),
+   ( "storm-water-drainage", "Storm Water Drainage"),
+   ( "parks", "Parks"),
+   ( "transportation", "Transportation"),
+   ( "sewer", "Sewer"),
+   ( "water", "Water"))
+
 ORDER = (
-    ('SP_AWARD_START_DT', 'Award Start ASC'),
-    ('-SP_AWARD_START_DT', 'Award Start DESC'),
+    ('SP_PRELIM_ENGR_START_DT', 'Planning Start ASC'),
+    ('-SP_PRELIM_ENGR_START_DT', 'Planning Start DESC'),
     ('SP_CONSTR_FINISH_DT','construction finish ASC'),
     ('-SP_CONSTR_FINISH_DT','construction finish DESC'),
     ('SP_TOTAL_PROJECT_COST','construction cost ASC'),
@@ -168,11 +193,11 @@ DELIVERY_METHODS = (
     ("ST","Study"))
 
 PROJECT_PHASES = (
+    ("P", "Planning"),
     ("D", "Design"),
+    ("B", "Bid and Award"),
     ("N", "Construction"),
     ("O", "Post Construction"),
-    ("P", "Planning"),
-    ("B", "Bid and Award"),
     ("C", "Complete"))
 
 CLIENT_DEPARTMENTS = (

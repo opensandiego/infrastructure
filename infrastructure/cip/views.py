@@ -46,21 +46,33 @@ class ProjectList(ListView):
 
     def timephase(self):
         """docstring for timephase"""
+        self.show = {'current': 'active', 'all': ''}
+        projects = Project.objects.all()
         if self.kwargs.has_key('show'):
-            if self.kwargs['show'] == "all":
-                return Project.objects.all()
-            elif self.kwargs['show'] == "current":
-                return Project.objects.current()
-            else:
-                return Project.objects.all()
-        else:
-            return Project.objects.current()
+            if self.kwargs['show'] == "current":
+                self.show['current'] = 'active'
+                self.show['all'] = ''
+                projects = Project.objects.current()
+            elif self.kwargs['show'] == 'all':
+                self.show['current'] = ''
+                self.show['all'] = 'active'
+                projects = Project.objects.all()
+        return projects.order_by('SP_PRELIM_ENGR_START_DT').exclude(SP_PRELIM_ENGR_START_DT=None)
     def get_queryset(self):
         """docstring for get_queryset"""
+        if self.kwargs.has_key('phase'):
+            self.show = {'current': '', 'all': 'active'}
+            projects = self.timephase().order_by(PHASE_ORDERS[self.kwargs['phase']])
+            return projects.by_phase(dict(PHASE_URLS)[self.kwargs['phase']])
+        if self.kwargs.has_key('asset_type'):
+            self.show = {'current': '', 'all': 'active'}
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')#.exclude(SP_CONSTR_FINISH_DT=None)
+            return projects.by_asset_group(dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']])
+
         if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
             self.filter = self.kwargs['filter']
             self.filter_value = self.kwargs['value']
-            projects = self.timephase() 
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')#.exclude(SP_CONSTR_FINISH_DT=None)
             return getattr(projects, 'by_{format}'.format(format=self.filter))(self.filter_value)
         else:
             return self.timephase() 
@@ -69,6 +81,7 @@ class ProjectList(ListView):
         """docstring for get_contxt_data"""
         context = super(ProjectList, self).get_context_data(**kwargs)
         context['form'] = ProjectFilterForm()
+        context['show'] = self.show
         return context
 
 class ProjectsListListView(ProjectList):
@@ -107,7 +120,7 @@ class ProjectFilter:
             self.client_departements()
         if self.form.cleaned_data.has_key('project_cost') and self.form.cleaned_data['project_cost']:
             self.project_cost()
-        return self.projects.order_by(self.order)
+        return self.projects.order_by(self.order).exclude(**{self.order.replace('-',''): None})
 
     def phases(self):
         """docstring for phases"""

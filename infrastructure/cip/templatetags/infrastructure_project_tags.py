@@ -45,21 +45,21 @@ def show_shortcuts():
     """docstring for generate_shortcuts"""
     shortcuts = []
     phase_links = { 'links' : [], 'title': 'Phase' }
-    for (key, value) in PROJECT_PHASES:
+    for (key, value) in PHASE_URLS:
         phase_links['links'].append(generate_link('phase',key,value,phase_class[value]))
     shortcuts.append(phase_links)
     asset_group_links = { 'links' : [], 'title': 'Asset Type' }
-    for (key, value) in ASSET_TYPE_GROUPS:
-        asset_group_links['links'].append(generate_link('asset_group',key,value, asset_type_class[value]))
+    for (key, value) in ASSET_TYPE_URLS:
+        asset_group_links['links'].append(generate_link('asset_type',key,value, asset_type_class[value]))
     shortcuts.append(asset_group_links)
-    client_departement_links = { 'links' : [], 'title': 'Current Projects by asset type group' }
+    #client_departement_links = { 'links' : [], 'title': 'Current Projects by asset type group' }
 
     return {'shortcuts': shortcuts}
 
 def generate_link(type,key,value,image_class):
     """docstring for generate_link"""
     link = {}
-    link['url'] = reverse("projects_filter_list",kwargs={'filter':type, 'value':iri_to_uri(re.sub(r"[\(\)-]"," ",value))})
+    link['url'] = reverse("{0}_projects".format(type),kwargs={type: key})
     link['name'] = value
     link['key'] = key
     link['image_class'] = image_class
