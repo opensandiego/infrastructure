@@ -5,6 +5,10 @@ from django.core.urlresolvers import *
 import urllib
 
 register = template.Library()
+
+@register.filter    
+def subtract(value, arg):
+    return value - arg
 phase_class = {
         'Design' : 'design',
         'Construction' : 'construction',
