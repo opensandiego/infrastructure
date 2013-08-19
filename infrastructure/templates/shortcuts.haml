@@ -3,5 +3,5 @@
     %h5= shortcut.title
     %ul
       - for link in shortcut.links
-        %li{class: 'icon {{link.image_class}}' }
+        %li{class: 'detail-icon {{link.image_class}}' }
           %a{href: '{{ link.url }}' }= link.name

@@ -3,17 +3,35 @@
   Infrastructure
 - load infrastructure_project_tags 
 - load humanize
+- load static from staticfiles
 - block sidebar
   - show_shortcuts
 - block content
-  #project
+  #project{ 'data-id': '{{project.pk}}' }
     %h2= project.SP_PROJECT_NM
-    %p= project.SP_PROJECT_DESC
-    %h3 Total Cost: ${{project.SP_TOTAL_PROJECT_COST|intcomma}}
-    %h4 Construction Plan
-    %p Construction start: {{project.SP_CONSTRUCTION_START_DT}}
-    %p Construction finish: {{project.SP_CONSTR_FINISH_DT}}
-    %p Construction cost: ${{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}}
-    %h4 Current Phase: {{project.SP_PROJECT_PHASE}}
-    %h5 Division: {{project.SP_RESP_DIV_SECT_DESC}}
-    %h5 Asset Type: {{project.SP_ASSET_TYPE_GROUP}}
+    .row-fluid
+      .span3
+        #map
+      .span9
+        %h4 in {{project.SP_PROJECT_PHASE}} Phase
+        %h4= project.SP_CLIENT2
+        %h4
+          %span{ class: 'detail-icon {{project.SP_ASSET_TYPE_GROUP}}'}
+          %span= project.SP_ASSET_TYPE_GROUP
+        %h4
+          %img{src: "{% static 'images/icons/glyphicons_045_calendar.png' %}", width: '15'}
+          %span= project.SP_CONSTR_FINISH_DT
+    .row-fluid
+      .span3
+        #cost-breakdown
+      .span9{id: 'project-cost', 'data-cost': '{{project.SP_TOTAL_PROJECT_COST}},{{project.SP_TOTAL_CONSTRUCTION_COST}}', 'data-cost-labels': 'Total Cost, Construction Cost'}
+        %h4 Overall cost: $ {{project.SP_TOTAL_PROJECT_COST|intcomma}}
+        %h4 Construction cost: $ {{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}}
+    .row-fluid{id: 'timeline_container' }
+      .span12
+        #timeline
+    .row-fluid
+      .span3
+        %p Project Images
+      .span9
+        %p= project.SP_PROJECT_DESC
