@@ -10,9 +10,9 @@
   #project{ 'data-id': '{{project.pk}}' }
     %h2= project.SP_PROJECT_NM
     .row-fluid
-      .span3
+      .span4
         #map
-      .span9
+      .span8
         %h4 in {{project.SP_PROJECT_PHASE}} Phase
         %h4= project.SP_CLIENT2
         %h4
@@ -21,17 +21,17 @@
         %h4
           %img{src: "{% static 'images/icons/glyphicons_045_calendar.png' %}", width: '15'}
           %span= project.SP_CONSTR_FINISH_DT
+        %p= project.SP_PROJECT_DESC
     .row-fluid
-      .span3
+      .span4
         #cost-breakdown
-      .span9{id: 'project-cost', 'data-cost': '{{project.SP_TOTAL_PROJECT_COST}},{{project.SP_TOTAL_CONSTRUCTION_COST}}', 'data-cost-labels': 'Total Cost, Construction Cost'}
+      .span8{id: 'project-cost', 'data-cost': '{{project.SP_TOTAL_PROJECT_COST|subtract:project.SP_TOTAL_CONSTRUCTION_COST}},{{project.SP_TOTAL_CONSTRUCTION_COST}}', 'data-cost-labels': 'All other Cost, Construction Cost'}
         %h4 Overall cost: $ {{project.SP_TOTAL_PROJECT_COST|intcomma}}
         %h4 Construction cost: $ {{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}}
     .row-fluid{id: 'timeline_container' }
       .span12
         #timeline
     .row-fluid
-      .span3
+      .span4
         %p Project Images
-      .span9
-        %p= project.SP_PROJECT_DESC
+      .span8

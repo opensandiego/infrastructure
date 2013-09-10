@@ -20,7 +20,7 @@ $(document).ready(function() {
   if($('#project').length > 0) {
     project_width =  $('#project').width();
     project_id = $('#project').data('id');
-    first_column_width = $('#project .span3').width();
+    first_column_width = $('#project .span4').width();
     createStoryJS({
         type:       'timeline',
         width:      project_width,
@@ -32,6 +32,7 @@ $(document).ready(function() {
     .setView([32.70752, -117.15706], 9);
 
     cost_data = $('#project-cost').data('cost').split(',');
+    cost_data = cost_data.map(function(d) { return parseInt(d); });
     cost_labels = $('#project-cost').data('cost-labels').split(',');
     cost_x_scale = d3.scale.ordinal().rangeRoundBands([0, first_column_width-20], .1).domain(cost_data);
     cost_x_axis_scale = d3.scale.ordinal().rangeRoundBands([0, first_column_width-20], .1).domain(cost_labels);
