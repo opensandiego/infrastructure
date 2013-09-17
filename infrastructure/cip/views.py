@@ -6,9 +6,10 @@ from django import forms
 from django_select2 import *
 from django.core.urlresolvers import *
 import inspect
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 import json
 import django.http
+from django.db.models import Count, Min, Sum, Avg
 def index(request):
     """docstring for projects"""
     projects = Project.objects.all()
@@ -33,6 +34,25 @@ def show_project(request, p_id):
     project = Project.objects.get(id= p_id)
     
     return render_to_response('project.haml', {'project': project})
+
+class Dashboard():
+    projects = Project.objects.all().aggregate(overall_project_cost=Sum('SP_TOTAL_PROJECT_COST'),overall_construction_cost=Sum('SP_TOTAL_CONSTRUCTION_COST'),projects_count=Count('pk'))
+    current_projects = Project.objects.current()
+    def __init__(self):
+        """docstring for init"""
+        self.project_count = self.projects['projects_count']
+        self.active_project_count = self.current_projects.count()
+        self.project_cost = self.projects['overall_project_cost']
+        self.construction_cost = self.projects['overall_construction_cost']
+
+class DashboardView(TemplateView):
+    template_name = 'dashboard.haml'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context['dashboard'] = Dashboard()
+
+        return self.render_to_response(context=context)
 
 class ProjectDetailView(DetailView):
     model = Project
