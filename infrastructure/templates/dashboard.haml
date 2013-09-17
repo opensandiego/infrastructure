@@ -1,0 +1,13 @@
+- extends "application.haml"
+- block title
+  Infrastructure
+- load infrastructure_project_tags 
+- block sidebar
+  - show_shortcuts
+  
+- block content
+  - load humanize
+ 
+  %p Project Count: {{dashboard.project_count}}
+  %p Project Count: {{dashboard.active_project_count}}
+
