@@ -1,8 +1,49 @@
+body {
+  background: #fff url('../images/furley_bg.png') top left repeat;
+}
+#sidebar-container {
+  background: #D3D99B;
+}
+#content-container {
+  background: #fff;
+}
+#content {
+  padding:20px;
+}
+#shortcuts {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+}
+#shortcuts a {
+  color: #F56730;
+}
 a {
   color: #62ACC2;
 }
 #footer {
   margin: 20px 0;
+}
+.widget {
+  float:left;
+  width: 180px;
+  height: 180px;
+  border:1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+}
+.widget h2 {
+  font-size: 62px;
+  line-height: 68px;
+  text-align:center;
+}
+.widget h2 span {
+  font-size: 12px;
+  line-height: 68px;
+  text-align: left;
+}
+.widget h6 {
+  text-align:center;
+  font-size: 22px;
 }
 #filter {
   clear: left;

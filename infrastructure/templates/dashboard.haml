@@ -7,7 +7,8 @@
   
 - block content
   - load humanize
- 
-  %p Project Count: {{dashboard.project_count}}
-  %p Project Count: {{dashboard.active_project_count}}
 
+  - for widget in widgets
+    .widget
+      %h2 {{widget.value}}
+      %h6 {{widget.headline}}

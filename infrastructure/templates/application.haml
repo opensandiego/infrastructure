@@ -26,12 +26,15 @@
         .navbar-inner
           %ul.nav
             %li
+              %a{href: "{% url 'index' %}" } Overview
+            %li
               %a{href: "{% url 'projects' %}" } Projects
       %h1 Infrastructure San Diego
       .row
-        .span2.hidden-phone
+        .span2.hidden-phone{id:'sidebar-container' }
           - block sidebar
-        .span10
-          - block content
+        .span10{id: 'content-container' }
+          #content
+            - block content
      #footer
 
