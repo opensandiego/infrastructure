@@ -1,4 +1,4 @@
-- extends "application.haml"
+- extends "index.haml"
 - block title
   Infrastructure
 - load infrastructure_project_tags 
@@ -7,8 +7,11 @@
   
 - block content
   - load humanize
-
-  - for widget in widgets
-    .widget
-      %h2 {{widget.value}}
-      %h6 {{widget.headline}}
+  #dashboard
+    %h1 CIP San Diego
+    %h5 Capital Improvements Program (CIP)
+    #map{style: "background: #ccc;"}
+    - for widget in widgets
+      .widget
+        %h2 {{widget.value}}
+        %h6 {{widget.headline}}

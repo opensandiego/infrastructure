@@ -1,12 +1,4 @@
-- extends "application.haml"
-- block title
-  Infrastrucutre
-- block content
-  %h2 Projects
-  #projects
-    - for project in projects
-      %h3= project.SP_SEQ_NUM
-  %h2 Department Needs
-  #departement_needs
-    - for department_need in department_needs
-      %h3= department_need.name
+- include 'head.haml'
+
+#main.container-fluid
+  - block content
