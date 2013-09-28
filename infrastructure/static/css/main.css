@@ -49,6 +49,14 @@ body {
 #content-container {
   background: #fff;
 }
+.map-container {
+  position:relative;
+  border-bottom: 1px solid #ccc;
+}
+.content {
+  padding:20px 40px;
+  overflow:auto;
+}
 #content {
   padding:20px;
   border: 1px solid #E3C9BC;
@@ -73,21 +81,26 @@ a {
   border:1px solid #CD8E6D;
   padding: 10px;
   margin: 10px;
+}
+#dashboard .widget {
   background: #fff;
 }
 .widget h2 {
-  font-size: 62px;
-  line-height: 68px;
+  font-size:100px;
+  line-height: 110px;
   text-align:center;
 }
 .widget h2 span {
   font-size: 12px;
-  line-height: 68px;
-  text-align: left;
+  line-height: 14px;
+  text-align: right;
+  float: right;
+  margin-top: -15px;
 }
 .widget h6 {
   text-align:center;
   font-size: 22px;
+  line-height: 24px;
 }
 #filter {
   clear: left;
@@ -131,7 +144,9 @@ a {
   padding: 5px 0 5px 40px;
 }
 .design {
-  background: url('../images/icons/glyphicons_234_brush.png') center left no-repeat;
+  background: url('../images/icons/glyphicons_234_brush.png');
+  background-position: center left;
+  background-repeat: no-repeat;
 }
 .construction {
   background: url('../images/icons/glyphicons_430_construction_cone.png') center left no-repeat;
