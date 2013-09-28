@@ -41,6 +41,7 @@ def show_project(request, p_id):
 class DashboardWidget():
     headline = ''
     value = ''
+    widget_class = ''
     def __init__(self,headline):
         """docstring for __init__"""
         self.headline = headline
@@ -72,7 +73,7 @@ class DashboardMixin(object):
         project_cost = DashboardWidget('$$$')
         project_cost.value = intword_span(intword(self.project_cost))
 
-        construction_cost = DashboardWidget('construction $$$')
+        construction_cost = DashboardWidget('construction \n $$$')
         construction_cost.value = intword_span(intword(self.construction_cost))
 
         years_project = DashboardWidget('projects started in {0}'.format(self.this_year))
@@ -80,14 +81,28 @@ class DashboardMixin(object):
 
         years_finished = DashboardWidget('projects finished in {0}'.format(self.this_year))
         years_finished.value = self.finished_this_year.count()
+        row_widgets = []
+        row_widgets.append(project_count)
+        row_widgets.append(active_project_count)
+        row_widgets.append(project_cost)
+        row_widgets.append(construction_cost)
+        row_widgets.append(years_project)
+        row_widgets.append(years_finished)
+        self.widgets.append({'title': '', 'row': row_widgets})
+        row_widgets = []
+        for (phase_class,phase) in PHASE_URLS:
+            phase_widget = DashboardWidget(phase)
+            phase_widget.value = Project.objects.all().by_phase(phase).count()
+            phase_widget.widget_class = phase_class
+            row_widgets.append(phase_widget)
+        self.widgets.append({'title': 'Projects by Phase:', 'row': row_widgets})
+        row_widgets = []
+        for (asset_type_class,asset_type) in ASSET_TYPE_URLS:
+            asset_widget = DashboardWidget(asset_type)
+            asset_widget.value = Project.objects.all().by_asset_group(asset_type).count()
+            row_widgets.append(asset_widget)
 
-        self.widgets.append(project_count)
-        self.widgets.append(active_project_count)
-        self.widgets.append(project_cost)
-        self.widgets.append(construction_cost)
-        self.widgets.append(years_project)
-        self.widgets.append(years_finished)
-
+        self.widgets.append({'title': 'Projects by Asset Type:', 'row': row_widgets})
         return self.widgets
     def get_context_data(self, **kwargs):
         context = super(DashboardMixin, self).get_context_data(**kwargs)
