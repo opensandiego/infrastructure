@@ -1,37 +1,10 @@
-
-- load bootstrap_toolkit
-- load staticfiles
-- load django_select2_tags
-- load static from staticfiles
-%html
-  %head
-    %title
-      - block title
-    %script{src: '{{ STATIC_URL }}js/jquery.js' }
-    %script{src: '{{ STATIC_URL }}js/storyjs-embed.js' }
-    %script{src: '{{ STATIC_URL }}js/main.js' }
-    %script{src: 'http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js' }
-    %script{ src:"http://d3js.org/d3.v3.min.js", charset:"utf-8" }
-	  - import_django_select2_js
-	  - import_django_select2_css
-    %meta{ name:"viewport", content:"width=device-width, initial-scale=1.0" }
-    - bootstrap_stylesheet_tag
-    - bootstrap_stylesheet_tag "responsive"
-    %link{href: "{% static 'css/timeline.css' %}", rel:'stylesheet', type:'text/css'}
-    %link{ href:'http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css', rel:'stylesheet' }
-    %link{href: "{% static 'css/main.css' %}", rel:'stylesheet', type:'text/css'}
-  %body
-    .container
-      .navbar
-        .navbar-inner
-          %ul.nav
-            %li
-              %a{href: "{% url 'projects' %}" } Projects
-      %h1 Infrastructure San Diego
-      .row
-        .span2.hidden-phone
-          - block sidebar
-        .span10
-          - block content
-     #footer
+- include 'head.haml'
+.container
+  %h1 Infrastructure San Diego
+  .row
+    .span2.hidden-phone{id:'sidebar-container' }
+      - block sidebar
+    .span10{id: 'content-container' }
+      #content
+        - block content
 

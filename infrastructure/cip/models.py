@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.query import QuerySet
-import datetime
+import datetime 
 from django.contrib.humanize.templatetags.humanize import intcomma
 
 class ProjectCosts(object):
@@ -51,6 +51,10 @@ class ProjectManagerMixin(object):
     def current(self):
         """docstring for current"""
         return self.filter(SP_CONSTR_FINISH_DT__gt=datetime.date.today(), SP_PRELIM_ENGR_START_DT__lt=datetime.date.today())
+    def by_year(self,year=datetime.date.today().year):
+        """docstring for years"""
+        start_of_the_year = datetime.date(year,1,1)
+        return self.filter(SP_PRELIM_ENGR_START_DT__gt=start_of_the_year)
     def future(self):
         """docstring for future"""
         return self.filter(SP_AWARD_START_DT__gt=datetime.date.today())
@@ -72,6 +76,9 @@ class ProjectManagerMixin(object):
     def by_project_cost(self,project_cost):
         """docstring for by_project_cost"""
         return self.get_query(project_cost)
+    def by_finished_date(self,date):
+        """docstring for by_finished_date"""
+        return self.filter(SP_CONSTR_FINISH_DT__lt=date)
 
 class ProjectQuerySet(QuerySet,ProjectManagerMixin,ProjectCosts):
     pass

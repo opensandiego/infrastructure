@@ -43,4 +43,8 @@ $(document).ready(function() {
     svg_element.append('g').attr('class','axis x').attr("transform", "translate(0,120)").call(x_axis);
   }
 
+  if($('#main').length > 0) {
+    var map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
+    .setView([32.70752, -117.15706], 11);
+  }
 });

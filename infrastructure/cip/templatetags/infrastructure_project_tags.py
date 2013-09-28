@@ -3,6 +3,8 @@ from infrastructure.cip.models import *
 from django import template
 from django.core.urlresolvers import *
 import urllib
+from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -44,6 +46,19 @@ asset_type_images = {
         'Sewer' : 'wetland',
         'Water' : 'water'
         }
+@register.filter(needs_autoescape=True)
+def intword_span(value,autoescape=None):
+    """docstring for intword_span"""
+    intword = value.split(" ")
+    money = intword[0]
+    money_type = intword[1]
+    if autoescape:
+        esc = conditional_escape
+    else:
+        esc = lambda x: x
+    money_string = "{0} <span>{1}</span>".format(esc(money),esc(money_type))
+    return mark_safe(money_string)
+    
 @register.inclusion_tag('shortcuts.haml')
 def show_shortcuts():
     """docstring for generate_shortcuts"""

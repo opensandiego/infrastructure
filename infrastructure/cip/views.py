@@ -6,9 +6,13 @@ from django import forms
 from django_select2 import *
 from django.core.urlresolvers import *
 import inspect
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 import json
 import django.http
+from django.db.models import Count, Min, Sum, Avg
+from django.contrib.humanize.templatetags.humanize import intword
+from infrastructure.cip.templatetags.infrastructure_project_tags import intword_span
+
 def index(request):
     """docstring for projects"""
     projects = Project.objects.all()
@@ -33,6 +37,81 @@ def show_project(request, p_id):
     project = Project.objects.get(id= p_id)
     
     return render_to_response('project.haml', {'project': project})
+
+class DashboardWidget():
+    headline = ''
+    value = ''
+    widget_class = ''
+    def __init__(self,headline):
+        """docstring for __init__"""
+        self.headline = headline
+    def set_value(self,value):
+        """docstring for set_value"""
+        self.value = value
+
+class DashboardMixin(object):
+    projects = Project.objects.all().aggregate(overall_project_cost=Sum('SP_TOTAL_PROJECT_COST'),overall_construction_cost=Sum('SP_TOTAL_CONSTRUCTION_COST'),projects_count=Count('pk'))
+    current_projects = Project.objects.current()
+    this_years_projects = Project.objects.by_year()
+    widgets = []
+    def __init__(self):
+        """docstring for init"""
+        self.this_year = datetime.date.today().year
+        self.widgets = []
+        self.active_project_count = self.current_projects.count()
+        self.project_cost = self.projects['overall_project_cost']
+        self.construction_cost = self.projects['overall_construction_cost']
+        self.finished_this_year = self.this_years_projects.by_finished_date(datetime.date(self.this_year,12,31))
+    def get_widgets(self):
+        """docstring for get_widgets"""
+        project_count = DashboardWidget('projects')
+        project_count.value = self.projects['projects_count']
+
+        active_project_count = DashboardWidget('active projects')
+        active_project_count.value = self.active_project_count
+
+        project_cost = DashboardWidget('$$$')
+        project_cost.value = intword_span(intword(self.project_cost))
+
+        construction_cost = DashboardWidget('construction \n $$$')
+        construction_cost.value = intword_span(intword(self.construction_cost))
+
+        years_project = DashboardWidget('projects started in {0}'.format(self.this_year))
+        years_project.value = self.this_years_projects.count()
+
+        years_finished = DashboardWidget('projects finished in {0}'.format(self.this_year))
+        years_finished.value = self.finished_this_year.count()
+        row_widgets = []
+        row_widgets.append(project_count)
+        row_widgets.append(active_project_count)
+        row_widgets.append(project_cost)
+        row_widgets.append(construction_cost)
+        row_widgets.append(years_project)
+        row_widgets.append(years_finished)
+        self.widgets.append({'title': '', 'row': row_widgets})
+        row_widgets = []
+        for (phase_class,phase) in PHASE_URLS:
+            phase_widget = DashboardWidget(phase)
+            phase_widget.value = Project.objects.all().by_phase(phase).count()
+            phase_widget.widget_class = phase_class
+            row_widgets.append(phase_widget)
+        self.widgets.append({'title': 'Projects by Phase:', 'row': row_widgets})
+        row_widgets = []
+        for (asset_type_class,asset_type) in ASSET_TYPE_URLS:
+            asset_widget = DashboardWidget(asset_type)
+            asset_widget.value = Project.objects.all().by_asset_group(asset_type).count()
+            row_widgets.append(asset_widget)
+
+        self.widgets.append({'title': 'Projects by Asset Type:', 'row': row_widgets})
+        return self.widgets
+    def get_context_data(self, **kwargs):
+        context = super(DashboardMixin, self).get_context_data(**kwargs)
+        context['widgets'] = self.get_widgets()
+        return context
+
+class DashboardView(DashboardMixin,TemplateView):
+    template_name = 'dashboard.haml'
+
 
 class ProjectDetailView(DetailView):
     model = Project
