@@ -79,6 +79,9 @@ class ProjectManagerMixin(object):
     def by_finished_date(self,date):
         """docstring for by_finished_date"""
         return self.filter(SP_CONSTR_FINISH_DT__lt=date)
+    def by_district(self,district):
+        """docstring for by_finished_date"""
+        return self.filter(SP_COUNCIL_DISTRICTS=district)
 
 class ProjectQuerySet(QuerySet,ProjectManagerMixin,ProjectCosts):
     pass
