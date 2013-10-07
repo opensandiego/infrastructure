@@ -90,6 +90,12 @@ class DashboardMixin(object):
         row_widgets.append(years_finished)
         self.widgets.append({'title': '', 'row': row_widgets})
         row_widgets = []
+        for district in range(1,10):
+            district_widget = DashboardWidget('District {0}'.format(district))
+            district_widget.value = Project.objects.all().by_district(district).count()
+            row_widgets.append(district_widget)
+        self.widgets.append({'title': 'By district', 'row': row_widgets})
+        row_widgets = []
         for (phase_class,phase) in PHASE_URLS:
             phase_widget = DashboardWidget(phase)
             phase_widget.value = Project.objects.all().by_phase(phase).count()
