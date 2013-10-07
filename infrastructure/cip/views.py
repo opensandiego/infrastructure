@@ -148,6 +148,10 @@ class ProjectList(ListView):
             self.show = {'current': '', 'all': 'active'}
             projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
             return projects.by_asset_group(dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']])
+        if self.kwargs.has_key('district'):
+            self.show = {'current': '', 'all': 'active'}
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
+            return projects.by_district(self.kwargs['district'])
 
         if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
             self.filter = self.kwargs['filter']

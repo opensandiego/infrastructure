@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^projects$',ProjectList.as_view(), name='projects'),
     url(r'^projects/(?P<phase>(design|planning|bid|construction|post-construction|completed))$',ProjectList.as_view(), name='phase_projects'),
     url(r'^projects/(?P<asset_type>(airports|buildings|storm-water-drainage|parks|transportation|sewer|water))$',ProjectList.as_view(), name='asset_type_projects'),
+    url(r'^projects/district/(?P<district>([1-9]))$',ProjectList.as_view(), name='district_projects'),
 
     url(r'^projects/(?P<show>(all|current))$',ProjectList.as_view(), name='projects'),
     url(r'^projects/(?P<filter>\w+([\w_])*)/(?P<value>\w+([\/\w \.-?%?&]*))$', ProjectList.as_view(), name='projects_filter_list'),
