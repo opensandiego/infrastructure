@@ -345,6 +345,8 @@ class Project(models.Model):
     SP_DELIVERY_METHOD_DESC = models.CharField(max_length=100, null=True, blank=True)
     SP_FIELD_SENIOR_NM = models.CharField(max_length=100, null=True, blank=True)
     SP_PROJECT_PHASE = models.CharField(max_length=100, null=True, blank=True)
+    SP_COUNCIL_DISTRICTS = models.CharField(max_length=100, null=True, blank=True)
+    SP_REPORT_PHASE= models.CharField(max_length=100, null=True, blank=True)
     SP_PROJECT_STATUS_CD = models.CharField(max_length=2)
     SP_UPDATE_DT = models.DateField(null=True, blank=True)
     SP_PROJECT_DESC = models.TextField(null=True, blank=True)
