@@ -17,6 +17,7 @@
         .row
           %h2 {{widget_row.title}}
           - for widget in widget_row.row
-            .widget{class: '{{widget.widget_class}}' }
-              %h2 {{widget.value}}
-              %h6 {{widget.headline}}
+            .widget
+              %h6{class: '{{widget.widget_class}}' }= widget.headline
+              .content
+                %h2 {{widget.value}}
