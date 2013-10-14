@@ -84,6 +84,7 @@ a {
 }
 .widget .content {
   padding: 10px 0;
+  position: relative;
 }
 #dashboard .widget {
 }
@@ -99,9 +100,8 @@ a {
 .widget h2 span {
   font-size: 12px;
   line-height: 14px;
-  text-align: right;
-  float: right;
-  margin-top: -15px;
+  position: absolute;
+  bottom: 10px;
 }
 .widget h6 {
   text-align:center;
@@ -223,8 +223,21 @@ a {
     stroke: black;
     shape-rendering: crispEdges;
 }
-
 #project .axis text {
     font-family: sans-serif;
     font-size: 11px;
+}
+#project-list #stats .widget h2 {
+  font-size: 35px;
+  line-height: 38px;
+}
+#project-list #stats .widget {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+}
+#project-list #stats .widget h6{
+  font-size: 11px;
+  line-height: 12px;
+  padding: 5px;
 }
