@@ -138,6 +138,18 @@ class ProjectWidgetMixin(object):
             asset_widget.value = Project.objects.all().by_asset_group(asset_type).count()
             row_widgets.append(asset_widget)
         return row_widgets
+    def project_widgets(self,filter_set):
+        """docstring for project_widgets"""
+        project_widgets = ProjectWidgets()
+        project_widgets.add_row('',self.project_count(),self.project_cost(),self.construction_cost())
+        if not filter_set.has_key('district'):
+            project_widgets.add_row('Projects',self.districts())
+        if not filter_set.has_key('phase'):
+            project_widgets.add_row('Phases',self.phases())
+        if not filter_set.has_key('asset_type'):
+            project_widgets.add_row('Asset Types',self.asset_types())
+        project_widgets.add_row('',self.projects_by_year(2013))
+        return project_widgets.widgets
 
 class ProjectsFilterMixin():
     projects = Project.objects.all()
@@ -210,6 +222,7 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
         """docstring for get_contxt_data"""
         context = super(ProjectList, self).get_context_data(**kwargs)
         context['form'] = ProjectFilterForm(self.form_data)
+        context['widgets'] = self.project_widgets({})
         context['show'] = self.show
         return context
 
@@ -217,18 +230,6 @@ class ProjectsListListView(ProjectList):
     template_name = 'project_list.haml'
     paginate_by = 10
 
-    def project_widgets(self,filter_set):
-        """docstring for project_widgets"""
-        project_widgets = ProjectWidgets()
-        project_widgets.add_row('',self.project_count(),self.project_cost(),self.construction_cost())
-        if not filter_set.has_key('district'):
-            project_widgets.add_row('Projects',self.districts())
-        if not filter_set.has_key('phase'):
-            project_widgets.add_row('Phases',self.phases())
-        if not filter_set.has_key('asset_type'):
-            project_widgets.add_row('Asset Types',self.asset_types())
-        project_widgets.add_row('',self.projects_by_year(2013))
-        return project_widgets.widgets
     def get(self, request, *args, **kwargs):  
         form = ProjectFilterForm(self.request.GET)
         if form.is_valid():

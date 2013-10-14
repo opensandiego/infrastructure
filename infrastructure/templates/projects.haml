@@ -21,23 +21,20 @@
     - pagination_count
     #projects
       %ul.tabs
-        %li
-          %a{href: "#" }
-            %img{src: "{{STATIC_URL}}/images/icons/glyphicons_370_globe_af.png"}
         %li{class: 'active'}
-          %a{href: "#" }
+          %a{href: "#", "data-tab": "list" }
             %img{src: "{{STATIC_URL}}/images/icons/glyphicons_114_list.png"}
         %li.last
-          %a{href: "#" }
+          %a{href: "#", "data-tab": "stats" }
             %img{src: "{{STATIC_URL}}/images/icons/glyphicons_040_stats.png"}
-      %ul.views
+      %ul.views{style: 'display:none;'}
         %li
           %a{href: '#'} Expanded
         %li.last
           %a{href: '#'} Compact
-      #stats
+      #stats.tab-view
         - widgets
-      #projects-list
+      #list.tab-view
         - for project in projects
           - project_list_item project
         - pagination

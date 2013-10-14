@@ -288,3 +288,7 @@ a {
   line-height: 12px;
   padding: 5px;
 }
+#project-list #stats {
+  display:none;
+  padding: 10px 20px;
+}
