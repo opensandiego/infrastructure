@@ -158,13 +158,13 @@ class ProjectsFilterMixin():
         """docstring for filter"""
         getattr(self, filter_by)(value)
         return self.projects
-    def phase(self,value):
+    def filter_by_phase(self,value):
         """docstring for phase"""
         self.projects = self.projects.order_by(PHASE_ORDERS[value]).by_phase(dict(PHASE_URLS)[value])
-    def asset_type(self):
+    def filter_by_asset_type(self,value):
         """docstring for asset_type"""
         self.projects = self.projects.by_asset_group(dict(ASSET_TYPE_URLS)[value]).order_by('SP_CONSTR_FINISH_DT')
-    def district(self):
+    def filter_by_district(self,value):
         """docstring for district"""
         self.projects = self.projects.by_district(value).order_by('SP_CONSTR_FINISH_DT')
         
@@ -202,14 +202,14 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
         projects = []
         self.show = {'current': '', 'all': 'active'}
         if self.kwargs.has_key('phase'):
-            self.filter('phase',self.kwargs['phase'])
+            self.filter('filter_by_phase',self.kwargs['phase'])
             for key, value in dict(PROJECT_PHASES).items():
                 if value == dict(PHASE_URLS)[self.kwargs['phase']]:
                     self.form_data['phases'] = key
         if self.kwargs.has_key('asset_type'):
-            self.filter('asset_type',self.kwargs['asset_type'])
+            self.filter('filter_by_asset_type',self.kwargs['asset_type'])
         if self.kwargs.has_key('district'):
-            self.filter('district',self.kwargs['district'])
+            self.filter('filter_by_district',self.kwargs['district'])
 
         #if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
         #    self.filter = self.kwargs['filter']
