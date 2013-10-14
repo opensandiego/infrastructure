@@ -76,31 +76,45 @@ a {
 }
 .widget {
   float:left;
-  width: 180px;
-  height: 180px;
-  border:1px solid #CD8E6D;
-  padding: 10px;
+  width: 220px;
+  height: 220px;
+  border:1px solid #375585;
   margin: 10px;
-}
-#dashboard .widget {
   background: #fff;
 }
+.widget .content {
+  padding: 10px 0;
+  position: relative;
+}
+#dashboard .widget {
+}
 .widget h2 {
-  font-size:100px;
-  line-height: 110px;
+  font-size:90px;
+  line-height: 100px;
   text-align:center;
+  margin: 0px;
+  color: #222;
+  text-shadow: 0px 2px 3px #eee;
+  //text-shadow: 1px 1px 0px #666;
 }
 .widget h2 span {
   font-size: 12px;
   line-height: 14px;
-  text-align: right;
-  float: right;
-  margin-top: -15px;
+  position: absolute;
+  bottom: 10px;
 }
 .widget h6 {
   text-align:center;
-  font-size: 22px;
-  line-height: 24px;
+  font-size: 16px;
+  line-height: 18px;
+  margin: 0;
+  padding: 10px;
+  background-color: #A6C4F4;
+  background-size: 10%;
+  background-position: 5px center;
+  border-bottom: 1px solid #375585;
+  color: #444;
+  font-weight: normal;
 }
 #filter {
   clear: left;
@@ -209,8 +223,21 @@ a {
     stroke: black;
     shape-rendering: crispEdges;
 }
-
 #project .axis text {
     font-family: sans-serif;
     font-size: 11px;
+}
+#project-list #stats .widget h2 {
+  font-size: 35px;
+  line-height: 38px;
+}
+#project-list #stats .widget {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+}
+#project-list #stats .widget h6{
+  font-size: 11px;
+  line-height: 12px;
+  padding: 5px;
 }

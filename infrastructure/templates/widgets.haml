@@ -1,0 +1,8 @@
+- for row in widgets
+  .row
+    %h2 {{row.title}}
+    - for widget in row.widgets
+      .widget
+        %h6{class: '{{widget.widget_class}}' }= widget.headline
+        .content
+          %h2 {{widget.value}}

@@ -44,7 +44,9 @@ $(document).ready(function() {
   }
 
   if($('#main').length > 0) {
+    L.esri.get = L.esri.RequestHandlers.JSONP;
     var map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
     .setView([32.70752, -117.15706], 11);
+    L.esri.featureLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer/15').addTo(map);
   }
 });

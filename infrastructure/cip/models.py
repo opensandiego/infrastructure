@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 import datetime 
 from django.contrib.humanize.templatetags.humanize import intcomma
+from django.db.models import Count, Min, Sum, Avg
 
 class ProjectCosts(object):
     def __init__(self):
@@ -51,10 +52,14 @@ class ProjectManagerMixin(object):
     def current(self):
         """docstring for current"""
         return self.filter(SP_CONSTR_FINISH_DT__gt=datetime.date.today(), SP_PRELIM_ENGR_START_DT__lt=datetime.date.today())
+    def active(self):
+        """docstring for active"""
+        return self.exclude(SP_PROJECT_PHASE='Complete').exclude(SP_PROJECT_PHASE='Post Construction')
     def by_year(self,year=datetime.date.today().year):
         """docstring for years"""
+        end_of_year = datetime.date(year,12,31)
         start_of_the_year = datetime.date(year,1,1)
-        return self.filter(SP_PRELIM_ENGR_START_DT__gt=start_of_the_year)
+        return self.filter(SP_PRELIM_ENGR_START_DT__gt=start_of_the_year,SP_PRELIM_ENGR_START_DT__lt=end_of_year)
     def future(self):
         """docstring for future"""
         return self.filter(SP_AWARD_START_DT__gt=datetime.date.today())
@@ -76,11 +81,35 @@ class ProjectManagerMixin(object):
     def by_project_cost(self,project_cost):
         """docstring for by_project_cost"""
         return self.get_query(project_cost)
-    def by_finished_date(self,date):
+    def by_finished_year(self,year):
         """docstring for by_finished_date"""
-        return self.filter(SP_CONSTR_FINISH_DT__lt=date)
+        end_of_year = datetime.date(year,12,31)
+        start_of_the_year = datetime.date(year,1,1)
+        return self.filter(SP_CONSTR_FINISH_DT__gt=start_of_the_year,SP_CONSTR_FINISH_DT__lt=end_of_year)
+    def by_district(self,district):
+        """docstring for by_finished_date"""
+        return self.filter(SP_COUNCIL_DISTRICTS=district)
+    def project_cost(self):
+        """docstring for project_cost"""
+        return self.aggregate(project_cost=Sum('SP_TOTAL_PROJECT_COST'))
 
-class ProjectQuerySet(QuerySet,ProjectManagerMixin,ProjectCosts):
+class ProjectsStatsMixin(object):
+    def construction_cost(self):
+        """docstring for construction_cost"""
+        return self.aggregate(cost=Sum('SP_TOTAL_CONSTRUCTION_COST'))['cost']
+    def overall_cost(self):
+        """docstring for overall_cost"""
+        return self.aggregate(cost=Sum('SP_TOTAL_PROJECT_COST'))['cost']
+    def count_by_year(self,year):
+        """docstring for count_by_year"""
+        return self.by_year(year).count()
+    def finished_by_year(self,year):
+        """docstring for finished_by_year"""
+        return self.by_finished_year(year).count()
+        
+
+
+class ProjectQuerySet(QuerySet,ProjectManagerMixin,ProjectCosts,ProjectsStatsMixin):
     pass
 
 class ProjectManager(models.Manager,ProjectManagerMixin):
@@ -90,6 +119,12 @@ class ProjectManager(models.Manager,ProjectManagerMixin):
     def get_query_set(self):
         """docstring for get_query_set"""
         return ProjectQuerySet(self.model)
+
+class ProjectsStatsQuerySet(ProjectManagerMixin,ProjectsStatsMixin):
+    pass
+class ProjectsStatsManager(models.Manager):
+    def get_query_set(self):
+        return ProjectsStatsQuerySet(self.model, using=self._db)
 
 PHASE_URLS = (
         ('planning' , 'Planning'),
@@ -314,6 +349,10 @@ class Person(models.Model):
 class Contractor(models.Model):
     full_name = models.CharField(max_length=100)
 
+class Phase(models.Model):
+    title = models.CharField(max_length=100,null=True, blank=True)
+    key = models.CharField(max_length=2, null=True, blank=True)
+    url = models.CharField(max_length=100,null=True, blank=True)
 
 class Project(models.Model):
     SP_SEQ_NUM = models.IntegerField()
@@ -345,6 +384,8 @@ class Project(models.Model):
     SP_DELIVERY_METHOD_DESC = models.CharField(max_length=100, null=True, blank=True)
     SP_FIELD_SENIOR_NM = models.CharField(max_length=100, null=True, blank=True)
     SP_PROJECT_PHASE = models.CharField(max_length=100, null=True, blank=True)
+    SP_COUNCIL_DISTRICTS = models.CharField(max_length=100, null=True, blank=True)
+    SP_REPORT_PHASE= models.CharField(max_length=100, null=True, blank=True)
     SP_PROJECT_STATUS_CD = models.CharField(max_length=2)
     SP_UPDATE_DT = models.DateField(null=True, blank=True)
     SP_PROJECT_DESC = models.TextField(null=True, blank=True)
@@ -379,6 +420,7 @@ class Project(models.Model):
     SP_SPEC_NUM = models.CharField(max_length=20, null=True, blank=True)
 
     objects = ProjectManager()
+    stats = ProjectsStatsManager()
 
     def __unicode__(self):
         return self.SP_PROJECT_NM
