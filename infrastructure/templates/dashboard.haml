@@ -13,10 +13,4 @@
       %h5 Capital Improvements Program (CIP)
       #map{style: "background: #ccc;"}
     .content
-      - for widget_row in widgets
-        .row
-          %h2 {{widget_row.title}}
-          - for widget in widget_row.row
-            .widget{class: '{{widget.widget_class}}' }
-              %h2 {{widget.value}}
-              %h6 {{widget.headline}}
+      - widgets

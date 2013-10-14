@@ -123,3 +123,8 @@ def filter_text(context):
     
     filter_text = filter_text + " ordered by {0}".format(filter['order'])
     return {'filter_text': filter_text}
+
+@register.inclusion_tag('widgets.haml', takes_context=True)
+def widgets(context):
+    """docstring for widgets"""
+    return context
