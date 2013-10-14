@@ -19,10 +19,22 @@
   #project-list
     %h3 Currently running Projects ordered by Award start
     - pagination_count
-    
-    #stats
-      - widgets
     #projects
-      - for project in projects
-        - project_list_item project
-    - pagination
+      %ul.tabs
+        %li{class: 'active'}
+          %a{href: "#", "data-tab": "list" }
+            %img{src: "{{STATIC_URL}}/images/icons/glyphicons_114_list.png"}
+        %li.last
+          %a{href: "#", "data-tab": "stats" }
+            %img{src: "{{STATIC_URL}}/images/icons/glyphicons_040_stats.png"}
+      %ul.views{style: 'display:none;'}
+        %li
+          %a{href: '#'} Expanded
+        %li.last
+          %a{href: '#'} Compact
+      #stats.tab-view
+        - widgets
+      #list.tab-view
+        - for project in projects
+          - project_list_item project
+        - pagination

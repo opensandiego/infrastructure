@@ -129,8 +129,55 @@ a {
   float:left;
   padding: 5px 10px;
 }
+#project-list #projects .tabs{
+  position: absolute;
+  top: 20px;
+  left: -38px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-right: none;
+}
+#projects .tabs li {
+  list-style: none;
+  padding: 5px;
+  margin: 0;
+  background: #eee;
+  border-right: 1px solid #ccc;
+}
+#projects .tabs li.active {
+  background: #fff;
+  border-right: 1px solid #fff;
+}
+#projects .tabs li.last {
+  border-bottom:none;
+}
+#projects ul.views {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  font-size: 10px;
+  border: 1px solid #ccc;
+  border-top: none;
+  color: #ccc;
+}
+#projects ul.views li{
+  padding: 5px;
+  margin: 0;
+  border:none;
+  border-right: 1px solid #ccc;
+  float:left;
+  clear: none;
+}
+#projects ul.views li.last {
+  border:none;
+}
 #projects {
   clear: left;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  margin: 10px 10px 10px 30px;
+  position:relative;
 }
 #projects dl {
   margin: 0;
@@ -229,7 +276,7 @@ a {
 }
 #project-list #stats .widget h2 {
   font-size: 35px;
-  line-height: 38px;
+  line-height: 37px;
 }
 #project-list #stats .widget {
   width: 100px;
@@ -240,4 +287,8 @@ a {
   font-size: 11px;
   line-height: 12px;
   padding: 5px;
+}
+#project-list #stats {
+  display:none;
+  padding: 10px 20px;
 }

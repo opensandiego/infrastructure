@@ -49,4 +49,12 @@ $(document).ready(function() {
     .setView([32.70752, -117.15706], 11);
     L.esri.featureLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer/15').addTo(map);
   }
+  if($('#project-list .tabs').length > 0) {
+    $('#project-list').on('click', '.tabs li a',function(e) {
+      $('.tab-view').hide();
+      $('#' + $(this).data('tab')).show();
+      $('#project-list .tabs li').removeClass('active');
+      $(this).parent('li').addClass('active');
+    });
+  }
 });
