@@ -79,6 +79,9 @@ class ProjectManagerMixin(object):
     def by_finished_date(self,date):
         """docstring for by_finished_date"""
         return self.filter(SP_CONSTR_FINISH_DT__lt=date)
+    def by_district(self,district):
+        """docstring for by_finished_date"""
+        return self.filter(SP_COUNCIL_DISTRICTS=district)
 
 class ProjectQuerySet(QuerySet,ProjectManagerMixin,ProjectCosts):
     pass
@@ -345,6 +348,8 @@ class Project(models.Model):
     SP_DELIVERY_METHOD_DESC = models.CharField(max_length=100, null=True, blank=True)
     SP_FIELD_SENIOR_NM = models.CharField(max_length=100, null=True, blank=True)
     SP_PROJECT_PHASE = models.CharField(max_length=100, null=True, blank=True)
+    SP_COUNCIL_DISTRICTS = models.CharField(max_length=100, null=True, blank=True)
+    SP_REPORT_PHASE= models.CharField(max_length=100, null=True, blank=True)
     SP_PROJECT_STATUS_CD = models.CharField(max_length=2)
     SP_UPDATE_DT = models.DateField(null=True, blank=True)
     SP_PROJECT_DESC = models.TextField(null=True, blank=True)

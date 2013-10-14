@@ -90,6 +90,12 @@ class DashboardMixin(object):
         row_widgets.append(years_finished)
         self.widgets.append({'title': '', 'row': row_widgets})
         row_widgets = []
+        for district in range(1,10):
+            district_widget = DashboardWidget('District {0}'.format(district))
+            district_widget.value = Project.objects.all().by_district(district).count()
+            row_widgets.append(district_widget)
+        self.widgets.append({'title': 'By district', 'row': row_widgets})
+        row_widgets = []
         for (phase_class,phase) in PHASE_URLS:
             phase_widget = DashboardWidget(phase)
             phase_widget.value = Project.objects.all().by_phase(phase).count()
@@ -148,6 +154,10 @@ class ProjectList(ListView):
             self.show = {'current': '', 'all': 'active'}
             projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
             return projects.by_asset_group(dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']])
+        if self.kwargs.has_key('district'):
+            self.show = {'current': '', 'all': 'active'}
+            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
+            return projects.by_district(self.kwargs['district'])
 
         if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
             self.filter = self.kwargs['filter']
