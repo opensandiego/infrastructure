@@ -196,14 +196,13 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
                     self.form_data['phases'] = key
         if self.kwargs.has_key('asset_type'):
             self.filter('filter_by_asset_type',self.kwargs['asset_type'])
+            for key, value in dict(ASSET_TYPE_GROUPS).items():
+                if value == dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']]:
+                    self.form_data['asset_types'] = key
         if self.kwargs.has_key('district'):
             self.filter('filter_by_district',self.kwargs['district'])
+            self.form_data['districts'] = self.kwargs['district']
 
-        #if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
-        #    self.filter = self.kwargs['filter']
-        #    self.filter_value = self.kwargs['value']
-        #    projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
-        #    return getattr(projects, 'by_{format}'.format(format=self.filter))(self.filter_value)
         return self.projects
 
     def get_context_data(self, **kwargs):
@@ -278,6 +277,8 @@ class ProjectFilter:
             self.client_departements()
         if self.form.cleaned_data.has_key('project_cost') and self.form.cleaned_data['project_cost']:
             self.project_cost()
+        if self.form.cleaned_data.has_key('districts') and self.form.cleaned_data['districts']:
+            self.districts()
         return self.projects.order_by(self.order).exclude(**{self.order.replace('-',''): None})
 
     def phases(self):
@@ -290,7 +291,7 @@ class ProjectFilter:
         """docstring for asset_types"""
         asset_type = self.form.cleaned_data['asset_types']
         asset_types = dict(ASSET_TYPE_GROUPS)
-        self.filter_set['asset_type'] = asset_types[asset_type]
+        self.filter_set['asset_types'] = asset_types[asset_type]
         self.projects = self.projects.by_asset_group(asset_types[asset_type])
     def asset_groups(self):
         """docstring for asset_types"""
@@ -311,6 +312,11 @@ class ProjectFilter:
         """docstring for project_cost"""
         project_cost = self.form.cleaned_data['project_cost']
         self.projects = self.projects.by_project_cost(ProjectCosts().get_value(int(project_cost)))
+    def districts(self):
+        """docstring for project_cost"""
+        district = self.form.cleaned_data['districts']
+        self.filter_set['districts'] = district
+        self.projects = self.projects.by_district(district)
 
 class ProjectFilterForm(forms.Form):
     default = [(u'', 'All')]
@@ -320,6 +326,7 @@ class ProjectFilterForm(forms.Form):
     choice_delivery_methods = tuple(default + list(DELIVERY_METHODS))
     choice_client_departements = tuple(default + list(CLIENT_DEPARTMENTS))
     project_costs = tuple(default + ProjectCosts().get_touples())
+    choice_districts = tuple(default + Districts().get_touples())
 
     dataset = Select2ChoiceField(initial=1,
         choices=(('all','All'),('current','Active')),required=False)
@@ -337,6 +344,8 @@ class ProjectFilterForm(forms.Form):
         choices=choice_client_departements,required=False)
     delivery_methods = Select2ChoiceField(initial=2,
         choices=choice_delivery_methods,required=False)
+    districts = Select2ChoiceField(initial=2,
+        choices=choice_districts,required=False)
 
 class JSONTimetableMixin(object):
     def render_to_response(self, context):

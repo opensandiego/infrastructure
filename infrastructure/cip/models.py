@@ -46,7 +46,15 @@ class ProjectCosts(object):
     def get_touples(self):
         """docstring for get_touples"""
         return [(i,self.get_string(self.cost[i])) for i in range(len(self.cost))]
-
+class Districts(object):
+    def __init__(self):
+        """docstring for __init__"""
+        self.districts = []
+        for i in range(1,10):
+            self.districts.append('District {0}'.format(i))
+    def get_touples(self):
+        """docstring for get_touples"""
+        return [(i+1,self.districts[i]) for i in range(len(self.districts))]
 
 class ProjectManagerMixin(object):
     def current(self):
