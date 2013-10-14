@@ -291,7 +291,7 @@ class ProjectFilter:
         """docstring for asset_types"""
         asset_type = self.form.cleaned_data['asset_types']
         asset_types = dict(ASSET_TYPE_GROUPS)
-        self.filter_set['asset_types'] = asset_types[asset_type]
+        self.filter_set['asset_type'] = asset_types[asset_type]
         self.projects = self.projects.by_asset_group(asset_types[asset_type])
     def asset_groups(self):
         """docstring for asset_types"""
@@ -315,7 +315,7 @@ class ProjectFilter:
     def districts(self):
         """docstring for project_cost"""
         district = self.form.cleaned_data['districts']
-        self.filter_set['districts'] = district
+        self.filter_set['district'] = district
         self.projects = self.projects.by_district(district)
 
 class ProjectFilterForm(forms.Form):
