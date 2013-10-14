@@ -71,6 +71,10 @@ def show_shortcuts():
     for (key, value) in ASSET_TYPE_URLS:
         asset_group_links['links'].append(generate_link('asset_type',key,value, asset_type_class[value]))
     shortcuts.append(asset_group_links)
+    district_links = { 'links' : [], 'title': 'Disricts' }
+    for district_nr in range(1,10):
+        district_links['links'].append(generate_link('district',district_nr,'District {0}'.format(district_nr),''))
+    shortcuts.append(district_links)
     #client_departement_links = { 'links' : [], 'title': 'Current Projects by asset type group' }
 
     return {'shortcuts': shortcuts}
@@ -119,3 +123,8 @@ def filter_text(context):
     
     filter_text = filter_text + " ordered by {0}".format(filter['order'])
     return {'filter_text': filter_text}
+
+@register.inclusion_tag('widgets.haml', takes_context=True)
+def widgets(context):
+    """docstring for widgets"""
+    return context

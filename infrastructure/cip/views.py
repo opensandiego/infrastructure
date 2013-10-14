@@ -38,7 +38,7 @@ def show_project(request, p_id):
     
     return render_to_response('project.haml', {'project': project})
 
-class DashboardWidget():
+class Widget():
     headline = ''
     value = ''
     widget_class = ''
@@ -49,67 +49,114 @@ class DashboardWidget():
         """docstring for set_value"""
         self.value = value
 
-class DashboardMixin(object):
-    projects = Project.objects.all().aggregate(overall_project_cost=Sum('SP_TOTAL_PROJECT_COST'),overall_construction_cost=Sum('SP_TOTAL_CONSTRUCTION_COST'),projects_count=Count('pk'))
-    current_projects = Project.objects.current()
-    this_years_projects = Project.objects.by_year()
+class WidgetRow():
+    headline = ''
     widgets = []
+    def __init__(self,headline):
+       """docstring for __init"""
+       self.headline = headline
+       self.widgets = []
+
+    def add_widget(self,widget):
+        """docstring for add_widget"""
+        self.widgets.append(widget)
+
+
+class DashboardMixin(object):
     def __init__(self):
         """docstring for init"""
+        self.projects = Project.objects.all()
         self.this_year = datetime.date.today().year
         self.widgets = []
-        self.active_project_count = self.current_projects.count()
-        self.project_cost = self.projects['overall_project_cost']
-        self.construction_cost = self.projects['overall_construction_cost']
-        self.finished_this_year = self.this_years_projects.by_finished_date(datetime.date(self.this_year,12,31))
     def get_widgets(self):
         """docstring for get_widgets"""
-        project_count = DashboardWidget('projects')
-        project_count.value = self.projects['projects_count']
-
-        active_project_count = DashboardWidget('active projects')
-        active_project_count.value = self.active_project_count
-
-        project_cost = DashboardWidget('$$$')
-        project_cost.value = intword_span(intword(self.project_cost))
-
-        construction_cost = DashboardWidget('construction \n $$$')
-        construction_cost.value = intword_span(intword(self.construction_cost))
-
-        years_project = DashboardWidget('projects started in {0}'.format(self.this_year))
-        years_project.value = self.this_years_projects.count()
-
-        years_finished = DashboardWidget('projects finished in {0}'.format(self.this_year))
-        years_finished.value = self.finished_this_year.count()
-        row_widgets = []
-        row_widgets.append(project_count)
-        row_widgets.append(active_project_count)
-        row_widgets.append(project_cost)
-        row_widgets.append(construction_cost)
-        row_widgets.append(years_project)
-        row_widgets.append(years_finished)
-        self.widgets.append({'title': '', 'row': row_widgets})
-        row_widgets = []
-        for (phase_class,phase) in PHASE_URLS:
-            phase_widget = DashboardWidget(phase)
-            phase_widget.value = Project.objects.all().by_phase(phase).count()
-            phase_widget.widget_class = phase_class
-            row_widgets.append(phase_widget)
-        self.widgets.append({'title': 'Projects by Phase:', 'row': row_widgets})
-        row_widgets = []
-        for (asset_type_class,asset_type) in ASSET_TYPE_URLS:
-            asset_widget = DashboardWidget(asset_type)
-            asset_widget.value = Project.objects.all().by_asset_group(asset_type).count()
-            row_widgets.append(asset_widget)
-
-        self.widgets.append({'title': 'Projects by Asset Type:', 'row': row_widgets})
-        return self.widgets
+        project_widgets = ProjectWidgets()
+        project_widgets.add_row('',self.project_count(),self.active_count(),self.project_cost(),self.construction_cost(),self.projects_by_year(self.this_year), self.finished_by_year(self.this_year))
+        project_widgets.add_row('Projects',self.districts())
+        project_widgets.add_row('Phases',self.phases())
+        project_widgets.add_row('Asset Types',self.asset_types())
+        return project_widgets.widgets
     def get_context_data(self, **kwargs):
         context = super(DashboardMixin, self).get_context_data(**kwargs)
         context['widgets'] = self.get_widgets()
         return context
 
-class DashboardView(DashboardMixin,TemplateView):
+class ProjectWidgetMixin(object):
+    def construction_cost(self):
+        """docstring for construction_cost"""
+        construction_cost = Widget('construction \n $$$')
+        construction_cost.value = intword_span(intword(self.projects.construction_cost()))
+        return construction_cost
+    def project_cost(self):
+        """docstring for construction_cost"""
+        project_cost = Widget('$$$')
+        project_cost.value = intword_span(intword(self.projects.overall_cost()))
+        return project_cost
+    def project_count(self):
+        """docstring for project_count"""
+        count = Widget('projects')
+        count.value =  self.projects.count()
+        return count
+    def active_count(self):
+        """docstring for active_count"""
+        count = Widget('active projects')
+        count.value =  self.projects.active().count()
+        return count
+    def projects_by_year(self,year):
+        """docstring for projects_by_year"""
+        widget = Widget('started {0}'.format(year))
+        widget.value = self.projects.count_by_year(year)
+        return widget
+    def finished_by_year(self,year):
+        """docstring for finished_by_year"""
+        widget = Widget('finished {0}'.format(year))
+        widget.value = self.projects.finished_by_year(year)
+        return widget
+        
+    def districts(self):
+        """docstring for districts"""
+        row_widgets = []
+        for district in range(1,10):
+            district_widget = Widget('District {0}'.format(district))
+            district_widget.value = self.projects.by_district(district).count()
+            row_widgets.append(district_widget)
+        return row_widgets
+    def phases(self):
+        """docstring for phases"""
+        row_widgets = []
+        for (phase_class,phase) in PHASE_URLS:
+            phase_widget = Widget(phase)
+            phase_widget.value = self.projects.by_phase(phase).count()
+            phase_widget.widget_class = phase_class
+            row_widgets.append(phase_widget)
+        return row_widgets
+    def asset_types(self):
+        """docstring for asset_types"""
+        row_widgets = []
+        for (asset_type_class,asset_type) in ASSET_TYPE_URLS:
+            asset_widget = Widget(asset_type)
+            asset_widget.value = Project.objects.all().by_asset_group(asset_type).count()
+            row_widgets.append(asset_widget)
+        return row_widgets
+
+class ProjectsFilterMixin():
+    projects = Project.objects.all()
+
+    def filter(self,filter_by,value):
+        """docstring for filter"""
+        getattr(self, filter_by)(value)
+        return self.projects
+    def phase(self,value):
+        """docstring for phase"""
+        self.projects = self.projects.order_by(PHASE_ORDERS[value]).by_phase(dict(PHASE_URLS)[value])
+    def asset_type(self):
+        """docstring for asset_type"""
+        self.projects = self.projects.by_asset_group(dict(ASSET_TYPE_URLS)[value]).order_by('SP_CONSTR_FINISH_DT')
+    def district(self):
+        """docstring for district"""
+        self.projects = self.projects.by_district(value).order_by('SP_CONSTR_FINISH_DT')
+        
+class DashboardView(DashboardMixin, ProjectWidgetMixin, TemplateView):
     template_name = 'dashboard.haml'
 
 
@@ -117,12 +164,12 @@ class ProjectDetailView(DetailView):
     model = Project
     template_name = 'project.haml'
     context_object_name = 'project'
-
-class ProjectList(ListView):
+class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
     model = Project
     context_object_name = 'projects'
     template_name = 'projects.haml'
     paginate_by = 20
+    form_data = {'dataset': 'all', 'order': 'SP_PRELIM_ENGR_START_DT'}
 
     def timephase(self):
         """docstring for timephase"""
@@ -140,43 +187,74 @@ class ProjectList(ListView):
         return projects.order_by('SP_PRELIM_ENGR_START_DT').exclude(SP_PRELIM_ENGR_START_DT=None)
     def get_queryset(self):
         """docstring for get_queryset"""
+        projects = []
+        self.show = {'current': '', 'all': 'active'}
         if self.kwargs.has_key('phase'):
-            self.show = {'current': '', 'all': 'active'}
-            projects = self.timephase().order_by(PHASE_ORDERS[self.kwargs['phase']])
-            return projects.by_phase(dict(PHASE_URLS)[self.kwargs['phase']])
+            self.filter('phase',self.kwargs['phase'])
+            for key, value in dict(PROJECT_PHASES).items():
+                if value == dict(PHASE_URLS)[self.kwargs['phase']]:
+                    self.form_data['phases'] = key
         if self.kwargs.has_key('asset_type'):
-            self.show = {'current': '', 'all': 'active'}
-            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
-            return projects.by_asset_group(dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']])
+            self.filter('asset_type',self.kwargs['asset_type'])
+        if self.kwargs.has_key('district'):
+            self.filter('district',self.kwargs['district'])
 
-        if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
-            self.filter = self.kwargs['filter']
-            self.filter_value = self.kwargs['value']
-            projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
-            return getattr(projects, 'by_{format}'.format(format=self.filter))(self.filter_value)
-        else:
-            return self.timephase() 
+        #if self.kwargs.has_key('filter') and self.kwargs.has_key('value'):
+        #    self.filter = self.kwargs['filter']
+        #    self.filter_value = self.kwargs['value']
+        #    projects = self.timephase().order_by('SP_CONSTR_FINISH_DT')
+        #    return getattr(projects, 'by_{format}'.format(format=self.filter))(self.filter_value)
+        return self.projects
 
     def get_context_data(self, **kwargs):
         """docstring for get_contxt_data"""
         context = super(ProjectList, self).get_context_data(**kwargs)
-        context['form'] = ProjectFilterForm()
+        context['form'] = ProjectFilterForm(self.form_data)
         context['show'] = self.show
         return context
 
 class ProjectsListListView(ProjectList):
     template_name = 'project_list.haml'
     paginate_by = 10
+
+    def project_widgets(self,filter_set):
+        """docstring for project_widgets"""
+        project_widgets = ProjectWidgets()
+        project_widgets.add_row('',self.project_count(),self.project_cost(),self.construction_cost())
+        if not filter_set.has_key('district'):
+            project_widgets.add_row('Projects',self.districts())
+        if not filter_set.has_key('phase'):
+            project_widgets.add_row('Phases',self.phases())
+        if not filter_set.has_key('asset_type'):
+            project_widgets.add_row('Asset Types',self.asset_types())
+        project_widgets.add_row('',self.projects_by_year(2013))
+        return project_widgets.widgets
     def get(self, request, *args, **kwargs):  
         form = ProjectFilterForm(self.request.GET)
         if form.is_valid():
             pf = ProjectFilter(form)
-            projects =  pf.filter()
-        kwargs['object_list'] = projects
+            self.projects =  pf.filter()
+        kwargs['object_list'] = self.projects
         context = super(ProjectList, self).get_context_data(**kwargs)
         context['filter'] = pf.filter_set
+        context['widgets'] = self.project_widgets(pf.filter_set)
         return render(request, self.template_name, context)
- 
+
+class ProjectWidgets(object):
+    def __init__(self):
+        self.widgets = []
+    def add_row(self,title,*widgets):
+        """docstring for add_row"""
+        row = WidgetRow(title)
+        row_widgets = []
+        for widget in list(widgets):
+            if isinstance(widget, Widget):
+                row_widgets.append(widget)
+            else:
+                row_widgets = row_widgets + widget
+        row.widgets = row_widgets
+        self.widgets.append(row)
+
 class ProjectFilter:
     def __init__(self, form):
         self.form = form
@@ -243,9 +321,9 @@ class ProjectFilterForm(forms.Form):
     choice_client_departements = tuple(default + list(CLIENT_DEPARTMENTS))
     project_costs = tuple(default + ProjectCosts().get_touples())
 
-    dataset = Select2ChoiceField(initial=2,
+    dataset = Select2ChoiceField(initial=1,
         choices=(('all','All'),('current','Active')),required=False)
-    order = Select2ChoiceField(initial=2,
+    order = Select2ChoiceField(initial=1,
         choices=(ORDER),required=False)
     project_cost = Select2ChoiceField(
         choices=project_costs, required=False)
