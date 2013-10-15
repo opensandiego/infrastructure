@@ -49,6 +49,8 @@ asset_type_images = {
 @register.filter(needs_autoescape=True)
 def intword_span(value,autoescape=None):
     """docstring for intword_span"""
+    if value < 1000000:
+        return value
     intword = value.split(" ")
     money = intword[0]
     money_type = intword[1]
