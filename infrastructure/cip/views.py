@@ -197,21 +197,27 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
                 self.show['all'] = 'active'
                 projects = Project.objects.all()
         return projects.order_by('SP_PRELIM_ENGR_START_DT').exclude(SP_PRELIM_ENGR_START_DT=None)
+    def reset_form_data(self):
+        """docstring for reset_form_data"""
+        self.form_data = {'dataset': 'all', 'order': 'SP_PRELIM_ENGR_START_DT'}
     def get_queryset(self):
         """docstring for get_queryset"""
         projects = []
         self.show = {'current': '', 'all': 'active'}
         if self.kwargs.has_key('phase'):
+            self.reset_form_data()
             self.filter('filter_by_phase',self.kwargs['phase'])
             for key, value in dict(PROJECT_PHASES).items():
                 if value == dict(PHASE_URLS)[self.kwargs['phase']]:
                     self.form_data['phases'] = key
         if self.kwargs.has_key('asset_type'):
+            self.reset_form_data()
             self.filter('filter_by_asset_type',self.kwargs['asset_type'])
             for key, value in dict(ASSET_TYPE_GROUPS).items():
                 if value == dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']]:
                     self.form_data['asset_types'] = key
         if self.kwargs.has_key('district'):
+            self.reset_form_data()
             self.filter('filter_by_district',self.kwargs['district'])
             self.form_data['districts'] = self.kwargs['district']
 
