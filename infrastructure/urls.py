@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^projects_list$', ProjectsListListView.as_view(), name='projects_list'),
 
     url(r'^project/(?P<pk>\d+)$', ProjectDetailView.as_view(),name='project_detail'),
+    url(r'^project/(?P<slug>([A-Z0-9]*))$', ProjectDetailView.as_view(),name='project_detail'),
     url(r'^project/(?P<pk>\d+)/timetable.json$', ProjectDetailJSONView.as_view(),name='project_timetable'),
 
     url(r'^admin/', include(admin.site.urls)),

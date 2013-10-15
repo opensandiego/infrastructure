@@ -176,6 +176,7 @@ class ProjectDetailView(DetailView):
     model = Project
     template_name = 'project.haml'
     context_object_name = 'project'
+    slug_field = 'SP_SAPNO'
 class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
     model = Project
     context_object_name = 'projects'
