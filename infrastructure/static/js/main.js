@@ -58,6 +58,18 @@ $(document).ready(function() {
     map.on("click", function(e) {
         districtLayer.identify(e.latlng, function(data) {
           if(data.results.length > 0) {
+            cipLayer = data.results[0];
+            if(cipLayer.layerName == "CIP Point") {
+              attributes = cipLayer.attributes;
+              projectId = attributes["PROJECT ID"];
+              projectTitle = attributes["TITLE"];
+              projectUrl = '/project/' + projectId;
+              popupText = '<h4>' + projectTitle + '</h4><a href="' + projectUrl + '">Detail</a>'
+              var popup = L.popup()
+              .setLatLng(e.latlng)
+              .setContent(popupText)
+              .openOn(map);
+            }
           }
         });
     });
