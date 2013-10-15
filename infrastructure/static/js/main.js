@@ -47,7 +47,6 @@ $(document).ready(function() {
     L.esri.get = L.esri.RequestHandlers.JSONP;
     var map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
     .setView([32.70752, -117.15706], 11);
-    //L.esri.featureLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer/15').addTo(map);
     districtLayer = L.esri.dynamicMapLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer',{
       'layers': [15],
       'opacity' :0.9
@@ -59,11 +58,9 @@ $(document).ready(function() {
     map.on("click", function(e) {
         districtLayer.identify(e.latlng, function(data) {
           if(data.results.length > 0) {
-            console.log(data);
           }
         });
     });
-    //L.esri.tiledMapLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer/1').addTo(map);
   }
   if($('#project-list .tabs').length > 0) {
     $('#project-list').on('click', '.tabs li a',function(e) {
