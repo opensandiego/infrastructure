@@ -16,8 +16,14 @@
       %li.last
         %a{href: '#'} Compact
     #stats.tab-view
-      - widgets
+      - if projects|length > 0
+        - widgets 
+      - else
+        - no_results
     #list.tab-view
-      - for project in projects
-        - project_list_item project
-      - pagination
+      - if projects|length > 0
+        - for project in projects
+          - project_list_item project
+        - pagination
+      - else
+        - no_results

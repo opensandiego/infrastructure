@@ -130,3 +130,8 @@ def filter_text(context):
 def widgets(context):
     """docstring for widgets"""
     return context
+
+@register.inclusion_tag('no_results.haml')
+def no_results():
+    """docstring for no_results"""
+    return
