@@ -1,1 +1,3 @@
-{{ object.title }}
+{{ object.SP_PROJECT_NM }}
+{{ object.SP_PROJECT_DESC }}
+{{ object.SP_ASSET_TYPE_GROUP }}

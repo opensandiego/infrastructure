@@ -2,10 +2,8 @@ from django.conf.urls import patterns, include, url
 from infrastructure.cip.views import *
 from django.contrib import admin
 from django.http import HttpResponseRedirect
-from haystack.views import SearchView
 admin.autodiscover()
 
-from haystack.views import SearchView, search_view_factory
 
 
 urlpatterns = patterns('',
