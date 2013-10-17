@@ -1,0 +1,32 @@
+- extends "application.haml"
+
+- block content
+  %h2 Search
+  #project-list
+    <form method="get" action=".">
+      = form.as_table
+      <input type="submit" value="Search">
+    </form>
+        - if query
+            <h3>Results</h3>
+            = page
+            = page.object_list
+            = query
+            - for result in page.object_list
+                <p>
+                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+                </p>
+            - empty 
+                <p>No results found.</p>
+
+            {% if page.has_previous or page.has_next %}
+                <div>
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                </div>
+            {% endif %}
+        - else
+            {# Show some example queries to run, maybe query syntax, something else? #}
+
+    </form>
