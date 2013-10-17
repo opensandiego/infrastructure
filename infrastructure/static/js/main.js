@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $( "form" ).on( "submit", function( event ) {
+  $( "projects_filter form" ).on( "submit", function( event ) {
     event.preventDefault();
     form_data = $(this).serialize();
     $.ajax({
