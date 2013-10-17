@@ -29,4 +29,8 @@
               %a{href: "{% url 'index' %}" } Overview
             %li
               %a{href: "{% url 'projects' %}" } Projects
+            %li
+              %form{action: '/search', method: 'get'}
+                %input{type: 'hidden', name: 'models', value: 'cip.project'}
+                %input{type: 'text', name: 'q', value: 'Search...'}
 

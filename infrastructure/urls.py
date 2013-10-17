@@ -2,7 +2,11 @@ from django.conf.urls import patterns, include, url
 from infrastructure.cip.views import *
 from django.contrib import admin
 from django.http import HttpResponseRedirect
+from haystack.views import SearchView
 admin.autodiscover()
+
+from haystack.views import SearchView, search_view_factory
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -23,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^project/(?P<pk>\d+)$', ProjectDetailView.as_view(),name='project_detail'),
     url(r'^project/(?P<slug>([A-Z0-9]*))$', ProjectDetailView.as_view(),name='project_detail'),
     url(r'^project/(?P<pk>\d+)/timetable.json$', ProjectDetailJSONView.as_view(),name='project_timetable'),
+    url(r'^search/', include('haystack.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
 )
