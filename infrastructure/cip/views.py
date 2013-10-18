@@ -71,7 +71,8 @@ class DashboardMixin(object):
     def get_widgets(self):
         """docstring for get_widgets"""
         project_widgets = ProjectWidgets()
-        project_widgets.add_row('',self.project_count(),self.active_count(),self.project_cost(),self.construction_cost(),self.projects_by_year(self.this_year), self.finished_by_year(self.this_year))
+        project_widgets.add_row('',self.project_count(),self.active_count(),self.projects_by_year(self.this_year), self.finished_by_year(self.this_year),self.planned_count())
+        project_widgets.add_row('Costs',self.project_cost(),self.construction_cost(), self.cost_by_year_widget(self.this_year), self.not_started_cost_widget())
         project_widgets.add_row('Projects',self.districts())
         project_widgets.add_row('Phases',self.phases())
         project_widgets.add_row('Asset Types',self.asset_types())
@@ -80,7 +81,6 @@ class DashboardMixin(object):
         context = super(DashboardMixin, self).get_context_data(**kwargs)
         context['widgets'] = self.get_widgets()
         return context
-
 class ProjectWidgetMixin(object):
     def construction_cost(self):
         """docstring for construction_cost"""
@@ -92,6 +92,16 @@ class ProjectWidgetMixin(object):
         project_cost = Widget('$$$')
         project_cost.value = intword_span(intword(self.projects.overall_cost()))
         return project_cost
+    def not_started_cost_widget(self):
+        """docstring for construction_cost"""
+        not_started_cost = Widget('planned $$$')
+        not_started_cost.value = intword_span(intword(self.projects.not_started_cost()))
+        return not_started_cost
+    def cost_by_year_widget(self,year):
+        """docstring for construction_cost"""
+        not_started_cost = Widget('{0} $$$'.format(year))
+        not_started_cost.value = intword_span(intword(self.projects.cost_by_year(year)))
+        return not_started_cost
     def project_count(self):
         """docstring for project_count"""
         count = Widget('projects')
@@ -101,6 +111,11 @@ class ProjectWidgetMixin(object):
         """docstring for active_count"""
         count = Widget('active projects')
         count.value =  self.projects.active().count()
+        return count
+    def planned_count(self):
+        """docstring for project_count"""
+        count = Widget('planned')
+        count.value =  self.projects.not_yet_started_count()
         return count
     def projects_by_year(self,year):
         """docstring for projects_by_year"""
@@ -269,8 +284,12 @@ class ProjectFilter:
             self.projects = Project.objects.current()
         else:
             self.projects = Project.objects.all()
-        self.order =  self.form.cleaned_data['order'] 
-        self.filter_set = { 'order': dict(ORDER)[self.order] }
+        if self.form.cleaned_data.has_key('order') and self.form.cleaned_data['order']:
+            self.order =  self.form.cleaned_data['order'] 
+            self.filter_set = { 'order': dict(ORDER)[self.order] }
+        else:
+            self.order = 'SP_PRELIM_ENGR_START_DT'
+            self.filter_set = {'order': 'SP_PRELIM_ENGR_START_DT'}
     def filter(self):
         """docstring for  filter_data"""
         if self.form.cleaned_data.has_key('phases') and self.form.cleaned_data['phases']:

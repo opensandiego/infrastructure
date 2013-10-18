@@ -100,6 +100,9 @@ class ProjectManagerMixin(object):
     def project_cost(self):
         """docstring for project_cost"""
         return self.aggregate(project_cost=Sum('SP_TOTAL_PROJECT_COST'))
+    def not_started(self):
+        """docstring for not_started"""
+        return self.filter(SP_PRELIM_ENGR_START_DT__isnull=True)
 
 class ProjectsStatsMixin(object):
     def construction_cost(self):
@@ -108,13 +111,21 @@ class ProjectsStatsMixin(object):
     def overall_cost(self):
         """docstring for overall_cost"""
         return self.aggregate(cost=Sum('SP_TOTAL_PROJECT_COST'))['cost']
+    def cost_by_year(self,year):
+        """docstring for overall_cost"""
+        return self.by_year(year).aggregate(cost=Sum('SP_TOTAL_PROJECT_COST'))['cost']
     def count_by_year(self,year):
         """docstring for count_by_year"""
         return self.by_year(year).count()
     def finished_by_year(self,year):
         """docstring for finished_by_year"""
         return self.by_finished_year(year).count()
-        
+    def not_yet_started_count(self):
+        """docstring for not_yet_started_count"""
+        return self.not_started().count()
+    def not_started_cost(self):
+        """docstring for not_started_cost"""
+        return self.not_started().aggregate(cost=Sum('SP_TOTAL_PROJECT_COST'))['cost']
 
 
 class ProjectQuerySet(QuerySet,ProjectManagerMixin,ProjectCosts,ProjectsStatsMixin):
