@@ -260,6 +260,33 @@ a {
 .water {
   background: url('../images/icons/water-24.png') center left no-repeat;
 }
+.district-1{
+  background: url('../images/cm/cd1.jpg') center left no-repeat;
+}
+.district-2{
+  background: url('../images/cm/cd2.jpg') center left no-repeat;
+}
+.district-3{
+  background: url('../images/cm/cd3.jpg') center left no-repeat;
+}
+.district-4{
+  background: url('../images/cm/cd4.jpg') center left no-repeat;
+}
+.district-5{
+  background: url('../images/cm/cd5.jpg') center left no-repeat;
+}
+.district-6{
+  background: url('../images/cm/cd6.jpg') center left no-repeat;
+}
+.district-7{
+  background: url('../images/cm/cd7.jpg') center left no-repeat;
+}
+.district-8{
+  background: url('../images/cm/cd8.jpg') center left no-repeat;
+}
+.district-9{
+  background: url('../images/cm/cd9.jpg') center left no-repeat;
+}
 #shortcuts ul {
   margin: 0;
 }

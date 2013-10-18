@@ -141,6 +141,7 @@ class ProjectWidgetMixin(object):
             district_widget = Widget('District {0}'.format(district))
             district_widget.subtitle = '{0} projects'.format(self.projects.by_district(district).count())
             district_widget.value = intword_span(intword(self.projects.by_district(district).overall_cost()))
+            district_widget.widget_class = 'district-{0}'.format(district)
             row_widgets.append(district_widget)
         return row_widgets
     def phases(self):
