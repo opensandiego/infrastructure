@@ -1,4 +1,15 @@
 $(document).ready(function() {
+  $('#nav').on('click','#search', function() {
+    value = $(this).val()
+    if(value == "Search...") {
+      $(this).val('');
+    }
+  }).on('blur', '#search', function() {
+    value = $(this).val()
+    if(value == '') {
+      $(this).val('Search...');
+    }
+  });
   $( "projects_filter form" ).on( "submit", function( event ) {
     event.preventDefault();
     form_data = $(this).serialize();

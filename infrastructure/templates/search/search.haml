@@ -7,21 +7,20 @@
   %h2 Search
   #project-list
     - if query
-      %h3 Results for '{{query}}'
-      %ul
+      %h3 {{ page.paginator.count }} Results for '{{query}}'
+      %ul#projects
         - for result in page.object_list
-          %li
-            %a{href: '/project/{{ result.object.pk }}'}= result.object.SP_PROJECT_NM
+            - project_list_item result.object
         - empty 
           %p No results found
         - if page.has_previous or page.has_next
           %div
             - if page.has_previous
-              %a{href: '?q={{ query }}&amp;page={{ page.previous_page_number }}' }
+              %a{href: '?q={{ query }}&amp;page={{ page.previous_page_number }}', class: 'btn' }
                 &laquo; Previous
-            |
+              |
             - if page.has_next
-              %a{href: '?q={{ query }}&amp;page={{ page.next_page_number }} '}
+              %a{href: '?q={{ query }}&amp;page={{ page.next_page_number }} ', class: 'btn'}
                 Next &raquo;
     - else
         {# Show some example queries to run, maybe query syntax, something else? #}
