@@ -111,6 +111,9 @@ class ProjectsStatsMixin(object):
     def overall_cost(self):
         """docstring for overall_cost"""
         return self.aggregate(cost=Sum('SP_TOTAL_PROJECT_COST'))['cost']
+    def cost_by_year(self,year):
+        """docstring for overall_cost"""
+        return self.by_year(year).aggregate(cost=Sum('SP_TOTAL_PROJECT_COST'))['cost']
     def count_by_year(self,year):
         """docstring for count_by_year"""
         return self.by_year(year).count()
