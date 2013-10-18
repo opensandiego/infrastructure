@@ -41,6 +41,7 @@ def show_project(request, p_id):
 class Widget():
     headline = ''
     value = ''
+    subtitle = ''
     widget_class = ''
     def __init__(self,headline):
         """docstring for __init__"""
@@ -48,6 +49,9 @@ class Widget():
     def set_value(self,value):
         """docstring for set_value"""
         self.value = value
+    def set_subtitle(self,subtitle):
+        """docstring for set_value"""
+        self.subtitle = subtitle 
 
 class WidgetRow():
     headline = ''
@@ -71,8 +75,7 @@ class DashboardMixin(object):
     def get_widgets(self):
         """docstring for get_widgets"""
         project_widgets = ProjectWidgets()
-        project_widgets.add_row('',self.project_count(),self.active_count(),self.projects_by_year(self.this_year), self.finished_by_year(self.this_year),self.planned_count())
-        project_widgets.add_row('Costs',self.project_cost(),self.construction_cost(), self.cost_by_year_widget(self.this_year), self.not_started_cost_widget())
+        project_widgets.add_row('Costs',self.project_cost(),self.cost_by_year_widget(self.this_year), self.cost_by_year_widget(self.this_year+1), self.not_started_cost_widget())
         project_widgets.add_row('Projects',self.districts())
         project_widgets.add_row('Phases',self.phases())
         project_widgets.add_row('Asset Types',self.asset_types())
@@ -89,18 +92,21 @@ class ProjectWidgetMixin(object):
         return construction_cost
     def project_cost(self):
         """docstring for construction_cost"""
-        project_cost = Widget('$$$')
+        project_cost = Widget('All projects')
         project_cost.value = intword_span(intword(self.projects.overall_cost()))
+        project_cost.subtitle = "{0} projects".format(self.projects.count())
         return project_cost
     def not_started_cost_widget(self):
         """docstring for construction_cost"""
-        not_started_cost = Widget('planned $$$')
+        not_started_cost = Widget('planned projects')
         not_started_cost.value = intword_span(intword(self.projects.not_started_cost()))
+        not_started_cost.subtitle = "{0} projects".format(self.projects.not_started().count())
         return not_started_cost
     def cost_by_year_widget(self,year):
         """docstring for construction_cost"""
-        not_started_cost = Widget('{0} $$$'.format(year))
+        not_started_cost = Widget('{0} projects'.format(year))
         not_started_cost.value = intword_span(intword(self.projects.cost_by_year(year)))
+        not_started_cost.subtitle = "{0} projects".format(self.projects.by_year(year).count())
         return not_started_cost
     def project_count(self):
         """docstring for project_count"""
@@ -133,7 +139,8 @@ class ProjectWidgetMixin(object):
         row_widgets = []
         for district in range(1,10):
             district_widget = Widget('District {0}'.format(district))
-            district_widget.value = self.projects.by_district(district).count()
+            district_widget.subtitle = '{0} projects'.format(self.projects.by_district(district).count())
+            district_widget.value = intword_span(intword(self.projects.by_district(district).overall_cost()))
             row_widgets.append(district_widget)
         return row_widgets
     def phases(self):
@@ -141,7 +148,8 @@ class ProjectWidgetMixin(object):
         row_widgets = []
         for (phase_class,phase) in PHASE_URLS:
             phase_widget = Widget(phase)
-            phase_widget.value = self.projects.by_phase(phase).count()
+            phase_widget.subtitle = '{0} projects'.format(self.projects.by_phase(phase).count())
+            phase_widget.value = intword_span(intword(self.projects.by_phase(phase).overall_cost()))
             phase_widget.widget_class = phase_class
             row_widgets.append(phase_widget)
         return row_widgets
@@ -150,20 +158,23 @@ class ProjectWidgetMixin(object):
         row_widgets = []
         for (asset_type_class,asset_type) in ASSET_TYPE_URLS:
             asset_widget = Widget(asset_type)
-            asset_widget.value = Project.objects.all().by_asset_group(asset_type).count()
+            asset_widget.subtitle = '{0} projects'.format(Project.objects.all().by_asset_group(asset_type).count())
+            asset_widget.widget_class = asset_type_class
+            asset_widget.value = intword_span(intword(self.projects.by_asset_group(asset_type).overall_cost()))
             row_widgets.append(asset_widget)
         return row_widgets
     def project_widgets(self,filter_set):
         """docstring for project_widgets"""
         project_widgets = ProjectWidgets()
-        project_widgets.add_row('',self.project_count(),self.project_cost(),self.construction_cost())
+        project_widgets.add_row('Costs',self.project_cost(),self.cost_by_year_widget(datetime.date.today().year), self.not_started_cost_widget())
+        #project_widgets.add_row('',self.project_count(),self.project_cost(),self.construction_cost())
         if not filter_set.has_key('district'):
             project_widgets.add_row('Projects',self.districts())
         if not filter_set.has_key('phase'):
             project_widgets.add_row('Phases',self.phases())
         if not filter_set.has_key('asset_type'):
             project_widgets.add_row('Asset Types',self.asset_types())
-        project_widgets.add_row('',self.projects_by_year(2013))
+        project_widgets.add_row('',self.projects_by_year(datetime.date.today().year))
         return project_widgets.widgets
 
 class ProjectsFilterMixin():

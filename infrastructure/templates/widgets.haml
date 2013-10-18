@@ -6,3 +6,6 @@
         %h6{class: '{{widget.widget_class}}' }= widget.headline
         .content
           %h2 {{widget.value}}
+        - if widget.subtitle
+          .subtitle
+            %h5 {{widget.subtitle}}

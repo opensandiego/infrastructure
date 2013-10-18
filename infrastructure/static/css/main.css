@@ -89,7 +89,7 @@ a {
 #dashboard .widget {
 }
 .widget h2 {
-  font-size:90px;
+  font-size:70px;
   line-height: 100px;
   text-align:center;
   margin: 0px;
@@ -102,6 +102,7 @@ a {
   line-height: 14px;
   position: absolute;
   bottom: 10px;
+  right: 5px;
 }
 .widget h6 {
   text-align:center;
@@ -115,6 +116,19 @@ a {
   border-bottom: 1px solid #375585;
   color: #444;
   font-weight: normal;
+}
+.widget .subtitle {
+  position:relative;
+  border-top: 1px solid #eee;
+  margin: 10px;
+}
+.widget .subtitle h5,#dashboard .widget h5 {
+  position:relative;
+  bottom: 10px;
+  text-align: right;
+  left: 0;
+  padding: 10px 5px;
+  color: #666;
 }
 #filter {
   clear: left;
@@ -228,7 +242,7 @@ a {
 .buildings {
   background: url('../images/icons/commercial-24.png') center left no-repeat;
 }
-.airport {
+.airport, .airports {
   background: url('../images/icons/airport-24.png') center left no-repeat;
 }
 .storm-water-drainage {
@@ -279,6 +293,9 @@ a {
   font-size: 35px;
   line-height: 37px;
 }
+#project-list #stats .widget h2 span{
+  bottom: 0;
+}
 #project-list #stats .widget {
   width: 100px;
   height: 100px;
@@ -288,6 +305,9 @@ a {
   font-size: 11px;
   line-height: 12px;
   padding: 5px;
+}
+#project-list #stats .widget .subtitle {
+  display: none
 }
 #project-list #stats {
   display:none;
