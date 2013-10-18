@@ -269,8 +269,12 @@ class ProjectFilter:
             self.projects = Project.objects.current()
         else:
             self.projects = Project.objects.all()
-        self.order =  self.form.cleaned_data['order'] 
-        self.filter_set = { 'order': dict(ORDER)[self.order] }
+        if self.form.cleaned_data.has_key('order') and self.form.cleaned_data['order']:
+            self.order =  self.form.cleaned_data['order'] 
+            self.filter_set = { 'order': dict(ORDER)[self.order] }
+        else:
+            self.order = 'SP_PRELIM_ENGR_START_DT'
+            self.filter_set = {'order': 'SP_PRELIM_ENGR_START_DT'}
     def filter(self):
         """docstring for  filter_data"""
         if self.form.cleaned_data.has_key('phases') and self.form.cleaned_data['phases']:
