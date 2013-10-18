@@ -1,5 +1,16 @@
 $(document).ready(function() {
-  $("form#projects_filter" ).on( "submit", function( event ) {
+  $('#nav').on('click','#search', function() {
+    value = $(this).val()
+    if(value == "Search...") {
+      $(this).val('');
+    }
+  }).on('blur', '#search', function() {
+    value = $(this).val()
+    if(value == '') {
+      $(this).val('Search...');
+    }
+  });
+  $( "form#projects_filter" ).on( "submit", function( event ) {
     event.preventDefault();
     form_data = $(this).serialize();
     $.ajax({
