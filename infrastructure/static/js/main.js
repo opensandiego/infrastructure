@@ -10,7 +10,7 @@ $(document).ready(function() {
       $(this).val('Search...');
     }
   });
-  $( "#projects_filter form" ).on( "submit", function( event ) {
+  $( "form#projects_filter" ).on( "submit", function( event ) {
     event.preventDefault();
     form_data = $(this).serialize();
     $.ajax({
