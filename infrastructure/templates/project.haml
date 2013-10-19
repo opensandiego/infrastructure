@@ -14,6 +14,8 @@
         #map
       .span8
         %h4 in {{project.SP_PROJECT_PHASE}} Phase
+        - if project.SP_REPORT_PHASE
+          %p current status: {{project.SP_REPORT_PHASE}}
         %h4= project.SP_CLIENT2
         %h4
           %span{ class: 'detail-icon {{project.SP_ASSET_TYPE_GROUP}}'}
