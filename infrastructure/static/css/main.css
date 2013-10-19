@@ -117,6 +117,9 @@ a {
   color: #444;
   font-weight: normal;
 }
+.widget h6 a {
+  color: #444;
+}
 .widget .subtitle {
   position:relative;
   border-top: 1px solid #eee;

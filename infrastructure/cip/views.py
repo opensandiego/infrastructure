@@ -43,6 +43,8 @@ class Widget():
     value = ''
     subtitle = ''
     widget_class = ''
+    headline_link = ''
+    subtitle_link = ''
     def __init__(self,headline):
         """docstring for __init__"""
         self.headline = headline
@@ -93,8 +95,10 @@ class ProjectWidgetMixin(object):
     def project_cost(self):
         """docstring for construction_cost"""
         project_cost = Widget('All projects')
+        project_cost.headline_link = reverse('projects')
         project_cost.value = intword_span(intword(self.projects.overall_cost()))
         project_cost.subtitle = "{0} projects".format(self.projects.count())
+        project_cost.subtitle_link = reverse('projects')
         return project_cost
     def not_started_cost_widget(self):
         """docstring for construction_cost"""
@@ -139,6 +143,7 @@ class ProjectWidgetMixin(object):
         row_widgets = []
         for district in range(1,10):
             district_widget = Widget('District {0}'.format(district))
+            district_widget.headline_link = reverse('district_projects',kwargs={'district': district})
             district_widget.subtitle = '{0} projects'.format(self.projects.by_district(district).count())
             district_widget.value = intword_span(intword(self.projects.by_district(district).overall_cost()))
             district_widget.widget_class = 'district-{0}'.format(district)
@@ -149,6 +154,7 @@ class ProjectWidgetMixin(object):
         row_widgets = []
         for (phase_class,phase) in PHASE_URLS:
             phase_widget = Widget(phase)
+            phase_widget.headline_link = reverse('phase_projects',kwargs={'phase':phase_class})
             phase_widget.subtitle = '{0} projects'.format(self.projects.by_phase(phase).count())
             phase_widget.value = intword_span(intword(self.projects.by_phase(phase).overall_cost()))
             phase_widget.widget_class = phase_class
@@ -159,6 +165,7 @@ class ProjectWidgetMixin(object):
         row_widgets = []
         for (asset_type_class,asset_type) in ASSET_TYPE_URLS:
             asset_widget = Widget(asset_type)
+            asset_widget.headline_link = reverse('asset_type_projects',kwargs={'asset_type':asset_type_class})
             asset_widget.subtitle = '{0} projects'.format(Project.objects.all().by_asset_group(asset_type).count())
             asset_widget.widget_class = asset_type_class
             asset_widget.value = intword_span(intword(self.projects.by_asset_group(asset_type).overall_cost()))

@@ -69,8 +69,9 @@ $(document).ready(function() {
     map.on("click", function(e) {
         districtLayer.identify(e.latlng, function(data) {
           if(data.results.length > 0) {
+            console.log(data.results);
             cipLayer = data.results[0];
-            if(cipLayer.layerName == "CIP Point") {
+            if(cipLayer.layerName == "CIP Point" || cipLayer.layerName == "CIP Line" || cipLayer.layerName == "CIP Poly"  ) {
               attributes = cipLayer.attributes;
               projectId = attributes["PROJECT ID"];
               projectTitle = attributes["TITLE"];
