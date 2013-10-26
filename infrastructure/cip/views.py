@@ -1,15 +1,12 @@
 import datetime
 from django.shortcuts import render_to_response, render
-from django.db.models import Q
 from infrastructure.cip.models import *
 from django import forms
 from django_select2 import *
 from django.core.urlresolvers import *
-import inspect
 from django.views.generic import ListView, DetailView, TemplateView
 import json
 import django.http
-from django.db.models import Count, Min, Sum, Avg
 from django.contrib.humanize.templatetags.humanize import intword
 from infrastructure.cip.templatetags.infrastructure_project_tags import intword_span
 
@@ -21,7 +18,7 @@ def index(request):
 
 def projects():
     """docstring for projects"""
-    
+
 def filter_projects(request):
     """docstring for filter_projects"""
     if request.POST:
@@ -30,12 +27,12 @@ def filter_projects(request):
         projects = ProjectFilter(form).filter()
     else:
         form = ProjectFilterForm()
-    return render(request, 'projects.haml', {'projects': projects, 'form': form })
-    
+    return render(request, 'projects.haml', {'projects': projects, 'form': form})
+
 def show_project(request, p_id):
     """docstring for show_project"""
     project = Project.objects.get(id= p_id)
-    
+
     return render_to_response('project.haml', {'project': project})
 
 class Widget():
@@ -51,7 +48,7 @@ class Widget():
         self.value = value
     def set_subtitle(self,subtitle):
         """docstring for set_value"""
-        self.subtitle = subtitle 
+        self.subtitle = subtitle
 
 class WidgetRow():
     headline = ''
@@ -133,7 +130,7 @@ class ProjectWidgetMixin(object):
         widget = Widget('finished {0}'.format(year))
         widget.value = self.projects.finished_by_year(year)
         return widget
-        
+
     def districts(self):
         """docstring for districts"""
         row_widgets = []
@@ -194,7 +191,7 @@ class ProjectsFilterMixin():
     def filter_by_district(self,value):
         """docstring for district"""
         self.projects = self.projects.by_district(value).order_by('SP_CONSTR_FINISH_DT')
-        
+
 class DashboardView(DashboardMixin, ProjectWidgetMixin, TemplateView):
     template_name = 'dashboard.haml'
 
@@ -263,15 +260,16 @@ class ProjectsListListView(ProjectList):
     template_name = 'project_list.haml'
     paginate_by = 10
 
-    def get(self, request, *args, **kwargs):  
+    def get(self, request, *args, **kwargs):
         form = ProjectFilterForm(self.request.GET)
         if form.is_valid():
             pf = ProjectFilter(form)
             self.projects =  pf.filter()
         kwargs['object_list'] = self.projects
         context = super(ProjectList, self).get_context_data(**kwargs)
-        context['filter'] = pf.filter_set
-        context['widgets'] = self.project_widgets(pf.filter_set)
+        if form.is_valid():
+            context['filter'] = pf.filter_set
+            context['widgets'] = self.project_widgets(pf.filter_set)
         return render(request, self.template_name, context)
 
 class ProjectWidgets(object):
@@ -292,59 +290,60 @@ class ProjectWidgets(object):
 class ProjectFilter:
     def __init__(self, form):
         self.form = form
-        if self.form.cleaned_data['dataset'] == 'current':
-            self.projects = Project.objects.current()
-        else:
-            self.projects = Project.objects.all()
+        self.projects = Project.objects.all()
+        if self.form.cleaned_data['dataset'] == 'active':
+            self.projects = self.projects.active()
+        elif self.form.cleaned_data['dataset'].isdigit:
+            self.projects = self.projects.by_year(int(self.form.cleaned_data['dataset']))
         if self.form.cleaned_data.has_key('order') and self.form.cleaned_data['order']:
-            self.order =  self.form.cleaned_data['order'] 
+            self.order =  self.form.cleaned_data['order']
             self.filter_set = { 'order': dict(ORDER)[self.order] }
         else:
             self.order = 'SP_PRELIM_ENGR_START_DT'
             self.filter_set = {'order': 'SP_PRELIM_ENGR_START_DT'}
     def filter(self):
         """docstring for  filter_data"""
-        if self.form.cleaned_data.has_key('phases') and self.form.cleaned_data['phases']:
+        if self.form.cleaned_data.has_key('current_phase') and self.form.cleaned_data['current_phase']:
             self.phases()
-        if self.form.cleaned_data.has_key('asset_types') and self.form.cleaned_data['asset_types']:
+        if self.form.cleaned_data.has_key('asset_type') and self.form.cleaned_data['asset_type']:
             self.asset_types()
-        if self.form.cleaned_data.has_key('type_choices') and self.form.cleaned_data['type_choices']:
+        if self.form.cleaned_data.has_key('specific_asset_type') and self.form.cleaned_data['specific_asset_type']:
             self.asset_groups()
-        if self.form.cleaned_data.has_key('delivery_methods') and self.form.cleaned_data['delivery_methods']:
+        if self.form.cleaned_data.has_key('delivery_method') and self.form.cleaned_data['delivery_method']:
             self.delivery_methods()
-        if self.form.cleaned_data.has_key('client_departements') and self.form.cleaned_data['client_departements']:
+        if self.form.cleaned_data.has_key('client_department') and self.form.cleaned_data['client_department']:
             self.client_departements()
         if self.form.cleaned_data.has_key('project_cost') and self.form.cleaned_data['project_cost']:
             self.project_cost()
-        if self.form.cleaned_data.has_key('districts') and self.form.cleaned_data['districts']:
+        if self.form.cleaned_data.has_key('district') and self.form.cleaned_data['district']:
             self.districts()
         return self.projects.order_by(self.order).exclude(**{self.order.replace('-',''): None})
 
     def phases(self):
         """docstring for phases"""
-        phase = self.form.cleaned_data['phases']
+        phase = self.form.cleaned_data['current_phase']
         phases = dict(PROJECT_PHASES)
         self.filter_set['phase'] = phases[phase]
         self.projects = self.projects.by_phase(phases[phase])
     def asset_types(self):
         """docstring for asset_types"""
-        asset_type = self.form.cleaned_data['asset_types']
+        asset_type = self.form.cleaned_data['asset_type']
         asset_types = dict(ASSET_TYPE_GROUPS)
         self.filter_set['asset_type'] = asset_types[asset_type]
         self.projects = self.projects.by_asset_group(asset_types[asset_type])
     def asset_groups(self):
         """docstring for asset_types"""
-        asset_group = self.form.cleaned_data['type_choices']
+        asset_group = self.form.cleaned_data['specific_asset_type']
         asset_groups = dict(ASSET_TYPE_CHOICES)
         self.projects = self.projects.by_asset_group(asset_groups[asset_group])
     def delivery_methods(self):
         """docstring for asset_types"""
-        delivery_method = self.form.cleaned_data['delivery_methods']
+        delivery_method = self.form.cleaned_data['delivery_method']
         delivery_methods = dict(DELIVERY_METHODS)
         self.projects = self.projects.by_delivery_method(delivery_methods[delivery_method])
     def client_departements(self):
         """docstring for asset_types"""
-        client_departement = self.form.cleaned_data['client_departements']
+        client_departement = self.form.cleaned_data['client_departement']
         client_departements = dict(CLIENT_DEPARTMENTS)
         self.projects = self.projects.by_client_departement(client_departements[client_departement])
     def project_cost(self):
@@ -353,12 +352,13 @@ class ProjectFilter:
         self.projects = self.projects.by_project_cost(ProjectCosts().get_value(int(project_cost)))
     def districts(self):
         """docstring for project_cost"""
-        district = self.form.cleaned_data['districts']
+        district = self.form.cleaned_data['district']
         self.filter_set['district'] = district
         self.projects = self.projects.by_district(district)
 
 class ProjectFilterForm(forms.Form):
     default = [(u'', 'All')]
+    year = datetime.date.today().year
     choice_phases = tuple(default + list(PROJECT_PHASES))
     choice_assets = tuple(default + list(ASSET_TYPE_GROUPS))
     choice_type_choices = tuple(default + list(ASSET_TYPE_CHOICES))
@@ -367,24 +367,24 @@ class ProjectFilterForm(forms.Form):
     project_costs = tuple(default + ProjectCosts().get_touples())
     choice_districts = tuple(default + Districts().get_touples())
 
-    dataset = Select2ChoiceField(initial=1,
-        choices=(('all','All'),('current','Active')),required=False)
-    order = Select2ChoiceField(initial=1,
-        choices=(ORDER),required=False)
     project_cost = Select2ChoiceField(
         choices=project_costs, required=False)
-    phases = Select2ChoiceField(initial=2,
+    current_phase = Select2ChoiceField(initial=2,
         choices=choice_phases,required=False)
-    asset_types = Select2ChoiceField(initial=2,
+    asset_type = Select2ChoiceField(initial=2,
         choices=choice_assets,required=False)
-    type_choices = Select2ChoiceField(initial=2,
+    specific_asset_type = Select2ChoiceField(initial=2,
         choices=choice_type_choices,required=False)
-    client_departements = Select2ChoiceField(initial=2,
+    client_department = Select2ChoiceField(initial=2,
         choices=choice_client_departements,required=False)
-    delivery_methods = Select2ChoiceField(initial=2,
+    delivery_method = Select2ChoiceField(initial=2,
         choices=choice_delivery_methods,required=False)
-    districts = Select2ChoiceField(initial=2,
+    district = Select2ChoiceField(initial=2,
         choices=choice_districts,required=False)
+    dataset = Select2ChoiceField(initial=1,
+        choices=(('all','All'),('active','Active'),(year-1,year-1),(year,year),(year+1,year+1)),required=False)
+    order = Select2ChoiceField(initial=1,
+        choices=(ORDER),required=False)
 
 class JSONTimetableMixin(object):
     def render_to_response(self, context):
