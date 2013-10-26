@@ -1,6 +1,9 @@
 body {
   background: #fff url('../images/furley_bg.png') top left repeat;
 }
+.clear {
+  clear: both;
+}
 #main {
   padding: 0;
 }

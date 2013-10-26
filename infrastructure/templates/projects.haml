@@ -11,10 +11,13 @@
     %h5 Filter
     %form#projects_filter{ method: "post", action: "/projects/filter"}
         - csrf_token
-        = form.as_ul
+        %ul
+          = form.as_ul
         %input#page{ type:"hidden", name: "page", value: 1}
-      %li
-        %input#submit{ type:"submit", value:"Submit Form" }
+      .clear
+      %br
+      %input#submit{ type:"submit", value:"Filter" }
+      %input#submit{ type:"reset", value:"Reset Form" }
 
   #project-list
     %h3 Currently running Projects ordered by Award start
