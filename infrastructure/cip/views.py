@@ -241,17 +241,17 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
             self.filter('filter_by_phase',self.kwargs['phase'])
             for key, value in dict(PROJECT_PHASES).items():
                 if value == dict(PHASE_URLS)[self.kwargs['phase']]:
-                    self.form_data['phases'] = key
+                    self.form_data['current_phase'] = key
         if self.kwargs.has_key('asset_type'):
             self.reset_form_data()
             self.filter('filter_by_asset_type',self.kwargs['asset_type'])
             for key, value in dict(ASSET_TYPE_GROUPS).items():
                 if value == dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']]:
-                    self.form_data['asset_types'] = key
+                    self.form_data['asset_type'] = key
         if self.kwargs.has_key('district'):
             self.reset_form_data()
             self.filter('filter_by_district',self.kwargs['district'])
-            self.form_data['districts'] = self.kwargs['district']
+            self.form_data['district'] = self.kwargs['district']
 
         return self.projects
 
@@ -300,7 +300,7 @@ class ProjectFilter:
         self.projects = Project.objects.all()
         if self.form.cleaned_data['dataset'] == 'active':
             self.projects = self.projects.active()
-        elif self.form.cleaned_data['dataset'].isdigit:
+        elif self.form.cleaned_data['dataset'].isdigit():
             self.projects = self.projects.by_year(int(self.form.cleaned_data['dataset']))
         if self.form.cleaned_data.has_key('order') and self.form.cleaned_data['order']:
             self.order =  self.form.cleaned_data['order']
