@@ -11,8 +11,36 @@
     %h5 Filter
     %form#projects_filter{ method: "post", action: "/projects/filter"}
         - csrf_token
-        %ul
-          = form.as_ul
+        .row
+          .span3
+            %label{ for:"id_project_costs" } Project Costs:
+            {{ form.project_cost }}
+          .span3
+            %label{ for:"id_current_phase" } Current Phase:
+            {{ form.current_phase }}
+          .span3
+            %label{ for:"id_asset_type" } Asset Type:
+            {{ form.asset_type }}
+        .row
+          .span3
+            %label{ for:"id_specific_asset_type" } specific Asset Type:
+            {{ form.specific_asset_type }}
+          .span3
+            %label{ for:"id_client_department" } Department:
+            {{ form.client_department }}
+          .span3
+            %label{ for:"id_district" } District:
+            {{ form.district }}
+        .row
+          .span3
+            %label{ for:"id_delivery_method" } Delivery mehtod:
+            {{ form.delivery_method }}
+          .span3
+            %label{ for:"id_dataset" } Year:
+            {{ form.dataset }}
+          .span3
+            %label{ for:"id_order" } Order:
+            {{ form.order }}
         %input#page{ type:"hidden", name: "page", value: 1}
       .clear
       %br
