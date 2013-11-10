@@ -1,0 +1,12 @@
+%button {
+  @include button(simple, $base-accent-color);
+  font-size: $base-font-size;
+}
+%filter-button {
+  font-size: $filter-button-font-size;
+  font-weight: normal;
+  border-radius: 5px;
+  padding: 10px ;
+  background: $light-blue;
+}
+
