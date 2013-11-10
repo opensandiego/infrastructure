@@ -83,6 +83,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -91,7 +92,7 @@ SECRET_KEY = '4!geuuae*iz*t^8914cl*xg0j*d!bnii$5n8ywcc4f=s7_3$li'
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'hamlpy.template.loaders.HamlPyFilesystemLoader',
-    'hamlpy.template.loaders.HamlPyAppDirectoriesLoader',  
+    'hamlpy.template.loaders.HamlPyAppDirectoriesLoader',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
@@ -105,6 +106,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+COMPRESS_PARSER = 'compressor.parser.LxmlParser'
+COMPRESS_OUTPUT_DIR = ''
+COMPRESS_MTIME_DELAY = 20
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+    ('text/x-sass', 'sass {infile} {outfile}'),
+    ('text/x-scss', 'sass --scss {infile} {outfile}'),
 )
 
 ROOT_URLCONF = 'infrastructure.urls'
@@ -128,6 +137,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django.contrib.admin',
+    'compressor',
     'bootstrap_toolkit',
     'django_select2',
     'jquery',
