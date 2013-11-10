@@ -1,0 +1,51 @@
+#filter {
+  clear: left;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background: $beige;
+  padding: 5px 0px 0px 10px;
+  color: #504F54;
+  margin: 0 0 30px 0;
+  #projects-filter {
+    position:relative;
+    margin: 0;
+    @include outer-container;
+    .filter-actions{
+      position:absolute;
+      bottom: -1px;
+      right: 0;
+      border-left:1px solid #ebe0b1;
+      border-top:1px solid #ebe0b1;
+      padding:15px;
+      background: darken($beige, 10);
+      input{
+        margin: 0 10px;
+        background: none;
+        border: 1px solid $dark-beige;
+        padding: 5px;
+        @include border-top-radius(3px);
+        @include border-bottom-radius(3px);
+        @include border-left-radius(3px);
+        @include border-right-radius(3px);
+        float: left;
+        &:hover {
+          background: $dark-beige;
+        }
+      }
+    }
+    .filter {
+      margin: 5px 0;
+      @include span-columns(6);
+      @include omega(n);
+      label { 
+        @include span-columns(2 of 6);
+      }
+      .input {
+        @include span-columns(4 of 6);
+      }
+      &.last {
+        padding-bottom:80px;
+      }
+    }
+  }
+}
