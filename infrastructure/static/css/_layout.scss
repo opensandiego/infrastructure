@@ -1,0 +1,24 @@
+body {
+  margin:0;
+  padding: 0;
+}
+.main {
+  @include outer-container;
+  @include row();
+}
+#sidebar-container {
+  @include span-columns(2);
+}
+#content-container {
+  @include span-columns(9);
+}
+#nav {
+  @include fill-parent;
+ }
+.nav {
+  @include outer-container;
+}
+
+.widget_row {
+  @include row();
+}
