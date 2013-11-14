@@ -3,22 +3,49 @@ body {
   padding: 0;
 }
 .main {
+  clear:both;
   @include outer-container;
-  @include row();
 }
 #sidebar-container {
   @include span-columns(2);
 }
 #content-container {
   @include span-columns(9);
+  @include pad();
 }
 #nav {
   @include fill-parent;
+  @include clearfix;
  }
 .nav {
   @include outer-container;
+  @include clearfix;
 }
 
 .widget_row {
   @include row();
 }
+
+#project {
+  #map {
+    @include span-columns(4 of 9);
+  }
+  #details {
+    @include span-columns(5 of 9);
+    @include omega();
+  }
+  #cost-breakdown {
+    clear:both;
+    @include span-columns(4 of 9);
+    min-height: 180px;
+  }
+  #project-cost {
+    @include span-columns(5 of 9);
+    @include omega();
+  }
+  #tineline-container {
+    @include span-columns(9 of 9);
+  }
+
+}
+
