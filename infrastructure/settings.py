@@ -140,7 +140,6 @@ class Common(Configuration):
         'django.contrib.humanize',
         'django.contrib.admin',
         'compressor',
-        'bootstrap_toolkit',
         'django_select2',
         'jquery',
         'haystack',
