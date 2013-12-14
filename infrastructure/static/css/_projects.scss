@@ -1,0 +1,132 @@
+#project-list {
+  #projects {
+    clear: left;
+    border: 1px solid #ccc;
+    @include pad();
+    margin: 10px 10px 10px 30px;
+    position:relative;
+    min-height: 200px;
+    dl {
+      margin: 0;
+      clear:both;
+      overflow:auto;
+      width: 85%;
+      float:left;
+    }
+    li.icon {
+      padding: 0px 0px 5px 40px;
+      display:block;
+      margin: 0 ;
+      border-bottom: 1px solid #ccc;
+      clear:both;
+      @include clearfix;
+      background-position: 0 20px;
+      height: 130px;
+    }
+    dt {
+      font-size: 18px;
+      line-height: 24px;
+      @include clearfix;
+      a {
+        float: left;
+      }
+      .district {
+        float:left;
+        padding: 0 5px;
+        border: 1px solid #777;
+        margin: 0 20px;
+        font-size: 16px;
+        color: #999;
+        border-radius: 5px;
+      }
+    }
+    dd.status  {
+      color: #777;
+      margin-top: 25px;
+    }
+    .icons {
+      @include clearfix;
+      margin: 10px 0;
+      .progress {
+        border-radius: 22px;
+        height: 45px;
+        width: 45px;
+        border: 1px solid #ccc;
+        float:left;
+        z-index:2;
+        background-position: center center;
+        margin-right: 40px;
+        position:relative;
+        &:last-child {
+          &:after {
+            width:0;
+          }
+        }
+        &:after {
+          position:absolute;
+          content: "";
+          width:40px;
+          height: 22px;
+          left: 45px;
+          border-bottom: 1px solid #ccc;
+        }
+        &.active {
+          background-color: $light-blue;
+        }
+        &:first-child .date {
+          left: 0;
+          text-align: left;
+        }
+        & .date {
+          position:absolute;
+          width: 85px;
+          height: 10px;
+          top: -30px;
+          left: -20px;
+          font-size: 10px;
+          text-align: center;
+          display: none;
+        }
+        &.planning .date, &.completed .date{
+          display: block;
+        }
+      }
+      .line {
+        float:left;
+      }
+    }
+    .finances {
+      width: 15%;
+      float:left;
+      padding: 10px;
+      height: 129px;
+      background: $light-red;
+      font-size: 14px;
+      text-align: center;
+      color: #fefefe;
+    }
+    .tabs{
+      position: absolute;
+      top: 20px;
+      left: -38px;
+      margin: 0;
+      padding: 0;
+      border: 1px solid #ccc;
+      border-right: none;
+      li {
+        list-style: none;
+        padding: 5px;
+        margin: 0;
+        background: #eee;
+        border-right: 1px solid #ccc;
+        &.active {
+          background: #fff;
+          border-right: 1px solid #fff;
+        }
+        &.last {
+          border-bottom:none;
+        }
+      }
+    }
+  }
+}

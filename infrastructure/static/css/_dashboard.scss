@@ -1,0 +1,29 @@
+
+#dashboard {
+  position:relative;
+  h1 {
+    position:absolute;
+    top: 20px;
+    left:40px;
+    width: 20%;
+    font-size: 100px;
+    line-height: 90px;
+    z-index:2;
+  }
+  h5 {
+    position:absolute;
+    bottom: 20px;
+    left:40px;
+    z-index:2;
+  }
+  .widget {
+    .subtitle {
+      height: 19%;
+      h5 {
+        bottom: 0px;
+        left: 0px;
+        position:relative;
+      }
+    }
+  }
+}
