@@ -9,15 +9,48 @@
   - load humanize
   #filter
     %h5 Filter
-    %form#projects_filter{ method: "post", action: "/projects/filter"}
+    %form#projects-filter{ method: "post", action: "/projects/filter"}
         - csrf_token
-        %ul
-          = form.as_ul
+        .filter
+          %label{ for:"id_project_costs" } Project Costs:
+          .input
+            {{ form.project_cost }}
+        .filter
+          %label{ for:"id_current_phase" } Current Phase:
+          .input
+            {{ form.current_phase }}
+        .filter
+          %label{ for:"id_asset_type" } Asset Type:
+          .input
+            {{ form.asset_type }}
+        .filter
+          %label{ for:"id_specific_asset_type" } specific Asset Type:
+          .input
+            {{ form.specific_asset_type }}
+        .filter
+          %label{ for:"id_client_department" } Department:
+          .input
+            {{ form.client_department }}
+        .filter
+          %label{ for:"id_district" } District:
+          .input
+            {{ form.district }}
+        .filter
+          %label{ for:"id_delivery_method" } Delivery mehtod:
+          .input
+            {{ form.delivery_method }}
+        .filter
+          %label{ for:"id_dataset" } Year:
+          .input
+            {{ form.dataset }}
+        .filter.last
+          %label{ for:"id_order" } Order:
+          .input
+            {{ form.order }}
         %input#page{ type:"hidden", name: "page", value: 1}
-      .clear
-      %br
-      %input#submit{ type:"submit", value:"Filter" }
-      %input#submit{ type:"reset", value:"Reset Form" }
+        .filter-actions
+          %input#reset{ type:"reset", value:"Reset Form" }
+          %input#submit{ type:"submit", value:"Filter" }
 
   #project-list
     %h3 Currently running Projects ordered by Award start

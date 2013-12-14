@@ -98,7 +98,7 @@ def project_list_item(project):
     """docstring for project_list_item"""
     project_link_path = reverse('project_detail', args=[project.id] )
     asset_type_image = "images/icons/%s-18.png" % asset_type_images[project.SP_ASSET_TYPE_GROUP]
-    return { 'project' : project, 'link': project_link_path, 'phase': phase_class[project.SP_PROJECT_PHASE], 'asset_type_image': asset_type_image }
+    return { 'project' : project, 'link': project_link_path, 'phase': phase_class[project.SP_PROJECT_PHASE], 'asset_type':asset_type_class[project.SP_ASSET_TYPE_GROUP]}
 
 @register.inclusion_tag('pagination.haml',takes_context=True)
 def pagination(context):
@@ -138,3 +138,12 @@ def widgets(context):
 def no_results():
     """docstring for no_results"""
     return
+
+@register.simple_tag
+def is_active(value,test):
+    """docstring for is_active"""
+    if value == test:
+        return " active"
+    else:
+        return ""
+

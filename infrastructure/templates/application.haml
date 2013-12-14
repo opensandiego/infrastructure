@@ -1,10 +1,7 @@
 - include 'head.haml'
-.container
-  %h1 Infrastructure San Diego
-  .row
-    .span2.hidden-phone{id:'sidebar-container' }
-      - block sidebar
-    .span10{id: 'content-container' }
-      #content
-        - block content
+.main
+  #sidebar-container
+    - block sidebar
+  #content-container
+    - block content
 

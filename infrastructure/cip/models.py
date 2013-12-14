@@ -83,9 +83,9 @@ class ProjectManagerMixin(object):
     def by_delivery_method(self,delivery_method):
         """docstring for by_asset_group"""
         return self.filter(SP_DELIVERY_METHOD_CD__istartswith=delivery_method)
-    def by_client_departement(self,client_departements):
+    def by_client_department(self,client_departments):
         """docstring for by_asset_group"""
-        return self.filter(SP_CLIENT2__istartswith=client_departements)
+        return self.filter(SP_CLIENT2__istartswith=client_departments)
     def by_project_cost(self,project_cost):
         """docstring for by_project_cost"""
         return self.get_query(project_cost)

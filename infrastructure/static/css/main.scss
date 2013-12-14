@@ -1,0 +1,249 @@
+body {
+  background: #fff url('../images/furley_bg.png') top left repeat;
+}
+.clear {
+  clear: both;
+}
+#main {
+  padding: 0;
+}
+#main #map {
+  width:100%;
+  height:500px;
+}
+#sidebar-container {
+  background: #F9E9B6;
+}
+#content-container {
+  background: #fff;
+  border: 1px solid #E3C9BC;
+}
+.map-container {
+  position:relative;
+  border-bottom: 1px solid #ccc;
+}
+.content {
+  padding:20px 40px;
+  overflow:auto;
+}
+#shortcuts {
+  padding: 10px 20px;
+  border: 1px solid #E1BB7C;
+  a {
+    color: #B55B52;
+  }
+}
+a {
+  color: #B55B52;
+}
+#footer {
+  margin: 20px 0;
+}
+.widget {
+  float:left;
+  width: 220px;
+  height: 220px;
+  border:1px solid #375585;
+  margin: 10px;
+  background: #fff;
+  .content {
+    padding: 10px 0;
+    position: relative;
+  }
+  h2 {
+    font-size:70px;
+    line-height: 100px;
+    text-align:center;
+    margin: 0px;
+    color: #222;
+    text-shadow: 0px 2px 3px #eee;
+    //text-shadow: 1px 1px 0px #666;
+    span {
+      font-size: 12px;
+      line-height: 14px;
+      position: absolute;
+      bottom: 10px;
+      right: 5px;
+    }
+  }
+  h6 {
+    text-align:center;
+    font-size: 16px;
+    line-height: 18px;
+    margin: 0;
+    padding: 10px;
+    background-color: #A6C4F4;
+    background-size: 10%;
+    background-position: 5px center;
+    border-bottom: 1px solid #375585;
+    color: #444;
+    font-weight: normal;
+    a {
+      color: #444;
+    }
+  }
+  .subtitle {
+    position:relative;
+    border-top: 1px solid #eee;
+    margin: 10px;
+  }
+  .subtitle h5,.widget h5 {
+    position:relative;
+    bottom: 10px;
+    text-align: right;
+    left: 0;
+    padding: 10px 5px;
+    color: #666;
+  }
+}
+#projects ul.views {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  font-size: 10px;
+  border: 1px solid #ccc;
+  border-top: none;
+  color: #ccc;
+  li{
+    padding: 5px;
+    margin: 0;
+    border:none;
+    border-right: 1px solid #ccc;
+    float:left;
+    clear: none;
+    &.last {
+      border:none;
+    }
+  }
+}
+.detail-icon {
+  padding: 5px 0 5px 40px;
+}
+.design {
+  background: url('../images/icons/glyphicons_234_brush.png');
+  background-position: center left;
+  background-repeat: no-repeat;
+}
+.construction {
+  background-image: url('../images/icons/glyphicons_430_construction_cone.png');
+  background-position: center left;
+  background-repeat: no-repeat;
+}
+.planning {
+  background: url('../images/icons/glyphicons_335_pushpin.png') center left no-repeat;
+}
+.post-construction {
+  background: url('../images/icons/glyphicons_331_dashboard.png') center left no-repeat;
+}
+.bid {
+  background: url('../images/icons/glyphicons_458_money.png') center left no-repeat;
+}
+.completed {
+  background: url('../images/icons/glyphicons_206_ok_2.png') center left no-repeat;
+}
+.buildings {
+  background: url('../images/icons/commercial-24.png') center left no-repeat;
+}
+.airport, .airports {
+  background: url('../images/icons/airport-24.png') center left no-repeat;
+}
+.storm-water-drainage {
+  background: url('../images/icons/telephone-24.png') center left no-repeat;
+}
+.parks {
+  background: url('../images/icons/park2-24.png') center left no-repeat;
+}
+.transportation {
+  background: url('../images/icons/bus-24.png') center left no-repeat;
+}
+.sewer {
+  background: url('../images/icons/wetland-24.png') center left no-repeat;
+}
+.water {
+  background: url('../images/icons/water-24.png') center left no-repeat;
+}
+.district-1{
+  background: url('../images/cm/cd1.png') center left no-repeat;
+}
+.district-2{
+  background: url('../images/cm/cd2.png') center left no-repeat;
+}
+.district-3{
+  background: url('../images/cm/cd3.png') center left no-repeat;
+}
+.district-4{
+  background: url('../images/cm/cd4.png') center left no-repeat;
+}
+.district-5{
+  background: url('../images/cm/cd5.png') center left no-repeat;
+}
+.district-6{
+  background: url('../images/cm/cd6.png') center left no-repeat;
+}
+.district-7{
+  background: url('../images/cm/cd7.png') center left no-repeat;
+}
+.district-8{
+  background: url('../images/cm/cd8.png') center left no-repeat;
+}
+.district-9{
+  background: url('../images/cm/cd9.png') center left no-repeat;
+}
+#shortcuts ul {
+  margin: 0;
+  li {
+    list-style: none;
+    margin: 0 0 5px 0;
+  }
+}
+
+#project {
+  .row-fluid {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+  }
+  #map {
+    height: 220px;
+  }
+  h4 img {
+    padding: 0 20px 0 5px;
+  }
+  .axis {
+    path,line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+    text {
+      font-family: sans-serif;
+      font-size: 11px;
+    }
+  }
+}
+#project-list {
+  #stats {
+    display:none;
+    padding: 0px 20px;
+    .widget {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      h2 {
+        font-size: 35px;
+        line-height: 37px;
+        span{
+          bottom: 0;
+        }
+      }
+      h6{
+        font-size: 11px;
+        line-height: 12px;
+        padding: 5px;
+      }
+      .subtitle {
+        display: none
+      }
+    }
+  }
+}

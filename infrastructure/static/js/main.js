@@ -10,7 +10,7 @@ $(document).ready(function() {
       $(this).val('Search...');
     }
   });
-  $( "form#projects_filter" ).on( "submit", function( event ) {
+  $( "form#projects-filter" ).on( "submit", function( event ) {
     event.preventDefault();
     form_data = $(this).serialize();
     $.ajax({
@@ -31,7 +31,7 @@ $(document).ready(function() {
   if($('#project').length > 0) {
     project_width =  $('#project').width();
     project_id = $('#project').data('id');
-    first_column_width = $('#project .span4').width();
+    first_column_width = $('#project #map').width();
     createStoryJS({
         type:       'timeline',
         width:      project_width,
@@ -48,7 +48,7 @@ $(document).ready(function() {
     cost_x_scale = d3.scale.ordinal().rangeRoundBands([0, first_column_width-20], .1).domain(cost_data);
     cost_x_axis_scale = d3.scale.ordinal().rangeRoundBands([0, first_column_width-20], .1).domain(cost_labels);
     cost_y_scale = d3.scale.linear().range([100,0]).domain([0, d3.max(cost_data)]);
-    var svg_element = d3.select('#cost-breakdown').append('svg').attr('height','140').attr('width',first_column_width).append('g').attr('transform','translate(20,20');
+    var svg_element = d3.select('#cost-breakdown').append('svg').attr('height','160').attr('width',first_column_width).append('g').attr('transform','translate(20,20)');
     svg_element.selectAll('rect').data(cost_data).enter().append('rect').attr('x',function(d) { return cost_x_scale(d); }).attr("width", cost_x_scale.rangeBand()).attr('y', function(d) {return cost_y_scale(d)}).attr('height',function(d) {return 120-cost_y_scale(d);});
     x_axis = d3.svg.axis().scale(cost_x_axis_scale).orient('bottom');
     svg_element.append('g').attr('class','axis x').attr("transform", "translate(0,120)").call(x_axis);

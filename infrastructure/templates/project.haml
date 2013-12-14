@@ -9,29 +9,21 @@
 - block content
   #project{ 'data-id': '{{project.pk}}' }
     %h2= project.SP_PROJECT_NM
-    .row-fluid
-      .span4
-        #map
-      .span8
-        %h4 in {{project.SP_PROJECT_PHASE}} Phase
-        %h4= project.SP_CLIENT2
-        %h4
-          %span{ class: 'detail-icon {{project.SP_ASSET_TYPE_GROUP}}'}
-          %span= project.SP_ASSET_TYPE_GROUP
-        %h4
-          %img{src: "{% static 'images/icons/glyphicons_045_calendar.png' %}", width: '15'}
-          %span= project.SP_CONSTR_FINISH_DT
-        %p= project.SP_PROJECT_DESC
-    .row-fluid
-      .span4
-        #cost-breakdown
-      .span8{id: 'project-cost', 'data-cost': '{{project.SP_TOTAL_PROJECT_COST|subtract:project.SP_TOTAL_CONSTRUCTION_COST}},{{project.SP_TOTAL_CONSTRUCTION_COST}}', 'data-cost-labels': 'All other Cost, Construction Cost'}
-        %h4 Overall cost: $ {{project.SP_TOTAL_PROJECT_COST|intcomma}}
-        %h4 Construction cost: $ {{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}}
-    .row-fluid{id: 'timeline_container' }
-      .span12
-        #timeline
-    .row-fluid
-      .span4
-        %p Project Images
-      .span8
+    #map
+    #details
+      %h4 in {{project.SP_PROJECT_PHASE}} Phase
+      %h4= project.SP_CLIENT2
+      %h4
+        %span{ class: 'detail-icon {{project.SP_ASSET_TYPE_GROUP}}'}
+        %span= project.SP_ASSET_TYPE_GROUP
+      %h4
+        %img{src: "{% static 'images/icons/glyphicons_045_calendar.png' %}", width: '15'}
+        %span= project.SP_CONSTR_FINISH_DT
+      %p= project.SP_PROJECT_DESC
+    #cost-breakdown
+    #project-cost{ 'data-cost': '{{project.SP_TOTAL_PROJECT_COST|subtract:project.SP_TOTAL_CONSTRUCTION_COST}},{{project.SP_TOTAL_CONSTRUCTION_COST}}', 'data-cost-labels': 'All other Cost, Construction Cost'}
+      %h4 Overall cost: $ {{project.SP_TOTAL_PROJECT_COST|intcomma}}
+      %h4 Construction cost: $ {{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}}
+    #timeline-container
+    #timeline
+    %p Project Images

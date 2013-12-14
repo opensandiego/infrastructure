@@ -1,0 +1,49 @@
+// Typography
+///////////////////////////////////////////////////////////////////////////////
+$sans-serif: $helvetica;
+$serif: $georgia;
+
+$base-font-family: $sans-serif;
+$header-font-family: $base-font-family;
+
+// Sizes
+///////////////////////////////////////////////////////////////////////////////
+$base-font-size: 1em;
+$base-line-height: $base-font-size * 1.5;
+$base-border-radius: em(3);
+
+$filter-button-font-size: 0.8em;
+
+// Colors
+///////////////////////////////////////////////////////////////////////////////
+
+$blue: #477DCA;
+$dark-gray: #333;
+$medium-gray: #999;
+$light-gray: #DDD;
+$light-red: #FBE3E4;
+$light-yellow: #FFF6BF;
+$light-green: #E6EFC2;
+$beige: #F9E9B6;
+$dark-beige: darken($beige, 40);
+$light-blue: #A6C4F4;
+$medium-blue: #375585;
+$red: #B55B52;
+$light-red: lighten($red,10);
+//  Font Colors
+$base-font-color: $dark-gray;
+$base-accent-color: $blue;
+
+//  Text Link Colors
+$base-link-color: $base-accent-color;
+$hover-link-color: darken($base-accent-color, 15);
+
+// Border color
+$base-border-color: $light-gray;
+
+// Flash Colors
+$error-color: $light-red;
+$notice-color: $light-yellow;
+$success-color: $light-green;
+
+$filter-button-color: $light-blue;
