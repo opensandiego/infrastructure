@@ -319,7 +319,7 @@ class ProjectFilter:
         if self.form.cleaned_data.has_key('delivery_method') and self.form.cleaned_data['delivery_method']:
             self.delivery_methods()
         if self.form.cleaned_data.has_key('client_department') and self.form.cleaned_data['client_department']:
-            self.client_departements()
+            self.client_departments()
         if self.form.cleaned_data.has_key('project_cost') and self.form.cleaned_data['project_cost']:
             self.project_cost()
         if self.form.cleaned_data.has_key('district') and self.form.cleaned_data['district']:
@@ -348,11 +348,11 @@ class ProjectFilter:
         delivery_method = self.form.cleaned_data['delivery_method']
         delivery_methods = dict(DELIVERY_METHODS)
         self.projects = self.projects.by_delivery_method(delivery_methods[delivery_method])
-    def client_departements(self):
+    def client_departments(self):
         """docstring for asset_types"""
-        client_departement = self.form.cleaned_data['client_departement']
-        client_departements = dict(CLIENT_DEPARTMENTS)
-        self.projects = self.projects.by_client_departement(client_departements[client_departement])
+        client_department = self.form.cleaned_data['client_department']
+        client_departments = dict(CLIENT_DEPARTMENTS)
+        self.projects = self.projects.by_client_department(client_departments[client_department])
     def project_cost(self):
         """docstring for project_cost"""
         project_cost = self.form.cleaned_data['project_cost']
@@ -370,7 +370,7 @@ class ProjectFilterForm(forms.Form):
     choice_assets = tuple(default + list(ASSET_TYPE_GROUPS))
     choice_type_choices = tuple(default + list(ASSET_TYPE_CHOICES))
     choice_delivery_methods = tuple(default + list(DELIVERY_METHODS))
-    choice_client_departements = tuple(default + list(CLIENT_DEPARTMENTS))
+    choice_client_departments = tuple(default + list(CLIENT_DEPARTMENTS))
     project_costs = tuple(default + ProjectCosts().get_touples())
     choice_districts = tuple(default + Districts().get_touples())
 
@@ -383,7 +383,7 @@ class ProjectFilterForm(forms.Form):
     specific_asset_type = Select2ChoiceField(initial=2,
         choices=choice_type_choices,required=False)
     client_department = Select2ChoiceField(initial=2,
-        choices=choice_client_departements,required=False)
+        choices=choice_client_departments,required=False)
     delivery_method = Select2ChoiceField(initial=2,
         choices=choice_delivery_methods,required=False)
     district = Select2ChoiceField(initial=2,
