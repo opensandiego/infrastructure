@@ -3,4 +3,5 @@ data/
 .DS_STORE
 CACHE
 .sass-cache/
-
+css/
+.ropeproject
