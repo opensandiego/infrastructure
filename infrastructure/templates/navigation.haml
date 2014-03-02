@@ -1,0 +1,19 @@
+#nav
+  %ul#quick-switch
+    %li
+      %a{href:""} Get Informed
+      %ul
+        %li
+          %a{href:""} Get Involved
+        %li
+          %a{href:""} Overview
+  %ul.nav
+    %li
+      %a{href: "{% url 'index' %}" } Overview
+    %li
+      %a{href: "{% url 'projects' %}" } Projects
+    %li.search
+      %form{action: '/search', method: 'get'}
+        %input{type: 'hidden', name: 'models', value: 'cip.project'}
+        %input{type: 'text', name: 'q', value: 'Search...', id:'search'}
+        %input{type: 'submit', value: 'Search'}

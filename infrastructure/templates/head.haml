@@ -21,15 +21,5 @@
     %link{ href:'http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css', rel:'stylesheet' }
     %meta{ name:"viewport", content:"width=device-width, initial-scale=1.0" }
   %body
-    #nav
-      %ul.nav
-        %li
-          %a{href: "{% url 'index' %}" } Overview
-        %li
-          %a{href: "{% url 'projects' %}" } Projects
-        %li.search
-          %form{action: '/search', method: 'get'}
-            %input{type: 'hidden', name: 'models', value: 'cip.project'}
-            %input{type: 'text', name: 'q', value: 'Search...', id:'search'}
-            %input{type: 'submit', value: 'Search'}
+    - include 'navigation.html'
 

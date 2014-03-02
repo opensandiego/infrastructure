@@ -1,30 +1,68 @@
 #nav {
   background: #B55B52;
-  height: 40px;
   border-bottom: 1px solid #CD8E6D;
-  ul li {
-    float:left;
-    padding: 10px 20px;
-    a {
-      font-size: 20px;
-      color: #fff;
+  position: relative;
+  a {
+    color: #fff;
+  }
+  ul#quick-switch {
+    position: relative;
+    display: inline-table;
+    float: left;
+    li {
+      padding: 15px 0;
+      // pfeil rechts einfügen
+      a {
+        padding: 0 15px;
+      }
+      ul {
+        margin: 0;
+        display: none;
+        position: absolute;
+        top: 100%;
+        z-index: 10;
+        background: darken(#B55B52,20);
+        // alpha wert benutzen
+        li {
+          position: relative;
+          float: none;
+        }
+      }
       &:hover {
-        background: none;
+        background: darken(#B55B52,20);
+        ul{
+          display: block;
+        }
       }
     }
-    &.search {
-      form {
-        margin: 0;
-        input {
-          height: 20px;
-          line-height: 20px;
-          margin: 0 5px 0;
-          font-size: em(12);
-          float: left;
-          width: 100px;
-          &[type="submit"] {
-            width: 60px;
-            line-height: 14px;
+  }
+  ul.nav {
+    float: left;
+    li {
+      float:left;
+      padding: 15px 20px;
+      a {
+        font-size: 20px;
+        color: #fff;
+        &:hover {
+          background: none;
+        }
+      }
+      &.search {
+        form {
+          margin: 0;
+          width: 200px;
+          input {
+            height: 20px;
+            line-height: 20px;
+            margin: 0 5px 0;
+            font-size: em(12);
+            float: left;
+            width: 100px;
+            &[type="submit"] {
+              width: 60px;
+              line-height: 14px;
+            }
           }
         }
       }
