@@ -1,13 +1,17 @@
+{% load staticfiles %}
 #nav
-  %ul#quick-switch
-    %li
-      %a{href:""} Get Informed
+  %ul
+    %li#logo
+      %img{src: "{% static 'images/logo.png' %}"}
+    %li#quick-switch
+      %a{href:""} 
+        Get Informed
+        %img{src:"{% static 'images/arrow_down.svg' %}"}
       %ul
         %li
           %a{href:""} Get Involved
         %li
           %a{href:""} Overview
-  %ul.nav
     %li
       %a{href: "{% url 'index' %}" } Overview
     %li

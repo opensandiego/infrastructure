@@ -1,46 +1,59 @@
 #nav {
   background: #B55B52;
   border-bottom: 1px solid #CD8E6D;
-  position: relative;
+  position: fixed;
+  z-index:3;
+  top: 0;
+  left: 0;
   a {
     color: #fff;
   }
-  ul#quick-switch {
+  ul{
     position: relative;
     display: inline-table;
     float: left;
-    li {
-      padding: 15px 0;
-      // pfeil rechts einfügen
-      a {
-        padding: 0 15px;
-      }
-      ul {
-        margin: 0;
-        display: none;
-        position: absolute;
-        top: 100%;
-        z-index: 10;
-        background: darken(#B55B52,20);
-        // alpha wert benutzen
-        li {
-          position: relative;
-          float: none;
-        }
-      }
-      &:hover {
-        background: darken(#B55B52,20);
-        ul{
-          display: block;
-        }
-      }
-    }
-  }
-  ul.nav {
-    float: left;
+    width: 100%;
     li {
       float:left;
       padding: 15px 20px;
+      &#logo {
+        padding:5px;
+        margin: 0 0 0 10px;
+        img {
+          height: 40px;
+        }
+      }
+      &#quick-switch {
+        padding: 15px 0px;
+        img {
+          width: 12px;
+          height: 12px;
+        }
+        a {
+          padding: 0 15px;
+        }
+        ul {
+          margin: 0;
+          display: none;
+          position: absolute;
+          top: 100%;
+          z-index: 1001;
+          background: rgba(113, 54, 48,0.9);
+          width: inherit;
+          li {
+            position: relative;
+            float: none;
+            background: none;
+            padding: 10px;
+          }
+        }
+        &:hover {
+          background: darken(#B55B52,20);
+          ul{
+            display: block;
+          }
+        }
+      }
       a {
         font-size: 20px;
         color: #fff;
@@ -49,6 +62,7 @@
         }
       }
       &.search {
+        float: right;
         form {
           margin: 0;
           width: 200px;
