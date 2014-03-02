@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.query import QuerySet
-import datetime 
+import datetime
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db.models import Count, Min, Sum, Avg
 
@@ -22,11 +22,11 @@ class ProjectCosts(object):
         """docstring for get_string"""
         if isinstance(value, list):
             if value[0] == 0:
-                return '< {0}'.format(intcomma(value[1]))
+                return '< ${0}'.format(intcomma(value[1]))
             elif value[1] == 0:
-                return '> {0}'.format(intcomma(value[0]))
+                return '> ${0}'.format(intcomma(value[0]))
             else:
-                return '{0} - {1}'.format(intcomma(value[0]), intcomma(value[1]))
+                return '${0} - ${1}'.format(intcomma(value[0]), intcomma(value[1]))
         else:
             return ''
     def get_query(self,value):
@@ -83,9 +83,9 @@ class ProjectManagerMixin(object):
     def by_delivery_method(self,delivery_method):
         """docstring for by_asset_group"""
         return self.filter(SP_DELIVERY_METHOD_CD__istartswith=delivery_method)
-    def by_client_departement(self,client_departements):
+    def by_client_department(self,client_departments):
         """docstring for by_asset_group"""
-        return self.filter(SP_CLIENT2__istartswith=client_departements)
+        return self.filter(SP_CLIENT2__istartswith=client_departments)
     def by_project_cost(self,project_cost):
         """docstring for by_project_cost"""
         return self.get_query(project_cost)
@@ -152,7 +152,7 @@ PHASE_URLS = (
         ('construction' , 'Construction'),
         ('post-construction' , 'Post Construction'),
         ('completed' , 'Complete')
-       ) 
+       )
 PHASE_ORDERS = {
         'planning' : 'SP_PRELIM_ENGR_START_DT',
         'design' : 'SP_DESIGN_INITIATION_START_DT',
@@ -171,12 +171,12 @@ ASSET_TYPE_URLS = (
    ( "water", "Water"))
 
 ORDER = (
-    ('SP_PRELIM_ENGR_START_DT', 'Planning Start ASC'),
-    ('-SP_PRELIM_ENGR_START_DT', 'Planning Start DESC'),
-    ('SP_CONSTR_FINISH_DT','construction finish ASC'),
-    ('-SP_CONSTR_FINISH_DT','construction finish DESC'),
-    ('SP_TOTAL_PROJECT_COST','construction cost ASC'),
-    ('-SP_TOTAL_PROJECT_COST','construction cost DESC'))
+    ('SP_PRELIM_ENGR_START_DT', 'Planning Start: Earliest First'),
+    ('-SP_PRELIM_ENGR_START_DT', 'Planning Start: Latest First'),
+    ('SP_CONSTR_FINISH_DT','Construction Finish: Earliest First'),
+    ('-SP_CONSTR_FINISH_DT','Construction Finish: Latest First'),
+    ('SP_TOTAL_PROJECT_COST','Construction Cost Earliest First'),
+    ('-SP_TOTAL_PROJECT_COST','Construction Cost: Latest First'))
 
 ASSET_TYPE_GROUPS = (
    ( "A", "Airports"),
@@ -383,8 +383,8 @@ class Project(models.Model):
     SP_ASSET_TYPE_GROUP = models.CharField(max_length=100, null=True, blank=True)
     SP_ASSET_TYPE_CD = models.CharField(max_length=2, null=True, blank=True)
     SP_ASSET_TYPE_DESC = models.CharField(max_length=100, null=True, blank=True)
-    SP_SAP_RUN_DT = models.DateField(null=True, blank=True) 
-    SP_PRELIM_ENGR_FINISH_DT= models.DateField(null=True, blank=True) 
+    SP_SAP_RUN_DT = models.DateField(null=True, blank=True)
+    SP_PRELIM_ENGR_FINISH_DT= models.DateField(null=True, blank=True)
     SP_DESIGN_FINISH_DT = models.DateField(null=True, blank=True)
     SP_NTP_DT = models.DateField(null=True, blank=True)
     SP_NOC_DT= models.DateField(null=True, blank=True)
@@ -480,6 +480,6 @@ class DepartmentNeed(models.Model):
     fci_percent = models.FloatField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
 
-    
+
 
 

@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
-@register.filter    
+@register.filter
 def subtract(value, arg):
     return value - arg
 phase_class = {
@@ -63,7 +63,7 @@ def intword_span(value,autoescape=None):
         esc = lambda x: x
     money_string = "{0} <span>{1}</span>".format(esc(money),esc(money_type))
     return mark_safe(money_string)
-    
+
 @register.inclusion_tag('shortcuts.haml')
 def show_shortcuts():
     """docstring for generate_shortcuts"""
@@ -76,9 +76,9 @@ def show_shortcuts():
     for (key, value) in ASSET_TYPE_URLS:
         asset_group_links['links'].append(generate_link('asset_type',key,value, asset_type_class[value]))
     shortcuts.append(asset_group_links)
-    district_links = { 'links' : [], 'title': 'Disricts' }
+    district_links = { 'links' : [], 'title': 'Districts' }
     for district_nr in range(1,10):
-        district_links['links'].append(generate_link('district',district_nr,'District {0}'.format(district_nr),''))
+        district_links['links'].append(generate_link('district',district_nr,'District {0}'.format(district_nr),'district-{0}'.format(district_nr)))
     shortcuts.append(district_links)
     #client_departement_links = { 'links' : [], 'title': 'Current Projects by asset type group' }
 
@@ -97,8 +97,8 @@ def generate_link(type,key,value,image_class):
 def project_list_item(project):
     """docstring for project_list_item"""
     project_link_path = reverse('project_detail', args=[project.id] )
-    asset_type_image = "images/icons/%s-18.png" % asset_type_images[project.SP_ASSET_TYPE_GROUP] 
-    return { 'project' : project, 'link': project_link_path, 'phase': phase_class[project.SP_PROJECT_PHASE], 'asset_type_image': asset_type_image }
+    asset_type_image = "images/icons/%s-18.png" % asset_type_images[project.SP_ASSET_TYPE_GROUP]
+    return { 'project' : project, 'link': project_link_path, 'phase': phase_class[project.SP_PROJECT_PHASE], 'asset_type':asset_type_class[project.SP_ASSET_TYPE_GROUP]}
 
 @register.inclusion_tag('pagination.haml',takes_context=True)
 def pagination(context):
@@ -125,7 +125,7 @@ def filter_text(context):
     filter_text = filter_text + " Projects"
     if filter.has_key("phase"):
         filter_text = filter_text + " in {0} Phase".format(filter['phase'])
-    
+
     filter_text = filter_text + " ordered by {0}".format(filter['order'])
     return {'filter_text': filter_text}
 
@@ -138,3 +138,12 @@ def widgets(context):
 def no_results():
     """docstring for no_results"""
     return
+
+@register.simple_tag
+def is_active(value,test):
+    """docstring for is_active"""
+    if value == test:
+        return " active"
+    else:
+        return ""
+

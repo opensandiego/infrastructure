@@ -1,7 +1,7 @@
-- load bootstrap_toolkit
 - load staticfiles
 - load django_select2_tags
 - load static from staticfiles
+- load compress
 %html
   %head
     %title
@@ -12,26 +12,24 @@
     %script{src: 'http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js' }
     %script{src: '{{ STATIC_URL }}js/esri-leaflet.js' }
     %script{ src:"http://d3js.org/d3.v3.min.js", charset:"utf-8" }
+    - compress css
+      %link{href: "{% static 'css/normalize.css' %}", rel:'stylesheet', type:'text/css'}
+      %link{href: "{% static 'css/application.scss' %}", rel:'stylesheet', type:'text/x-scss'}
+      %link{href: "{% static 'css/timeline.css' %}", rel:'stylesheet', type:'text/css'}
+      - import_django_select2_css
 	  - import_django_select2_js
-	  - import_django_select2_css
-    %meta{ name:"viewport", content:"width=device-width, initial-scale=1.0" }
-    - bootstrap_stylesheet_tag
-    - bootstrap_stylesheet_tag "responsive"
-    %link{href: "{% static 'css/timeline.css' %}", rel:'stylesheet', type:'text/css'}
     %link{ href:'http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css', rel:'stylesheet' }
-    %link{href: "{% static 'css/main.css' %}", rel:'stylesheet', type:'text/css'}
+    %meta{ name:"viewport", content:"width=device-width, initial-scale=1.0" }
   %body
     #nav
-      .container
-        .row
-          %ul.nav
-            %li
-              %a{href: "{% url 'index' %}" } Overview
-            %li
-              %a{href: "{% url 'projects' %}" } Projects
-            %li
-              %form{action: '/search', method: 'get'}
-                %input{type: 'hidden', name: 'models', value: 'cip.project'}
-                %input{type: 'text', name: 'q', value: 'Search...', id:'search'}
-                %input{type: 'submit', value: 'Search'}
+      %ul.nav
+        %li
+          %a{href: "{% url 'index' %}" } Overview
+        %li
+          %a{href: "{% url 'projects' %}" } Projects
+        %li.search
+          %form{action: '/search', method: 'get'}
+            %input{type: 'hidden', name: 'models', value: 'cip.project'}
+            %input{type: 'text', name: 'q', value: 'Search...', id:'search'}
+            %input{type: 'submit', value: 'Search'}
 
