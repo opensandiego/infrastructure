@@ -1,11 +1,13 @@
 #project {
-  border: 1px solid #ccc;
+  border: 1px solid #EBEBEB;
+  box-shadow: 2px 4px 10px #ccc;
   h2 {
     margin: 10px;
   }
   #details {
     margin: 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #D8D7D7;
+    border-top: 1px solid #E4E4E4;
     background: #f2f1f4;
     #map {
       height: 220px;
