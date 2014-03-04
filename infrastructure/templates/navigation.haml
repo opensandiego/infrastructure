@@ -1,0 +1,23 @@
+{% load staticfiles %}
+#nav
+  %ul
+    %li#logo
+      %img{src: "{% static 'images/logo.png' %}"}
+    %li#quick-switch
+      %a{href:""} 
+        Get Informed
+        %img{src:"{% static 'images/arrow_down.svg' %}"}
+      %ul
+        %li
+          %a{href:""} Get Involved
+        %li
+          %a{href:""} Overview
+    %li
+      %a{href: "{% url 'index' %}" } Overview
+    %li
+      %a{href: "{% url 'projects' %}" } Projects
+    %li.search
+      %form{action: '/search', method: 'get'}
+        %input{type: 'hidden', name: 'models', value: 'cip.project'}
+        %input{type: 'text', name: 'q', value: 'Search...', id:'search'}
+        %input{type: 'submit', value: 'Search'}

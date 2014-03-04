@@ -4,8 +4,12 @@ body {
 .clear {
   clear: both;
 }
+.main {
+  margin-top: 55px;
+}
 #main {
   padding: 0;
+  margin-top: 55px;
 }
 #main #map {
   width:100%;

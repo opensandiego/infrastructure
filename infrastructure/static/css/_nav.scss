@@ -1,30 +1,82 @@
 #nav {
   background: #B55B52;
-  height: 40px;
   border-bottom: 1px solid #CD8E6D;
-  ul li {
-    float:left;
-    padding: 10px 20px;
-    a {
-      font-size: 20px;
-      color: #fff;
-      &:hover {
-        background: none;
+  position: fixed;
+  z-index:3;
+  top: 0;
+  left: 0;
+  a {
+    color: #fff;
+  }
+  ul{
+    position: relative;
+    display: inline-table;
+    float: left;
+    width: 100%;
+    li {
+      float:left;
+      padding: 15px 20px;
+      &#logo {
+        padding:5px;
+        margin: 0 0 0 10px;
+        img {
+          height: 40px;
+        }
       }
-    }
-    &.search {
-      form {
-        margin: 0;
-        input {
-          height: 20px;
-          line-height: 20px;
-          margin: 0 5px 0;
-          font-size: em(12);
-          float: left;
-          width: 100px;
-          &[type="submit"] {
-            width: 60px;
-            line-height: 14px;
+      &#quick-switch {
+        padding: 15px 0px;
+        img {
+          width: 12px;
+          height: 12px;
+        }
+        a {
+          padding: 0 15px;
+        }
+        ul {
+          margin: 0;
+          display: none;
+          position: absolute;
+          top: 100%;
+          z-index: 1001;
+          background: rgba(113, 54, 48,0.9);
+          width: inherit;
+          li {
+            position: relative;
+            float: none;
+            background: none;
+            padding: 10px;
+          }
+        }
+        &:hover {
+          background: darken(#B55B52,20);
+          ul{
+            display: block;
+          }
+        }
+      }
+      a {
+        font-size: 20px;
+        color: #fff;
+        &:hover {
+          background: none;
+        }
+      }
+      &.search {
+        float: right;
+        form {
+          margin: 0;
+          width: 200px;
+          input {
+            height: 20px;
+            line-height: 20px;
+            margin: 0 5px 0;
+            font-size: em(12);
+            float: left;
+            width: 100px;
+            &[type="submit"] {
+              width: 60px;
+              line-height: 14px;
+            }
           }
         }
       }
