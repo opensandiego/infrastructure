@@ -140,6 +140,18 @@ def no_results():
     return
 
 @register.simple_tag
+def phase(project):
+    """docstring for asset_type"""
+    return phase_class[project.SP_PROJECT_PHASE]
+@register.simple_tag
+def asset_type(project):
+    """docstring for asset_type"""
+    return asset_type_class[project.SP_ASSET_TYPE_GROUP]
+@register.simple_tag
+def is_active_phase(project,test):
+    ph = phase(project)
+    return is_active(ph,test)
+@register.simple_tag
 def is_active(value,test):
     """docstring for is_active"""
     if value == test:

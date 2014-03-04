@@ -9,21 +9,70 @@
 - block content
   #project{ 'data-id': '{{project.pk}}' }
     %h2= project.SP_PROJECT_NM
-    #map
     #details
-      %h4 in {{project.SP_PROJECT_PHASE}} Phase
-      %h4= project.SP_CLIENT2
-      %h4
-        %span{ class: 'detail-icon {{project.SP_ASSET_TYPE_GROUP}}'}
-        %span= project.SP_ASSET_TYPE_GROUP
-      %h4
-        %img{src: "{% static 'images/icons/glyphicons_045_calendar.png' %}", width: '15'}
-        %span= project.SP_CONSTR_FINISH_DT
+      #map
+      #main-details
+        %ul
+          %li{"class":"detail-icon {% phase project %}"}
+            {{project.SP_PROJECT_PHASE}}
+          %li{"class":"detail-icon {% asset_type project %}"}
+            {{project.SP_ASSET_TYPE_GROUP}}
+          %li{"class":"detail-icon department"}
+            {{project.SP_CLIENT2}}
+          %li.last{"class": "detail-icon district-{{project.SP_COUNCIL_DISTRICTS}}"}
+            District {{project.SP_COUNCIL_DISTRICTS}}
+
+    #description
+      %h4 Description
       %p= project.SP_PROJECT_DESC
-    #cost-breakdown
-    #project-cost{ 'data-cost': '{{project.SP_TOTAL_PROJECT_COST|subtract:project.SP_TOTAL_CONSTRUCTION_COST}},{{project.SP_TOTAL_CONSTRUCTION_COST}}', 'data-cost-labels': 'All other Cost, Construction Cost'}
-      %h4 Overall cost: $ {{project.SP_TOTAL_PROJECT_COST|intcomma}}
-      %h4 Construction cost: $ {{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}}
+    #finance
+      #cost
+        %h4 Cost
+        %table
+          %tr
+            %td Overall cost:
+            %td $ {{project.SP_TOTAL_PROJECT_COST|intcomma}}
+          %tr
+            %td Construction cost:
+            %td $ {{project.SP_TOTAL_CONSTRUCTION_COST|intcomma}}
+        #cost-breakdown
+        #project-cost{ 'data-cost': '{{project.SP_TOTAL_PROJECT_COST|subtract:project.SP_TOTAL_CONSTRUCTION_COST}},{{project.SP_TOTAL_CONSTRUCTION_COST}}', 'data-cost-labels': 'All other Cost, Construction Cost'}
+      .divider
+        %div
+      #funding
+        #project-funding
+          %h4 Funding
+          %table
+            %tr
+              %td Funded:
+              %td= project.SP_PROJECT_INFO_DESC
+            - if project.SP_FUNDING_SOURCE_CD
+              %tr
+                %td Source:
+                %td= project.SP_FUNDING_SOURCE_CD 
+            - if project.SP_ADDL_FUND_SOURCE2_DESC
+              %tr
+                %td Additional Source:
+                %td
+                  {{project.SP_ADDL_FUND_SOURCE2_DESC}}
+                  - if project.SP_ADDL_FUND_SOURCE3_DESC
+                    %br
+                    {{project.SP_ADDL_FUND_SOURCE3_DESC
+        #project-timeline
+          %h4 Timeline
+          .status
+            %ul.icons
+              %li{'class': "planning progress{% is_active_phase project 'planning' %}"}
+                .date {{project.SP_PRELIM_ENGR_START_DT}}
+              %li{'class': "design progress{% is_active_phase project 'design' %}"}
+                .date {{project.SP_DESIGN_INITIATION_START_DT}}
+              %li{'class': "bid progress{% is_active_phase project 'bid' %}"}
+                .date {{project.SP_BID_START_DT}}
+              %li{'class': "construction progress{% is_active_phase project 'construction' %}"}
+                .date {{project.SP_CONSTRUCTION_START_DT}}
+              %li{'class': "post-construction progress{% is_active_phase project 'post-construction' %}"}
+                .date {{project.SP_CONSTR_FINISH_DT}}
+              %li{'class': "completed progress{% is_active_phase project 'completed' %}"}
+                .date {{project.SP_BO_BU_DT}}
+
     #timeline-container
-    #timeline
-    %p Project Images
