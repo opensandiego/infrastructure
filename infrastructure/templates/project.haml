@@ -45,7 +45,10 @@
           %table
             %tr
               %td Funded:
-              %td= project.SP_PROJECT_INFO_DESC
+              %td{"class":"funded {% funded_class project %}"}
+                %span.first
+                %span.last
+                = project.SP_PROJECT_INFO_DESC
             - if project.SP_FUNDING_SOURCE_CD
               %tr
                 %td Source:

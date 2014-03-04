@@ -2,7 +2,7 @@
   border: 1px solid #ccc;
   h2 {
     margin: 10px;
-  padding}
+  }
   #details {
     margin: 0;
     border-bottom: 1px solid #eee;
@@ -64,6 +64,31 @@
     #cost{
       padding-right: 15px;
       border-right: 1px solid #cecece;
+    }
+    #project-funding {
+      .funded {
+        font-size: 0.6em;
+        line-height: 2em;
+        span {
+          width: 16px;
+          height: 20px;
+          display: block;
+          float: left;
+          &.last {
+            width: 8px;
+            margin-right: 10px;
+          }
+        }
+        & span.first{
+          background: url('../images/icons/dollar_small.png') center left repeat-x;
+        }
+        &.full span.last{
+          background: url('../images/icons/dollar_small.png') center left repeat-x;
+        }
+        &.partial span.last{
+          background: url('../images/icons/dollar_empty_small.png') center left repeat-x;
+        }
+      }
     }
     .status {
       margin: 25px 0 25px 20px;

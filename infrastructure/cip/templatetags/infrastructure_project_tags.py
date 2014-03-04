@@ -159,3 +159,10 @@ def is_active(value,test):
     else:
         return ""
 
+@register.simple_tag
+def funded_class(project):
+    """docstring for funded_class"""
+    if project.SP_PROJECT_INFO_DESC == "Fully Funded":
+        return "full"
+    else:
+        return "partial"
