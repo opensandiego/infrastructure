@@ -1,0 +1,169 @@
+#project {
+  border: 1px solid #EBEBEB;
+  box-shadow: 2px 4px 10px #ccc;
+  h2 {
+    margin: 10px;
+  }
+  #details {
+    margin: 0;
+    border-bottom: 1px solid #D8D7D7;
+    border-top: 1px solid #E4E4E4;
+    background: #f2f1f4;
+    #map {
+      height: 220px;
+    }
+    #main-details {
+      min-height: 220px;
+      color: #777;
+      padding: 0 10px;
+      ul {
+        margin-right: 5%;
+        li {
+          padding: 10px 10px 10px 40px;
+          border-bottom: 1px solid #DEDEDE;
+          &.last {
+            border: none;
+          }
+        }
+      }
+    }
+  }
+  #description {
+    background: #DBE6EC;
+    border-bottom: 1px solid #ccc;
+    h4 {
+      padding: 10px 10px 0;
+    }
+    p {
+      padding: 10px;
+    }
+  }
+  #finance {
+    color: #777;
+    margin-bottom: 40px;
+    h4 {
+      text-align: center;
+      color: #777;
+        padding: 10px 5px 5px;
+    }
+    table {
+      width: 90%;
+      margin: 5%;
+      padding: 0;
+      border: none;
+      tr {
+        border-bottom: 1px solid #ccc;
+      }
+    }
+    .divider {
+      width: 1px;
+      div {
+        width: 1px;
+        margin: 0 auto;
+        background: #ccc;
+      }
+    }
+    #cost{
+      padding-right: 15px;
+      border-right: 1px solid #cecece;
+    }
+    #project-funding {
+      .funded {
+        font-size: 0.6em;
+        line-height: 2em;
+        span {
+          width: 16px;
+          height: 20px;
+          display: block;
+          float: left;
+          &.last {
+            width: 8px;
+            margin-right: 10px;
+          }
+        }
+        & span.first{
+          background: url('../images/icons/dollar_small.png') center left repeat-x;
+        }
+        &.full span.last{
+          background: url('../images/icons/dollar_small.png') center left repeat-x;
+        }
+        &.partial span.last{
+          background: url('../images/icons/dollar_empty_small.png') center left repeat-x;
+        }
+      }
+    }
+    .status {
+      margin: 25px 0 25px 20px;
+    }
+    .icons {
+      @include clearfix;
+      margin: 10px 0;
+      .progress {
+        border-radius: 22px;
+        height: 35px;
+        width: 35px;
+        border: 1px solid #ccc;
+        float:left;
+        z-index:2;
+        background-position: center center;
+        background-size: 18px 18px;
+        margin-right: 20px;
+        position:relative;
+        &:last-child {
+          &:after {
+            width:0;
+          }
+        }
+        &:after {
+          position:absolute;
+          content: "";
+          width:20px;
+          height: 17px;
+          left: 34px;
+          border-bottom: 1px solid #ccc;
+        }
+        &.active {
+          background-color: $light-blue;
+        }
+        &:first-child .date {
+          left: 0;
+          text-align: left;
+        }
+        &:hover .date {
+          display: block;
+        }
+        & .date {
+          position:absolute;
+          width: 85px;
+          height: 10px;
+          top: 30px;
+          left: -20px;
+          font-size: 10px;
+          text-align: center;
+          display: none;
+        }
+        &.planning .date, &.completed .date{
+          display: block;
+          top: -30px;
+        }
+      }
+      .line {
+        float:left;
+      }
+    }
+  }
+  h4 img {
+    padding: 0 20px 0 5px;
+  }
+  .axis {
+    path,line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+    text {
+      font-family: sans-serif;
+      font-size: 11px;
+    }
+  }
+}

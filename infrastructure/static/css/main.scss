@@ -189,6 +189,9 @@ a {
 .district-9{
   background: url('../images/cm/cd9.png') center left no-repeat;
 }
+.department {
+  background: url('../images/icons/department.png') center left no-repeat;
+}
 #shortcuts ul {
   margin: 0;
   li {
@@ -197,30 +200,6 @@ a {
   }
 }
 
-#project {
-  .row-fluid {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
-  }
-  #map {
-    height: 220px;
-  }
-  h4 img {
-    padding: 0 20px 0 5px;
-  }
-  .axis {
-    path,line {
-      fill: none;
-      stroke: black;
-      shape-rendering: crispEdges;
-    }
-    text {
-      font-family: sans-serif;
-      font-size: 11px;
-    }
-  }
-}
 #project-list {
   #stats {
     display:none;
