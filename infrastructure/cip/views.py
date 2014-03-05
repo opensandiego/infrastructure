@@ -213,7 +213,7 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
     context_object_name = 'projects'
     template_name = 'projects.haml'
     paginate_by = 20
-    form_data = {'dataset': 'all', 'order': 'SP_PRELIM_ENGR_START_DT'}
+    form_data = {'dataset': 'all', 'order': '-SP_PRELIM_ENGR_START_DT'}
 
     def timephase(self):
         """docstring for timephase"""
@@ -228,10 +228,10 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
                 self.show['current'] = ''
                 self.show['all'] = 'active'
                 projects = Project.objects.all()
-        return projects.order_by('SP_PRELIM_ENGR_START_DT').exclude(SP_PRELIM_ENGR_START_DT=None)
+        return projects.order_by('-SP_PRELIM_ENGR_START_DT').exclude(SP_PRELIM_ENGR_START_DT=None)
     def reset_form_data(self):
         """docstring for reset_form_data"""
-        self.form_data = {'dataset': 'all', 'order': 'SP_PRELIM_ENGR_START_DT'}
+        self.form_data = {'dataset': 'all', 'order': '-SP_PRELIM_ENGR_START_DT'}
     def get_queryset(self):
         """docstring for get_queryset"""
         projects = []
@@ -252,8 +252,7 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
             self.reset_form_data()
             self.filter('filter_by_district',self.kwargs['district'])
             self.form_data['district'] = self.kwargs['district']
-
-        return self.projects
+        return self.timephase()
 
     def get_context_data(self, **kwargs):
         """docstring for get_contxt_data"""
@@ -306,8 +305,8 @@ class ProjectFilter:
             self.order =  self.form.cleaned_data['order']
             self.filter_set = { 'order': dict(ORDER)[self.order] }
         else:
-            self.order = 'SP_PRELIM_ENGR_START_DT'
-            self.filter_set = {'order': 'SP_PRELIM_ENGR_START_DT'}
+            self.order = '-SP_PRELIM_ENGR_START_DT'
+            self.filter_set = {'order': '-SP_PRELIM_ENGR_START_DT'}
     def filter(self):
         """docstring for  filter_data"""
         if self.form.cleaned_data.has_key('current_phase') and self.form.cleaned_data['current_phase']:
