@@ -21,7 +21,7 @@
       clear:both;
       @include clearfix;
       background-position: 0 20px;
-      height: 130px;
+      height: 140px;
     }
     dt {
       font-size: 18px;
@@ -42,7 +42,7 @@
     }
     dd.status  {
       color: #777;
-      margin-top: 25px;
+      margin: 25px 0 30px;
     }
     .icons {
       @include clearfix;
@@ -77,11 +77,17 @@
           left: 0;
           text-align: left;
         }
+        &.active .date {
+          display: block;
+        }
+        &:hover .date {
+          display: block;
+        }
         & .date {
           position:absolute;
           width: 85px;
           height: 10px;
-          top: -30px;
+          top: 45px;
           left: -20px;
           font-size: 10px;
           text-align: center;
@@ -89,6 +95,7 @@
         }
         &.planning .date, &.completed .date{
           display: block;
+          top: -30px;
         }
       }
       .line {
@@ -99,11 +106,18 @@
       width: 15%;
       float:left;
       padding: 10px;
-      height: 129px;
+      height: 139px;
       background: $light-red;
-      font-size: 14px;
+      font-size: 1em;
       text-align: center;
       color: #fefefe;
+      p:first-child {
+        border-bottom: 1px solid #D6A1A1;
+        padding-bottom: 15px;
+      }
+      span {
+        font-size: 0.6em;
+      }
     }
     .tabs{
       position: absolute;
