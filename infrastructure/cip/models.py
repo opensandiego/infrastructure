@@ -383,6 +383,7 @@ class Project(models.Model):
     SP_ASSET_TYPE_GROUP = models.CharField(max_length=100, null=True, blank=True)
     SP_ASSET_TYPE_CD = models.CharField(max_length=2, null=True, blank=True)
     SP_ASSET_TYPE_DESC = models.CharField(max_length=100, null=True, blank=True)
+    SP_FISCAL_YEAR = models.IntegerField(null=True, blank=True)
     SP_SAP_RUN_DT = models.DateField(null=True, blank=True)
     SP_PRELIM_ENGR_FINISH_DT= models.DateField(null=True, blank=True)
     SP_DESIGN_FINISH_DT = models.DateField(null=True, blank=True)
@@ -481,5 +482,10 @@ class DepartmentNeed(models.Model):
     remarks = models.TextField(null=True, blank=True)
 
 
+class District(models.Model):
+    number = models.PositiveIntegerField(null=True, blank=False)
+    council = models.CharField(max_length=255 ,null=True, blank=True)
+    web_address = model.CharField(max_legnth=255, null=True, blank=True)
+    geometry = models.TextField(null=True ,blank=True)
 
 
