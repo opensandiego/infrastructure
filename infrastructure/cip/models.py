@@ -376,7 +376,7 @@ class Phase(models.Model):
 class Project(models.Model):
     SP_SEQ_NUM = models.IntegerField()
     SP_DATA_DATE = models.DateField()
-    SP_SAPNO = models.CharField(max_length=8, null=True, blank=True)
+    SP_SAPNO = models.CharField(max_length=20, null=True, blank=True)
     SP_TYPE_CD = models.CharField(max_length=1, null=True, blank=True)
     SP_PROJECT_NM = models.CharField(max_length=512, null=True, blank=True)
     SP_SENIOR_NM = models.CharField(max_length=100, null=True, blank=True)
@@ -438,6 +438,7 @@ class Project(models.Model):
     SP_PROJECT_KIND2_DESC = models.CharField(max_length=100, null=True, blank=True)
     SP_BID_NUM = models.CharField(max_length=20, null=True, blank=True)
     SP_SPEC_NUM = models.CharField(max_length=20, null=True, blank=True)
+    geometry = models.TextField(null=True, blank=True)
 
     objects = ProjectManager()
     stats = ProjectsStatsManager()
@@ -480,12 +481,4 @@ class DepartmentNeed(models.Model):
     map_length = models.FloatField(null=True, blank=True)
     fci_percent = models.FloatField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
-
-
-class District(models.Model):
-    number = models.PositiveIntegerField(null=True, blank=False)
-    council = models.CharField(max_length=255 ,null=True, blank=True)
-    web_address = model.CharField(max_legnth=255, null=True, blank=True)
-    geometry = models.TextField(null=True ,blank=True)
-
 
