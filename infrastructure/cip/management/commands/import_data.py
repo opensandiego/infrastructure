@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from infrastructure.cip.models import Project
 from optparse import make_option
 from datetime import datetime
+from decimal import *
 import csv
 
 class Command(BaseCommand):
@@ -59,8 +60,8 @@ class Command(BaseCommand):
         p.SP_DESIGN_INITIATION_START_DT = self.parse_date(project_row[29])
         p.SP_CONSTRUCTION_START_DT = self.parse_date(project_row[30])
         p.SP_BO_BU_DT = self.parse_date(project_row[31])
-        p.SP_TOTAL_CONSTRUCTION_COST = project_row[32]
-        p.SP_TOTAL_PROJECT_COST = project_row[33]
+        p.SP_TOTAL_CONSTRUCTION_COST = int(Decimal(project_row[32]))
+        p.SP_TOTAL_PROJECT_COST = int(Decimal(project_row[33]))
         p.SP_PLANNING_TO_NOC_DAYS = project_row[34]
         p.SP_VAR_BL_DESIGN_FINISH_DAYS = project_row[35]
         p.SP_VAR_DESIGN_BL_ES065_DAYS = project_row[36]
@@ -106,5 +107,9 @@ class Command(BaseCommand):
         p.SP_SPEC_NUM = project_row[90]
         try:
             p.save()
-        except:
+        except Exception as inst:
+            print type(inst)
+            print inst.args
             print "Project not saved: %s" % project_seq_nr
+            print project_row
+            raise Exception
