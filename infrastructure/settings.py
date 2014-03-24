@@ -9,6 +9,7 @@ class Common(Configuration):
     TEMPLATE_DEBUG = DEBUG
 
     ADMINS = (
+        ('Mila', 'mila.frerichs@gmail.com')
         # ('Your Name', 'your_email@example.com'),
     )
 
@@ -144,6 +145,7 @@ class Common(Configuration):
         'jquery',
         'haystack',
         'infrastructure.cip',
+        'south',
     )
 
     HAYSTACK_CONNECTIONS = {
