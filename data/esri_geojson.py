@@ -41,7 +41,7 @@ class GeoJSONFeature():
         """docstring for esri_coordinates_LineString"""
         if len(geom["paths"]) > 1:
             self.geometry["type"] = "MultiLineString"
-            return geom["paths"][0]
+            return geom["paths"]
         else:
             return geom["paths"][0]
 
