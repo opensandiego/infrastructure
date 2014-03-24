@@ -5,6 +5,7 @@ import json
 from data.esri_geojson import *
 
 class Command(BaseCommand):
+    args = '<id>'
 
     def update_geo(self,project):
         """docstring for update_geo"""
@@ -60,6 +61,12 @@ class Command(BaseCommand):
 
 
     def handle(self,*args,**options):
-        projects = Project.objects.all()
-        for project in projects:
-            self.update_geo(project)
+        if args:
+            project_id = args[0]
+            if project_id:
+                project = Project.objects.get(pk=int(project_id))
+                self.update_geo(project)
+        else:
+            projects = Project.objects.all()
+            for project in projects:
+                self.update_geo(project)
