@@ -32,8 +32,15 @@ $(document).ready(function() {
     project_width =  $('#project').width();
     project_id = $('#project').data('id');
     first_column_width = $('#project #map').width();
+    proj4.defs('EPSG:2230', '+proj=lcc +lat_1=33.88333333333333 +lat_2=32.78333333333333 +lat_0=32.16666666666666 +lon_0=-116.25 +x_0=2000000.0001016 +y_0=500000.0001016001 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs');
     var map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
-    .setView([32.70752, -117.15706], 9);
+    .setView([32.70752, -117.15706], 14);
+
+    geojsonFeature = JSON.parse(geojson);
+    geojsonFeature["crs"]["properties"]["name"] = "urn:ogc:def:crs:EPSG::2230";
+    marker = L.Proj.geoJson(geojsonFeature).addTo(map);
+    map.fitBounds(marker.getBounds());
+    map.setZoom(14);
 
     cost_data = $('#project-cost').data('cost').split(',');
     cost_data = cost_data.map(function(d) { return parseInt(d); });
