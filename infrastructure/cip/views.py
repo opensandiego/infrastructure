@@ -214,6 +214,7 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
     template_name = 'projects.haml'
     paginate_by = 20
     form_data = {'dataset': 'all', 'order': '-SP_PRELIM_ENGR_START_DT'}
+    filter_set = { 'order': dict(ORDER)[form_data['order']] }
 
     def timephase(self):
         """docstring for timephase"""
@@ -232,6 +233,7 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
     def reset_form_data(self):
         """docstring for reset_form_data"""
         self.form_data = {'dataset': 'all', 'order': '-SP_PRELIM_ENGR_START_DT'}
+        self.filter_set = { 'order': dict(ORDER)[self.form_data['order']] }
     def get_queryset(self):
         """docstring for get_queryset"""
         projects = []
@@ -242,23 +244,28 @@ class ProjectList(ListView,ProjectsFilterMixin,ProjectWidgetMixin):
             for key, value in dict(PROJECT_PHASES).items():
                 if value == dict(PHASE_URLS)[self.kwargs['phase']]:
                     self.form_data['current_phase'] = key
+                    self.filter_set['phase'] = value
         if self.kwargs.has_key('asset_type'):
             self.reset_form_data()
             self.filter('filter_by_asset_type',self.kwargs['asset_type'])
             for key, value in dict(ASSET_TYPE_GROUPS).items():
                 if value == dict(ASSET_TYPE_URLS)[self.kwargs['asset_type']]:
                     self.form_data['asset_type'] = key
+                    self.filter_set['asset_type'] = value
         if self.kwargs.has_key('district'):
             self.reset_form_data()
             self.filter('filter_by_district',self.kwargs['district'])
             self.form_data['district'] = self.kwargs['district']
-        return self.timephase()
+            self.filter_set['district'] = self.kwargs['district']
+        self.projects = self.projects.order_by('-SP_PRELIM_ENGR_START_DT').exclude(SP_PRELIM_ENGR_START_DT=None)
+        return self.projects
 
     def get_context_data(self, **kwargs):
         """docstring for get_contxt_data"""
         context = super(ProjectList, self).get_context_data(**kwargs)
         context['form'] = ProjectFilterForm(self.form_data)
         context['widgets'] = self.project_widgets({})
+        context['filter'] = self.filter_set
         context['show'] = self.show
         return context
 
