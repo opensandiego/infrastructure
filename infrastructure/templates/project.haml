@@ -7,6 +7,8 @@
 - block sidebar
   - show_shortcuts
 - block content
+  :javascript
+    geojson = '{{project.geometry|safe}}';
   #project{ 'data-id': '{{project.pk}}' }
     %h2= project.SP_PROJECT_NM
     #details

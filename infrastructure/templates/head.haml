@@ -11,6 +11,8 @@
     %script{src: '{{ STATIC_URL }}js/main.js' }
     %script{src: 'http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js' }
     %script{src: '{{ STATIC_URL }}js/esri-leaflet.js' }
+    %script{src: '{{ STATIC_URL }}js/proj4-compressed.js' }
+    %script{src: '{{ STATIC_URL }}js/proj4leaflet.js' }
     %script{ src:"http://d3js.org/d3.v3.min.js", charset:"utf-8" }
     - compress css
       %link{href: "{% static 'css/normalize.css' %}", rel:'stylesheet', type:'text/css'}
