@@ -53,7 +53,8 @@
           %input#submit{ type:"submit", value:"Filter" }
 
   #project-list
-    %h3 Currently running Projects ordered by Award start
+    %h3
+      - filter_text
     - pagination_count
     #projects
       %ul.tabs
