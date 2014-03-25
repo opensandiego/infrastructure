@@ -9,6 +9,7 @@ import json
 import django.http
 from django.contrib.humanize.templatetags.humanize import intword
 from infrastructure.cip.templatetags.infrastructure_project_tags import intword_span
+from rest_framework import viewsets
 
 def index(request):
     """docstring for projects"""
@@ -460,3 +461,7 @@ class JSONTimetableMixin(object):
         return json.dumps(json_response)
 class ProjectDetailJSONView(JSONTimetableMixin, ProjectDetailView):
     pass
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    model = Project
+

@@ -2,9 +2,11 @@ from django.conf.urls import patterns, include, url
 from infrastructure.cip.views import *
 from django.contrib import admin
 from django.http import HttpResponseRedirect
+from rest_framework import routers
 admin.autodiscover()
 
-
+router = routers.DefaultRouter()
+router.register(r'projects', ProjectViewSet)
 
 urlpatterns = patterns('',
     # Examples:
@@ -28,4 +30,5 @@ urlpatterns = patterns('',
     url(r'^search/', include('haystack.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include(router.urls))
 )
