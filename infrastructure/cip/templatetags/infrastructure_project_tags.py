@@ -17,7 +17,8 @@ phase_class = {
         'Post Construction' : 'post-construction',
         'Planning' : 'planning',
         'Bid and Award' : 'bid',
-        'Complete' : 'completed'
+        'Complete' : 'completed',
+        'Land Acquisition' : 'land'
         }
 phase_images = {
         'Design' : '234_brush',
