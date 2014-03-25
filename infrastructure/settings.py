@@ -144,6 +144,7 @@ class Common(Configuration):
         'django_select2',
         'jquery',
         'haystack',
+        'rest_framework',
         'infrastructure.cip',
         'south',
     )

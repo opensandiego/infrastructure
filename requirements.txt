@@ -1,7 +1,5 @@
 django==1.5.5
-South
-django_compressor
-hamlpy
+South django_compressor hamlpy
 django_select2
 django-haystack==2.0.0
 psycopg2
@@ -12,3 +10,4 @@ pyelasticsearch
 lxml
 BeautifulSoup
 django_jquery
+djangorestframework
