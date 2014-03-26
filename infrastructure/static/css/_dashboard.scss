@@ -16,6 +16,15 @@
     left:40px;
     z-index:2;
   }
+  .loading {
+    width: 100%;
+    text-align: center;
+    color: #333;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+  }
   .widget {
     .subtitle {
       height: 19%;
