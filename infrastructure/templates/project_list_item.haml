@@ -5,7 +5,7 @@
   %dl
     %dt
       %a{href: '{{link}}'}
-        = project.SP_PROJECT_NM
+        = project.SP_PROJECT_NM|truncatechars:60
       .district
         D{{project.SP_COUNCIL_DISTRICTS}}
     %dd.status
