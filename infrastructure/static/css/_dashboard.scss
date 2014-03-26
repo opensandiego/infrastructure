@@ -24,6 +24,8 @@
     top: 0;
     left: 0;
     display: none;
+    z-index:11;
+    background: rgba(244,244,255,0.8);
   }
   #switch-layer {
     position: absolute;
