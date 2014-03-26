@@ -35,7 +35,8 @@ asset_type_class = {
         'Parks' : 'parks',
         'Transportation' : 'transportation',
         'Sewer' : 'sewer',
-        'Water' : 'water'
+        'Water' : 'water',
+        'Landfill':'landfill'
         }
 
 asset_type_images = {
@@ -45,7 +46,8 @@ asset_type_images = {
         'Parks' : 'park2',
         'Transportation' : 'bus',
         'Sewer' : 'wetland',
-        'Water' : 'water'
+        'Water' : 'water',
+        'Landfill':'landfill'
         }
 @register.filter(needs_autoescape=True)
 def intword_span(value,autoescape=None):
@@ -99,7 +101,10 @@ def project_list_item(project):
     """docstring for project_list_item"""
     project_link_path = reverse('project_detail', args=[project.id] )
     asset_type_image = "images/icons/%s-18.png" % asset_type_images[project.SP_ASSET_TYPE_GROUP]
-    return { 'project' : project, 'link': project_link_path, 'phase': phase_class[project.SP_PROJECT_PHASE], 'asset_type':asset_type_class[project.SP_ASSET_TYPE_GROUP]}
+    phase = ""
+    if project.SP_PROJECT_PHASE:
+        phase = phase_class[project.SP_PROJECT_PHASE]
+    return { 'project' : project, 'link': project_link_path, 'phase': phase, 'asset_type':asset_type_class[project.SP_ASSET_TYPE_GROUP]}
 
 @register.inclusion_tag('pagination.haml',takes_context=True)
 def pagination(context):
