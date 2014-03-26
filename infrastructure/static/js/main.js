@@ -1,4 +1,4 @@
-var map;
+var map,markers,districtLayer,dynLayer;
 function projectPopup(project) {
   headline = "<h3>"+project.SP_PROJECT_NM+"</h3>";
   phase = "<h4>"+project.SP_PROJECT_PHASE+"</h4>";
@@ -13,6 +13,10 @@ function addStyles(geojsonFeature,project) {
   geojsonFeature["properties"]["color"] = project.asset_color;
 }
 function addNewMap() {
+  if(districtLayer && dynLayer) {
+    districtLayer.clearLayers();
+    dynLayer.clearLayers();
+  }
   markers = new L.MarkerClusterGroup();
   proj4.defs('EPSG:2230', '+proj=lcc +lat_1=33.88333333333333 +lat_2=32.78333333333333 +lat_0=32.16666666666666 +lon_0=-116.25 +x_0=2000000.0001016 +y_0=500000.0001016001 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs');
   $('#main .map-container .loading').show();
@@ -35,7 +39,37 @@ function addNewMap() {
   });
 }
 function addOldMap() {
-
+  if(markers) {
+    markers.clearLayers();
+  }
+  L.esri.get = L.esri.RequestHandlers.JSONP;
+  districtLayer = L.esri.dynamicMapLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer',{
+    'layers': [15],
+    'opacity' :0.9
+  }).addTo(map);
+  dynLayer = L.esri.dynamicMapLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer',{
+    'layers': [1,2,3,4],
+    'opacity' :1
+  }).addTo(map);
+  map.on("click", function(e) {
+      districtLayer.identify(e.latlng, function(data) {
+        if(data.results.length > 0) {
+          console.log(data.results);
+          cipLayer = data.results[0];
+          if(cipLayer.layerName == "CIP Point" || cipLayer.layerName == "CIP Line" || cipLayer.layerName == "CIP Poly"  ) {
+            attributes = cipLayer.attributes;
+            projectId = attributes["PROJECT ID"];
+            projectTitle = attributes["TITLE"];
+            projectUrl = '/project/' + projectId;
+            popupText = '<h4>' + projectTitle + '</h4><a href="' + projectUrl + '">Detail</a>'
+            var popup = L.popup()
+            .setLatLng(e.latlng)
+            .setContent(popupText)
+            .openOn(map);
+          }
+        }
+      });
+  });
 }
 function clearLayers() {
 
@@ -103,6 +137,18 @@ $(document).ready(function() {
     $('dd.phase input').change(function() {
       $('dd.phase input:checked').each(function(index,item) { 
         //console.log(item.name) });
+      });
+    })
+    currentLayer = "new";
+    $('#switch-layer').click(function(event) {
+      event.preventDefault();
+      if(currentLayer == "new") {
+        currentLayer = "old";
+        addOldMap();
+       }else {
+        currentLayer = "new";
+        addNewMap();
+       }
     });
   }
   if($('#project-list .tabs').length > 0) {
