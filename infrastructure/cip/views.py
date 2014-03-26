@@ -10,6 +10,7 @@ import django.http
 from django.contrib.humanize.templatetags.humanize import intword
 from infrastructure.cip.templatetags.infrastructure_project_tags import intword_span
 from rest_framework import viewsets
+from rest_framework import serializers
 
 def index(request):
     """docstring for projects"""
@@ -455,6 +456,12 @@ class JSONTimetableMixin(object):
 class ProjectDetailJSONView(JSONTimetableMixin, ProjectDetailView):
     pass
 
+class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('id', 'SP_PROJECT_NM', 'SP_PROJECT_PHASE', 'SP_ASSET_TYPE_GROUP','geometry')
+
 class ProjectViewSet(viewsets.ModelViewSet):
     model = Project
+    serializer_class = ProjectSerializer
 
