@@ -456,10 +456,41 @@ class JSONTimetableMixin(object):
 class ProjectDetailJSONView(JSONTimetableMixin, ProjectDetailView):
     pass
 
+asset_type_images = {
+        'Buildings': 'commercial',
+        'Airports' : 'airport',
+        'Storm Water Drainage' : 'telephone',
+        'Parks' : 'park2',
+        'Transportation' : 'bus',
+        'Sewer' : 'wetland',
+        'Water' : 'water',
+        'Landfill' : '',
+        }
+asset_type_colors = {
+        'Buildings': '#ccc',
+        'Airports' : '#b01517',
+        'Storm Water Drainage' : '#b0ae15',
+        'Parks' : '#65b015',
+        'Transportation' : '#1565b0',
+        'Sewer' : '#b06015',
+        'Water' : '#15b0ae',
+        'Landfill' : '',
+        }
 class ProjectSerializer(serializers.ModelSerializer):
+    asset_image= serializers.SerializerMethodField('asset_type_icon')
+    asset_color = serializers.SerializerMethodField('asset_type_color')
+
+    def asset_type_icon(self, object):
+        """docstring for asset_type"""
+        return asset_type_images[object.SP_ASSET_TYPE_GROUP]
+
+    def asset_type_color(self, object):
+        """docstring for asset_type"""
+        return asset_type_colors[object.SP_ASSET_TYPE_GROUP]
+
     class Meta:
         model = Project
-        fields = ('id', 'SP_PROJECT_NM', 'SP_PROJECT_PHASE', 'SP_ASSET_TYPE_GROUP','geometry')
+        fields = ('id', 'SP_PROJECT_NM', 'SP_PROJECT_PHASE', 'SP_ASSET_TYPE_GROUP','geometry','asset_image','asset_color')
 
 class ProjectViewSet(viewsets.ModelViewSet):
     model = Project
