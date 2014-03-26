@@ -1,3 +1,45 @@
+var map;
+function projectPopup(project) {
+  headline = "<h3>"+project.SP_PROJECT_NM+"</h3>";
+  phase = "<h4>"+project.SP_PROJECT_PHASE+"</h4>";
+  link = "<a href='/cip/project/"+project.id+"'>Detail</a>";
+  return headline+phase+link;
+}
+function addStyles(geojsonFeature,project) {
+  geojsonFeature["properties"]["marker-symbol"] = project.asset_image;
+  geojsonFeature["properties"]["marker-size"] = "medium";
+  geojsonFeature["properties"]["marker-color"] = project.asset_color;
+  geojsonFeature["properties"]["stroke"] = project.asset_color;
+  geojsonFeature["properties"]["color"] = project.asset_color;
+}
+function addNewMap() {
+  markers = new L.MarkerClusterGroup();
+  proj4.defs('EPSG:2230', '+proj=lcc +lat_1=33.88333333333333 +lat_2=32.78333333333333 +lat_0=32.16666666666666 +lon_0=-116.25 +x_0=2000000.0001016 +y_0=500000.0001016001 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs');
+  $('#main .map-container .loading').show();
+  $.getJSON('/projects/', function(data) {
+    $.each(data, function(index, project) {
+      geojsonFeature = JSON.parse(project.geometry);
+      if(geojsonFeature) {
+        var marker = L.Proj.geoJson(geojsonFeature, {
+          pointToLayer: L.mapbox.marker.style,
+          style: function(feature) {
+            return feature.properties; 
+          }
+        });
+        marker.bindPopup(projectPopup(project));
+        markers.addLayer(marker);
+      }
+    });
+    map.addLayer(markers);
+    $('#main .map-container .loading').hide();
+  });
+}
+function addOldMap() {
+
+}
+function clearLayers() {
+
+}
 $(document).ready(function() {
   $('#nav').on('click','#search', function() {
     value = $(this).val()
@@ -55,34 +97,13 @@ $(document).ready(function() {
   }
 
   if($('#main').length > 0) {
-    markers = new L.MarkerClusterGroup();
-    proj4.defs('EPSG:2230', '+proj=lcc +lat_1=33.88333333333333 +lat_2=32.78333333333333 +lat_0=32.16666666666666 +lon_0=-116.25 +x_0=2000000.0001016 +y_0=500000.0001016001 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs');
-    $('#main .map-container .loading').show();
-    $.getJSON('/projects/', function(data) {
-      $.each(data, function(index, project) {
-        geojsonFeature = JSON.parse(project.geometry);
-        if(geojsonFeature) {
-          geojsonFeature["properties"]["marker-symbol"] = project.asset_image;
-          geojsonFeature["properties"]["marker-size"] = "medium";
-          geojsonFeature["properties"]["marker-color"] = project.asset_color;
-          geojsonFeature["properties"]["stroke"] = project.asset_color;
-          geojsonFeature["properties"]["color"] = project.asset_color;
-          var marker = L.Proj.geoJson(geojsonFeature, {
-            pointToLayer: L.mapbox.marker.style,
-            style: function(feature) {
-              return feature.properties; 
-            }
-          });
-          var markerContent = "<h3>"+project.SP_PROJECT_NM+"</h3><a href='/cip/project/"+project.id+"'>Detail</a>"
-          marker.bindPopup(markerContent);
-          markers.addLayer(marker);
-        }
-      });
-      map.addLayer(markers);
-      $('#main .map-container .loading').hide();
-    });
-    var map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
+    map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
     .setView([32.70752, -117.15706], 11);
+    addNewMap();
+    $('dd.phase input').change(function() {
+      $('dd.phase input:checked').each(function(index,item) { 
+        //console.log(item.name) });
+    });
   }
   if($('#project-list .tabs').length > 0) {
     $('#project-list').on('click', '.tabs li a',function(e) {
