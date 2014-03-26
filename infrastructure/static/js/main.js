@@ -1,3 +1,80 @@
+var map,markers,districtLayer,dynLayer;
+function projectPopup(project) {
+  headline = "<h3>"+project.SP_PROJECT_NM+"</h3>";
+  phase = "<h4>"+project.SP_PROJECT_PHASE+"</h4>";
+  link = "<a href='/cip/project/"+project.id+"'>Detail</a>";
+  return headline+phase+link;
+}
+function addStyles(geojsonFeature,project) {
+  geojsonFeature["properties"]["marker-symbol"] = project.asset_image;
+  geojsonFeature["properties"]["marker-size"] = "medium";
+  geojsonFeature["properties"]["marker-color"] = project.asset_color;
+  geojsonFeature["properties"]["stroke"] = project.asset_color;
+  geojsonFeature["properties"]["color"] = project.asset_color;
+}
+function addNewMap(map) {
+  if(districtLayer && dynLayer) {
+    map.removeLayer(districtLayer);
+    map.removeLayer(dynLayer);
+  }
+  markers = new L.MarkerClusterGroup();
+  proj4.defs('EPSG:2230', '+proj=lcc +lat_1=33.88333333333333 +lat_2=32.78333333333333 +lat_0=32.16666666666666 +lon_0=-116.25 +x_0=2000000.0001016 +y_0=500000.0001016001 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs');
+  $('#main .map-container .loading').show();
+  $.getJSON('/projects/', function(data) {
+    $.each(data, function(index, project) {
+      geojsonFeature = JSON.parse(project.geometry);
+      if(geojsonFeature) {
+        addStyles(geojsonFeature,project);
+        var marker = L.Proj.geoJson(geojsonFeature, {
+          pointToLayer: L.mapbox.marker.style,
+          style: function(feature) {
+            return feature.properties; 
+          }
+        });
+        marker.bindPopup(projectPopup(project));
+        markers.addLayer(marker);
+      }
+    });
+    map.addLayer(markers);
+    $('#main .map-container .loading').hide();
+  });
+}
+function addOldMap(map) {
+  if(markers) {
+    markers.clearLayers();
+  }
+  L.esri.get = L.esri.RequestHandlers.JSONP;
+  districtLayer = L.esri.dynamicMapLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer',{
+    'layers': [15],
+    'opacity' :0.9
+  }).addTo(map);
+  dynLayer = L.esri.dynamicMapLayer('http://maps.sandiego.gov/ArcGIS/rest/services/CIPTrackingPublic/MapServer',{
+    'layers': [1,2,3,4],
+    'opacity' :1
+  }).addTo(map);
+  map.on("click", function(e) {
+      districtLayer.identify(e.latlng, function(data) {
+        if(data.results.length > 0) {
+          console.log(data.results);
+          cipLayer = data.results[0];
+          if(cipLayer.layerName == "CIP Point" || cipLayer.layerName == "CIP Line" || cipLayer.layerName == "CIP Poly"  ) {
+            attributes = cipLayer.attributes;
+            projectId = attributes["PROJECT ID"];
+            projectTitle = attributes["TITLE"];
+            projectUrl = '/project/' + projectId;
+            popupText = '<h4>' + projectTitle + '</h4><a href="' + projectUrl + '">Detail</a>'
+            var popup = L.popup()
+            .setLatLng(e.latlng)
+            .setContent(popupText)
+            .openOn(map);
+          }
+        }
+      });
+  });
+}
+function clearLayers() {
+
+}
 $(document).ready(function() {
   $('#nav').on('click','#search', function() {
     value = $(this).val()
@@ -55,32 +132,25 @@ $(document).ready(function() {
   }
 
   if($('#main').length > 0) {
-    markers = new L.MarkerClusterGroup();
-    proj4.defs('EPSG:2230', '+proj=lcc +lat_1=33.88333333333333 +lat_2=32.78333333333333 +lat_0=32.16666666666666 +lon_0=-116.25 +x_0=2000000.0001016 +y_0=500000.0001016001 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs');
-    $.getJSON('/projects/', function(data) {
-      $.each(data, function(index, project) {
-        geojsonFeature = JSON.parse(project.geometry);
-        if(geojsonFeature) {
-          geojsonFeature["properties"]["marker-symbol"] = project.asset_image;
-          geojsonFeature["properties"]["marker-size"] = "medium";
-          geojsonFeature["properties"]["marker-color"] = project.asset_color;
-          geojsonFeature["properties"]["stroke"] = project.asset_color;
-          geojsonFeature["properties"]["color"] = project.asset_color;
-          var marker = L.Proj.geoJson(geojsonFeature, {
-            pointToLayer: L.mapbox.marker.style,
-            style: function(feature) {
-              return feature.properties; 
-            }
-          });
-          var markerContent = "<h3>"+project.SP_PROJECT_NM+"</h3><a href='/cip/project/"+project.id+"'>Detail</a>"
-          marker.bindPopup(markerContent);
-          markers.addLayer(marker);
-        }
-      });
-      map.addLayer(markers);
-    });
-    var map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
+    map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
     .setView([32.70752, -117.15706], 11);
+    addNewMap(map);
+    $('dd.phase input').change(function() {
+      $('dd.phase input:checked').each(function(index,item) { 
+        //console.log(item.name) });
+      });
+    })
+    currentLayer = "new";
+    $('#switch-layer').click(function(event) {
+      event.preventDefault();
+      if(currentLayer == "new") {
+        currentLayer = "old";
+        addOldMap(map);
+       }else {
+        currentLayer = "new";
+        addNewMap(map);
+       }
+    });
   }
   if($('#project-list .tabs').length > 0) {
     $('#project-list').on('click', '.tabs li a',function(e) {
