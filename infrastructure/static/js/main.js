@@ -12,10 +12,10 @@ function addStyles(geojsonFeature,project) {
   geojsonFeature["properties"]["stroke"] = project.asset_color;
   geojsonFeature["properties"]["color"] = project.asset_color;
 }
-function addNewMap() {
+function addNewMap(map) {
   if(districtLayer && dynLayer) {
-    districtLayer.clearLayers();
-    dynLayer.clearLayers();
+    map.removeLayer(districtLayer);
+    map.removeLayer(dynLayer);
   }
   markers = new L.MarkerClusterGroup();
   proj4.defs('EPSG:2230', '+proj=lcc +lat_1=33.88333333333333 +lat_2=32.78333333333333 +lat_0=32.16666666666666 +lon_0=-116.25 +x_0=2000000.0001016 +y_0=500000.0001016001 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs');
@@ -24,6 +24,7 @@ function addNewMap() {
     $.each(data, function(index, project) {
       geojsonFeature = JSON.parse(project.geometry);
       if(geojsonFeature) {
+        addStyles(geojsonFeature,project);
         var marker = L.Proj.geoJson(geojsonFeature, {
           pointToLayer: L.mapbox.marker.style,
           style: function(feature) {
@@ -38,7 +39,7 @@ function addNewMap() {
     $('#main .map-container .loading').hide();
   });
 }
-function addOldMap() {
+function addOldMap(map) {
   if(markers) {
     markers.clearLayers();
   }
@@ -133,7 +134,7 @@ $(document).ready(function() {
   if($('#main').length > 0) {
     map = L.mapbox.map('map', 'milafrerichs.map-ezn7qjpd')
     .setView([32.70752, -117.15706], 11);
-    addNewMap();
+    addNewMap(map);
     $('dd.phase input').change(function() {
       $('dd.phase input:checked').each(function(index,item) { 
         //console.log(item.name) });
@@ -144,10 +145,10 @@ $(document).ready(function() {
       event.preventDefault();
       if(currentLayer == "new") {
         currentLayer = "old";
-        addOldMap();
+        addOldMap(map);
        }else {
         currentLayer = "new";
-        addNewMap();
+        addNewMap(map);
        }
     });
   }
