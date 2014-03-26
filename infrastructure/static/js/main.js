@@ -61,7 +61,17 @@ $(document).ready(function() {
       $.each(data, function(index, project) {
         geojsonFeature = JSON.parse(project.geometry);
         if(geojsonFeature) {
-          var marker = L.Proj.geoJson(geojsonFeature);
+          geojsonFeature["properties"]["marker-symbol"] = project.asset_image;
+          geojsonFeature["properties"]["marker-size"] = "medium";
+          geojsonFeature["properties"]["marker-color"] = project.asset_color;
+          geojsonFeature["properties"]["stroke"] = project.asset_color;
+          geojsonFeature["properties"]["color"] = project.asset_color;
+          var marker = L.Proj.geoJson(geojsonFeature, {
+            pointToLayer: L.mapbox.marker.style,
+            style: function(feature) {
+              return feature.properties; 
+            }
+          });
           var markerContent = "<h3>"+project.SP_PROJECT_NM+"</h3><a href='/cip/project/"+project.id+"'>Detail</a>"
           marker.bindPopup(markerContent);
           markers.addLayer(marker);
